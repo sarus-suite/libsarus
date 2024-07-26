@@ -1,0 +1,23 @@
+*.pyc
+*.swp
+*.swo
+*.gcno
+*.gcda
+doc/_build
+doc/_static
+doc/_templates
+doc/config/hook_examples/*.json
+doc/venv
+build*/
+_build/
+cache/
+*.gcov
+.idea
+.vscode
+.settings
+.project
+.cproject
+.vagrant
+
+# Auto-generated files
+RELEASE_NOTES.md
