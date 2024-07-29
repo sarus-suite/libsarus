@@ -17,8 +17,8 @@
 
 #include "aux/filesystem.hpp"
 #include "aux/unitTestMain.hpp"
-#include "libsarus/PathRAII.hpp"
-#include "libsarus/Utility.hpp"
+#include "PathRAII.hpp"
+#include "Utility.hpp"
 
 
 namespace libsarus {

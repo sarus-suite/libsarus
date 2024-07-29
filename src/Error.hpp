@@ -19,7 +19,7 @@
 
 #include <boost/filesystem.hpp>
 
-#include "libsarus/LogLevel.hpp"
+#include "LogLevel.hpp"
 
 namespace libsarus {
 

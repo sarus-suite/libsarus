@@ -18,8 +18,8 @@
 #include <boost/format.hpp>
 #include <boost/algorithm/string.hpp>
 
-#include "libsarus/Error.hpp"
-#include "libsarus/utility/logging.hpp"
+#include "Error.hpp"
+#include "utility/logging.hpp"
 
 /**
  * Utility functions for string manipulation 

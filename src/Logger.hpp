@@ -16,8 +16,8 @@
 
 #include <boost/format.hpp>
 
-#include "libsarus/LogLevel.hpp"
-#include "libsarus/Error.hpp"
+#include "LogLevel.hpp"
+#include "Error.hpp"
 
 namespace libsarus {
 

@@ -21,8 +21,8 @@
 #include "aux/hook.hpp"
 #include "aux/misc.hpp"
 #include "aux/unitTestMain.hpp"
-#include "libsarus/PathRAII.hpp"
-#include "libsarus/Utility.hpp"
+#include "PathRAII.hpp"
+#include "Utility.hpp"
 
 
 namespace libsarus {
@@ -40,7 +40,6 @@ TEST(HooksUtilityTestGroup, parseStateOfContainerFromStdin) {
     libsarus::filesystem::createFoldersIfNecessary(expectedBundleDir.getPath());
 
     auto returnedBundleDir = boost::filesystem::path();
-    pid_t returnedPid;
 
     aux::hook::writeOCIContainerStateToStdin(expectedBundleDir.getPath());
     auto containerState = parseStateOfContainerFromStdin();

@@ -17,9 +17,9 @@
 
 #include <rapidjson/prettywriter.h>
 
-#include "libsarus/Error.hpp"
-#include "libsarus/PasswdDB.hpp"
-#include "libsarus/Utility.hpp"
+#include "Error.hpp"
+#include "PasswdDB.hpp"
+#include "Utility.hpp"
 
 
 namespace libsarus {

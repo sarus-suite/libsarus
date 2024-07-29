@@ -18,7 +18,7 @@
 #include <sys/mount.h>
 #include <sys/fsuid.h>
 
-#include "libsarus/Utility.hpp"
+#include "Utility.hpp"
 
 namespace libsarus {
 

@@ -16,7 +16,7 @@
 
 #include <boost/format.hpp>
 
-#include "libsarus/Error.hpp"
+#include "Error.hpp"
 
 
 namespace libsarus {

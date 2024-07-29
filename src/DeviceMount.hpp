@@ -14,7 +14,7 @@
 #include <sys/types.h>
 
 #include "Mount.hpp"
-#include "libsarus/DeviceAccess.hpp"
+#include "DeviceAccess.hpp"
 
 namespace libsarus {
 

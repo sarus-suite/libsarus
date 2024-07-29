@@ -18,8 +18,8 @@
 #include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 
-#include "libsarus/Logger.hpp"
-#include "libsarus/Mount.hpp"
+#include "Logger.hpp"
+#include "Mount.hpp"
 
 /**
  * Utility functions for mounting

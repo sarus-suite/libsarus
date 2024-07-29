@@ -15,7 +15,7 @@
 #include <boost/filesystem.hpp>
 #include <sys/mount.h>
 
-#include "libsarus/UserIdentity.hpp"
+#include "UserIdentity.hpp"
 
 namespace libsarus {
 

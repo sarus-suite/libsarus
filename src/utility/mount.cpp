@@ -18,10 +18,10 @@
 
 #include <boost/format.hpp>
 
-#include "libsarus/Error.hpp"
-#include "libsarus/Logger.hpp"
-#include "libsarus/Utility.hpp"
-#include "libsarus/CLIArguments.hpp"
+#include "Error.hpp"
+#include "Logger.hpp"
+#include "Utility.hpp"
+#include "CLIArguments.hpp"
 
 /**
  * Utility functions for mounting 

@@ -10,10 +10,10 @@
 
 #include "aux/filesystem.hpp"
 #include "aux/unitTestMain.hpp"
-#include "libsarus/DeviceParser.hpp"
-#include "libsarus/Logger.hpp"
-#include "libsarus/PathRAII.hpp"
-#include "libsarus/Utility.hpp"
+#include "DeviceParser.hpp"
+#include "Logger.hpp"
+#include "PathRAII.hpp"
+#include "Utility.hpp"
 
 
 namespace libsarus {

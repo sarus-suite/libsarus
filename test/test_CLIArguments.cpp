@@ -15,10 +15,10 @@
 #include <boost/filesystem.hpp>
 
 #include "aux/unitTestMain.hpp"
-#include "libsarus/Error.hpp"
-#include "libsarus/Lockfile.hpp"
-#include "libsarus/Logger.hpp"
-#include "libsarus/Utility.hpp"
+#include "Error.hpp"
+#include "Lockfile.hpp"
+#include "Logger.hpp"
+#include "Utility.hpp"
 
 
 namespace libsarus {

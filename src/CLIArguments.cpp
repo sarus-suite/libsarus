@@ -17,7 +17,7 @@
 #include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
 
-#include "libsarus/Error.hpp"
+#include "Error.hpp"
 
 namespace libsarus {
 

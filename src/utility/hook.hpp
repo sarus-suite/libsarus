@@ -19,8 +19,8 @@
 #include <boost/optional.hpp>
 #include <rapidjson/document.h>
 
-#include "libsarus/Logger.hpp"
-#include "libsarus/UserIdentity.hpp"
+#include "Logger.hpp"
+#include "UserIdentity.hpp"
 
 /**
  * Utility functions for hooks 

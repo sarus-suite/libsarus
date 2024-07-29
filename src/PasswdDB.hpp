@@ -17,7 +17,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/optional.hpp>
 
-#include "libsarus/Logger.hpp"
+#include "Logger.hpp"
 
 namespace libsarus {
 

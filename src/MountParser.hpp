@@ -19,8 +19,8 @@
 #include <boost/format.hpp>
 #include <rapidjson/document.h>
 
-#include "libsarus/Logger.hpp"
-#include "libsarus/Mount.hpp"
+#include "Logger.hpp"
+#include "Mount.hpp"
 
 namespace libsarus {
 

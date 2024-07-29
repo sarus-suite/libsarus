@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
 project("libsarus")
 
-# Set cmake variables
+# Set CMake variables
 enable_testing()
-set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CMAKE_VERBOSE_MAKEFILE OFF)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules)
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 ### Required for gcov (e.g., example.gcno instead of example.cpp.gcno)
@@ -25,11 +25,16 @@ endif(${BUILD_STATIC})
 set(ENABLE_UNIT_TESTS TRUE CACHE BOOL "Build unit tests. Also downloads and builds the CppUTest framework [TRUE]")
 set(ENABLE_TESTS_WITH_VALGRIND FALSE CACHE BOOL "Run each unit test through valgrind [FALSE]")
 
-# Check or include dependencies
-find_package(Boost REQUIRED COMPONENTS program_options filesystem regex)
+# Check and set dependencies
+find_package(Boost REQUIRED COMPONENTS filesystem regex)
+find_program(GIT_PATH git)
+### Workaround: issue in linking 'boost::filesystem::detail::copy_file'
+add_definitions(-DBOOST_NO_CXX11_SCOPED_ENUMS)
+
+# Include headers
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${CMAKE_SOURCE_DIR}/dep/rapidjson/include)
-find_program(GIT_PATH git)
 
 # Print version
 execute_process(COMMAND ${GIT_PATH} describe --tags --dirty --always

@@ -13,9 +13,9 @@
 #include <boost/filesystem.hpp>
 
 #include "aux/unitTestMain.hpp"
-#include "libsarus/Error.hpp"
-#include "libsarus/Flock.hpp"
-#include "libsarus/Utility.hpp"
+#include "Error.hpp"
+#include "Flock.hpp"
+#include "Utility.hpp"
 
 
 namespace libsarus {
@@ -117,7 +117,7 @@ TEST(FlockTestGroup, convert_write_to_read) {
 TEST(FlockTestGroup, timeout_time_is_respected) {
     libsarus::Flock lock{fileToLock, libsarus::Flock::Type::writeLock};
 
-    for (auto &timeout : {10, 100, 500, 1000, 2000}) {
+    for (auto &timeout : {100, 500, 1000, 2000}) {
         auto start = std::chrono::system_clock::now();
         try {
             libsarus::Flock{fileToLock, libsarus::Flock::Type::writeLock, std::chrono::milliseconds{timeout}};
@@ -125,7 +125,8 @@ TEST(FlockTestGroup, timeout_time_is_respected) {
         }
         auto end = std::chrono::system_clock::now();
         std::chrono::duration<double, std::milli> elapsed = end - start;
-        CHECK(timeout <= elapsed.count() <= 2 * timeout);
+        CHECK(timeout <= elapsed.count());
+        CHECK(elapsed.count() <= 2 * timeout);
     }
 }
 

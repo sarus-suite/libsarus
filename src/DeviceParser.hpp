@@ -14,8 +14,8 @@
 #include <string>
 #include <vector>
 
-#include "libsarus/UserIdentity.hpp"
-#include "libsarus/DeviceMount.hpp"
+#include "UserIdentity.hpp"
+#include "DeviceMount.hpp"
 
 namespace libsarus {
 

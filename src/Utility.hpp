@@ -17,14 +17,14 @@
  * include individual headers instead.
  */
 
-#include "libsarus/utility/environment.hpp"
-#include "libsarus/utility/filesystem.hpp"
-#include "libsarus/utility/hook.hpp"
-#include "libsarus/utility/json.hpp"
-#include "libsarus/utility/logging.hpp"
-#include "libsarus/utility/mount.hpp"
-#include "libsarus/utility/process.hpp"
-#include "libsarus/utility/sharedLibs.hpp"
-#include "libsarus/utility/string.hpp"
+#include "utility/environment.hpp"
+#include "utility/filesystem.hpp"
+#include "utility/hook.hpp"
+#include "utility/json.hpp"
+#include "utility/logging.hpp"
+#include "utility/mount.hpp"
+#include "utility/process.hpp"
+#include "utility/sharedLibs.hpp"
+#include "utility/string.hpp"
 
 #endif

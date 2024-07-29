@@ -21,9 +21,9 @@
 #include <rapidjson/error/en.h>
 #include <rapidjson/writer.h>
 
-#include "libsarus/Error.hpp"
-#include "libsarus/utility/filesystem.hpp"
-#include "libsarus/utility/logging.hpp"
+#include "Error.hpp"
+#include "utility/filesystem.hpp"
+#include "utility/logging.hpp"
 
 /**
  * Utility functions for JSON operations

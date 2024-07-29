@@ -11,7 +11,7 @@
 #include <exception>
 
 #include "aux/unitTestMain.hpp"
-#include "libsarus/Error.hpp"
+#include "Error.hpp"
 
 
 namespace libsarus {

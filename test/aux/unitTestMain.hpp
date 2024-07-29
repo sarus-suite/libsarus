@@ -11,8 +11,8 @@
 #ifndef libsarus_test_aux_unitTestMain_hpp
 #define libsarus_test_aux_unitTestMain_hpp
 
-#include "libsarus/Error.hpp"
-#include "libsarus/Logger.hpp"
+#include "Error.hpp"
+#include "Logger.hpp"
 
 // WATCH OUT!
 // boost libraries must be included before CppUTest, so in order to be

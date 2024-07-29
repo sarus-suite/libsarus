@@ -13,8 +13,8 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
 
-#include "libsarus/Error.hpp"
-#include "libsarus/Utility.hpp"
+#include "Error.hpp"
+#include "Utility.hpp"
 
 namespace libsarus {
 

@@ -17,7 +17,7 @@
 #include <boost/regex.hpp>
 
 #include "aux/unitTestMain.hpp"
-#include "libsarus/Logger.hpp"
+#include "Logger.hpp"
 
 
 namespace libsarus {

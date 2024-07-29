@@ -13,7 +13,7 @@
 
 #include <string>
 
-#include "libsarus/Logger.hpp"
+#include "Logger.hpp"
 
 namespace libsarus {
 

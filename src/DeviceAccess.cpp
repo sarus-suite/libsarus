@@ -11,7 +11,7 @@
 #include "DeviceAccess.hpp"
 #include "Utility.hpp"
 
-#include "libsarus/Error.hpp"
+#include "Error.hpp"
 
 namespace libsarus {
 

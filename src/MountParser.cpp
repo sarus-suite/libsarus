@@ -15,9 +15,9 @@
 
 #include <boost/filesystem.hpp>
 
-#include "libsarus/Error.hpp"
-#include "libsarus/Mount.hpp"
-#include "libsarus/Utility.hpp"
+#include "Error.hpp"
+#include "Mount.hpp"
+#include "Utility.hpp"
 
 namespace libsarus {
 

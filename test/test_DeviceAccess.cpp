@@ -9,7 +9,7 @@
  */
 
 #include "aux/unitTestMain.hpp"
-#include "libsarus/DeviceAccess.hpp"
+#include "DeviceAccess.hpp"
 
 
 namespace libsarus {

@@ -24,7 +24,7 @@
 #include <sys/stat.h>
 #include <sys/sysmacros.h>
 
-#include "libsarus/Utility.hpp"
+#include "Utility.hpp"
 
 
 namespace libsarus {

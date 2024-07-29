@@ -12,8 +12,8 @@
 
 #include <sys/sysmacros.h>
 
-#include "libsarus/Error.hpp"
-#include "libsarus/Utility.hpp"
+#include "Error.hpp"
+#include "Utility.hpp"
 
 namespace libsarus {
 

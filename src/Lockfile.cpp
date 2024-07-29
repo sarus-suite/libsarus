@@ -18,8 +18,8 @@
 
 #include <boost/format.hpp>
 
-#include "libsarus/Error.hpp"
-#include "libsarus/Logger.hpp"
+#include "Error.hpp"
+#include "Logger.hpp"
 
 namespace libsarus {
 

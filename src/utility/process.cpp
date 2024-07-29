@@ -20,10 +20,10 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 
-#include "libsarus/Error.hpp"
-#include "libsarus/PasswdDB.hpp"
-#include "libsarus/utility/logging.hpp"
-#include "libsarus/utility/filesystem.hpp"
+#include "Error.hpp"
+#include "PasswdDB.hpp"
+#include "utility/logging.hpp"
+#include "utility/filesystem.hpp"
 
 /**
  * Utility functions for system operations 

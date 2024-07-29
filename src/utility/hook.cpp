@@ -24,10 +24,10 @@
 
 #include <rapidjson/istreamwrapper.h>
 
-#include "libsarus/Error.hpp"
-#include "libsarus/utility/environment.hpp"
-#include "libsarus/utility/filesystem.hpp"
-#include "libsarus/utility/json.hpp"
+#include "Error.hpp"
+#include "utility/environment.hpp"
+#include "utility/filesystem.hpp"
+#include "utility/json.hpp"
 
 /**
  * Utility functions for hooks 
