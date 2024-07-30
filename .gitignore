@@ -19,6 +19,7 @@ cache/
 .cproject
 .vagrant
 garage/
+Dockerfile.gen.*
 
 # Auto-generated files
 RELEASE_NOTES.md
