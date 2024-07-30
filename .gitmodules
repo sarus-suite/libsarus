@@ -1,3 +1,6 @@
 [submodule "dep/rapidjson"]
 	path = dep/rapidjson
 	url = https://github.com/Tencent/rapidjson.git
+[submodule "spack"]
+	path = spack
+	url = https://github.com/spack/spack.git

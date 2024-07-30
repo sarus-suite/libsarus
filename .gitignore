@@ -18,6 +18,9 @@ cache/
 .project
 .cproject
 .vagrant
+garage/
 
 # Auto-generated files
 RELEASE_NOTES.md
+spack.lock
+.spack-env
