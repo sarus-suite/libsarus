@@ -1,4 +1,3 @@
-
 include_directories(${CPPUTEST_INCLUDE_DIR})
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED")
@@ -19,7 +18,7 @@ function(_add_unit_test test_name test_src_file test_type link_libraries)
     set(test_bin_file test_${test_name})
     add_executable(${test_bin_file} ${test_src_file})
     target_link_libraries(${test_bin_file} ${link_libraries} ${CPPUTEST_LIB})
-    add_dependencies(${test_bin_file} cpputest_library)
+    add_dependencies(${test_bin_file} CPPUTEST_LIBRARY)
     if(${test_type} STREQUAL "AsRoot")
         target_compile_definitions(${test_bin_file} PUBLIC ASROOT)
     endif()

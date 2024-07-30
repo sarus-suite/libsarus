@@ -7,7 +7,7 @@ enable_testing()
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules)
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-### Required for gcov (e.g., example.gcno instead of example.cpp.gcno)
+### Required for gcov (e.g., 'example.gcno' instead of 'example.cpp.gcno')
 set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE 1) 
 
 message(STATUS "Installation directory: " ${CMAKE_INSTALL_PREFIX})
@@ -21,9 +21,11 @@ if(${BUILD_STATIC})
     set(Boost_USE_STATIC_LIBS ON)
 endif(${BUILD_STATIC})
 
-# Enable unit tests (CppUTest)
-set(ENABLE_UNIT_TESTS TRUE CACHE BOOL "Build unit tests. Also downloads and builds the CppUTest framework [TRUE]")
-set(ENABLE_TESTS_WITH_VALGRIND FALSE CACHE BOOL "Run each unit test through valgrind [FALSE]")
+# Define CMake variables
+set(ENABLE_UNIT_TESTS TRUE CACHE BOOL 
+  "Build unit tests. Also downloads and builds the CppUTest framework [TRUE]")
+set(ENABLE_TESTS_WITH_VALGRIND FALSE CACHE BOOL 
+  "Run each unit test through valgrind [FALSE]")
 
 # Check and set dependencies
 find_package(Boost REQUIRED COMPONENTS filesystem regex)
