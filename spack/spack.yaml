@@ -32,5 +32,3 @@ spack:
       modules: []
       environment: {}
       extra_rpaths: []
-  mirrors:
-    v0.22.1: https://binaries.spack.io/v0.22.1
