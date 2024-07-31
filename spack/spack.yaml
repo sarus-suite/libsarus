@@ -32,6 +32,7 @@ spack:
       modules: []
       environment: {}
       extra_rpaths: []
+  mirrors: { "mirror": "s3://spack-public/mirror" }
   ci:
     enable-artifacts-buildcache: True
     rebuild-index: False
