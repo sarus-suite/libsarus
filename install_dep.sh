@@ -8,6 +8,6 @@ export PATH=$LIBSARUS_ROOT_PATH/spack/spack/bin:$PATH
 spack mirror add v0.22.1 https://binaries.spack.io/v0.22.1
 spack buildcache keys --install --trust
 spack env activate spack
-spack -d install
+spack install
 
 # TODO: install sudo if needed.
