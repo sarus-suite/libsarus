@@ -5,6 +5,9 @@ stages:
   - build
   - test
 
+# TODO: what's the best way to pull a fully-prepared docker image for a job?
+# (e.g., for 'build-ubuntu_22.-4', right before './build.sh'.)
+
 build-ubuntu_22.04:
   image: ubuntu:22.04
   stage: build
@@ -33,6 +36,6 @@ test-ubuntu_22.04:
   image: ubuntu:22.04
   stage: test
   script:
-    - apt-get update && apt install -y cmake
+    - apt update && apt install -y cmake squashfs
     - CTEST_OUTPUT_ON_FAILURE=1 ASAN_OPTIONS=detect_leaks=1 ctest --exclude-regex AsRoot
     - sudo CTEST_OUTPUT_ON_FAILURE=1 ASAN_OPTIONS=detect_leaks=1 ctest --tests-regex AsRoot
