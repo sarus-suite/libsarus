@@ -9,7 +9,9 @@ build-ubuntu_22.04:
   image: ubuntu:22.04
   stage: build
   script:
-    - pwd
+    - ls
+    - ls spack
+    - ls spack/spack
     - ./install_dep.sh
     - ./build.sh
   artifacts:
