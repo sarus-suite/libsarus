@@ -1,4 +1,7 @@
-stages:          # List of stages for jobs, and their order of execution
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+stages:
   - build
   - test
 
