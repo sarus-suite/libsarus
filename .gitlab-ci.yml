@@ -6,9 +6,10 @@ stages:
   - test
 
 build-ubuntu_22.04:
-  image: spack/ubuntu-jammy
+  image: ubuntu:22.04
   stage: build
   script:
+    - apt update && DEBIAN_FRONTEND=noninteractive apt install -y build-essential ca-certificates coreutils curl environment-modules gfortran git gpg lsb-release python3 python3-distutils python3-venv unzip zip 
     - ./install_dep.sh
     - ./build.sh
   artifacts:
