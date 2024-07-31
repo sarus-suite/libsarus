@@ -9,7 +9,7 @@ build-ubuntu_22.04:
   image: ubuntu:22.04
   stage: build
   script:
-    - apt install python
+    - apt-get update && apt install -y python
     - ./install_dep.sh
     - ./build.sh
   artifacts:
