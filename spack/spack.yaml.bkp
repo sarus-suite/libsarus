@@ -40,7 +40,3 @@ spack:
   ci:
     enable-artifacts-buildcache: true
     rebuild-index: false
-    target: gitlab
-    pipeline-gen:
-    - submapping: []
-      match_behavior: first
