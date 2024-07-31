@@ -33,4 +33,5 @@ spack:
       environment: {}
       extra_rpaths: []
   ci:
-      enable-artifacts-buildcache: True
+    enable-artifacts-buildcache: True
+    rebuild-index: False
