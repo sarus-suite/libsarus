@@ -7,6 +7,6 @@ export PATH=$LIBSARUS_ROOT_PATH/spack/spack/bin:$PATH
 
 spack env activate spack
 spack buildcache keys --install --trust
-spack install --debug
+spack -d install
 
 # TODO: install sudo if needed.
