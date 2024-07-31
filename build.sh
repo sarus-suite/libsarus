@@ -15,3 +15,4 @@ cmake -DCMAKE_TOOLCHAIN_FILE=$BUILD_DIR/../cmake/toolchain_files/$TOOLCHAIN_FILE
       -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
       -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
       -B $BUILD_DIR -S .
+make install -C $BUILD_DIR

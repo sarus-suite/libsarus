@@ -1,0 +1,50 @@
+# Build stage with Spack pre-installed and ready to be used
+FROM @@BUILD_OS_IMAGE@@ AS builder
+
+# What we want to install and how we want to install it
+# is specified in a manifest file (spack.yaml)
+RUN mkdir -p /opt/spack-environment && \
+set -o noclobber && ( true \
+@@SPACK_YAML_FILE@@
+) > /opt/spack-environment/spack.yaml
+
+# Install the software, remove unnecessary deps
+RUN cd /opt/spack-environment \
+    && spack env activate . \
+    && spack buildcache keys --install --trust \
+    && spack install --fail-fast \
+    && spack gc -y
+
+# Modifications to the environment that are necessary to run
+RUN cd /opt/spack-environment && \
+    spack env activate --sh -d . > activate.sh
+
+# Bare OS image to run the installed executables
+FROM @@FINAL_OS_IMAGE@@
+
+COPY --from=builder /opt/spack-environment /opt/spack-environment
+COPY --from=builder /opt/software /opt/software
+
+# paths.view is a symlink, so copy the parent to avoid dereferencing and duplicating it
+COPY --from=builder /opt/views /opt/views
+
+RUN ln -s /opt/views/view /opt/view 
+
+# Switch to the user 'docker'
+RUN groupadd docker \
+    && useradd -m -g docker docker \
+    && echo 'docker:docker' | chpasswd \
+    && chown docker:docker /home/docker \
+    && echo 'docker ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers 
+USER docker 
+WORKDIR /home/docker 
+
+# Set up a boot-up environment
+# /etc/profile removes *sbin locations from PATH for non-root users
+# Modify .bashrc to find /sbin/ldconfig even after test scripts do a
+# 'sudo -u docker --login'
+RUN echo 'PATH=${PATH}:/usr/local/sbin:/usr/sbin:/sbin' >> .bashrc
+RUN echo '.' /opt/spack-environment/activate.sh >> .bashrc 
+
+CMD [ "/bin/bash" ]
+
