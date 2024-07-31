@@ -35,7 +35,6 @@ spack:
 
   mirrors:
     v0.22.1: https://binaries.spack.io/v0.22.1
-    mirror: s3://spack-public/mirror
 
   ci:
     enable-artifacts-buildcache: true
