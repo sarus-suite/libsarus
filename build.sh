@@ -6,7 +6,6 @@ LOCAL_SPACK_PATH=$LIBSARUS_ROOT_PATH/spack/spack/bin
 BUILD_DIR=$PWD/build
 TOOLCHAIN_FILE=gcc.cmake
 BUILD_TYPE=Debug
-INSTALL_DIR=$PWD/build/install
 
 # WARNING: the local testing environment and GitLab CI/CD use Spack differently;
 # for local testing, dependencies are installed in
@@ -21,6 +20,5 @@ fi
 
 cmake -DCMAKE_TOOLCHAIN_FILE=$BUILD_DIR/../cmake/toolchain_files/$TOOLCHAIN_FILE \
       -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
-      -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
       -B $BUILD_DIR -S .
-make -C $BUILD_DIR install
+make -C $BUILD_DIR
