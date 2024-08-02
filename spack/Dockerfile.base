@@ -35,16 +35,22 @@ RUN export PATH=$PWD/spack/bin:$PATH \
     && cd spack-environment \
     && spack env activate . \
     && spack buildcache keys --install --trust \
-    && spack install --fail-fast  \
-    && spack env activate --sh -d . > activate.sh
+    && spack install --fail-fast 
 
-#RUN ln -s views/view view 
-
-# Set up a boot-up environment
 # /etc/profile removes *sbin locations from PATH for non-root users
 # Modify .bashrc to find /sbin/ldconfig even after test scripts do a
 # 'sudo -u docker --login'
-RUN echo 'PATH=${PATH}:/usr/local/sbin:/usr/sbin:/sbin' >> .bashrc
-RUN echo '.' ~/spack-environment/activate.sh >> .bashrc 
+RUN echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> .bashrc 
 
+# Set up a boot-up environment
+RUN { echo '#!/bin/bash' \
+      && echo 'export PATH=$PATH:/home/docker/spack/bin' \ 
+      && echo '. /home/docker/spack/share/spack/setup-env.sh' \
+      && echo 'spack env activate /home/docker/spack-environment' \
+      && echo 'exec "$@"'; \
+    } > entry.sh \
+    && chmod a+x entry.sh 
+
+# Start container
+ENTRYPOINT [ "./entry.sh" ]
 CMD [ "/bin/bash" ]

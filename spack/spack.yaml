@@ -3,8 +3,6 @@ spack:
   - gcc@12.3.0
   - glibc
   - kmod
-  - curl
-  - git
   - autoconf
   - automake
   - gnupg
