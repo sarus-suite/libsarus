@@ -9,7 +9,7 @@ build-ubuntu_22.04:
   image: jfrog.svc.cscs.ch/vcef/libsarus/ubuntu:22.04 
   stage: build
   before_script:
-    - git config --global --add safe.directory
+    - git config --global --add safe.directory .
   script:
     - ./build.sh
   artifacts:
