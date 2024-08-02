@@ -13,7 +13,7 @@ INSTALL_DIR=$PWD/build/install
 # $LIBSARUS_ROOT_PATH/spack/spack but for GitLab CI/CD, dependencies are
 # installed in /opt/spack-environment. This subtle difference can make a
 # discrepancy that something works locally but not in CI/CD.
-if $($LOCAL_SPACK_PATH/spack env status | grep "No active env"); then 
+if [[ $($LOCAL_SPACK_PATH/spack env status) == *"No active env"* ]]; then 
   export PATH=$LOCAL_SPACK_PATH:$PATH
   . $LIBSARUS_ROOT_PATH/spack/spack/share/spack/setup-env.sh
   spack env activate spack

@@ -85,12 +85,12 @@ case $TARGET_OS in
   "ubuntu:22.04")
     BUILD_OS_IMAGE="spack/ubuntu-jammy:develop"
     FINAL_OS_IMAGE="ubuntu:22.04"
-    OS_PKG_MANAGER="apt"
+    OS_PKG_MANAGER="DEBIAN_FRONTEND=noninteractive apt"
     ;;
   "opensuseleap:15")
     BUILD_OS_IMAGE="spack/leap15:develop"
     FINAL_OS_IMAGE="opensuse/leap:15"
-    OS_PKG_MANAGER="zypper"
+    OS_PKG_MANAGER="zypper -y"
     ;;
   "rocky:9")
     BUILD_OS_IMAGE="spack/rockylinux9:develop"
@@ -112,8 +112,8 @@ cat <<EOF >>$SPACK_YAML_FILE
 &&   echo "  concretizer:" \\
 &&   echo "    unify: true" \\
 &&   echo "  config:" \\
-&&   echo "    install_tree: /opt/software" \\
-&&   echo "  view: /opt/views/view" \\
+&&   echo "    install_tree: ~/software" \\
+&&   echo "  view: ~/views/view" \\
 EOF
 
 replace_placeholders

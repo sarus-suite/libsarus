@@ -1,9 +1,29 @@
-# Build stage with Spack pre-installed and ready to be used
-FROM spack/ubuntu-jammy:develop AS builder
+FROM ubuntu:22.04
+
+# Install sudo and Spack dependencies 
+RUN DEBIAN_FRONTEND=noninteractive apt update \
+    && DEBIAN_FRONTEND=noninteractive apt install -y sudo \
+        build-essential ca-certificates coreutils curl \
+        environment-modules gfortran git gpg lsb-release \
+        python3 python3-distutils python3-venv unzip zip 
+
+# Create the user 'docker'
+RUN groupadd docker \
+    && useradd -m -g docker docker \
+    && echo 'docker:docker' | chpasswd \
+    && chown docker:docker /home/docker \
+    && echo 'docker ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers 
+
+# Change to the user 'docker'
+USER docker 
+WORKDIR /home/docker
+
+# Set up Spack
+RUN git clone https://github.com/spack/spack.git
 
 # What we want to install and how we want to install it
 # is specified in a manifest file (spack.yaml)
-RUN mkdir -p /opt/spack-environment && \
+RUN mkdir -p spack-environment && \
 set -o noclobber && ( true \
 &&   echo "spack:" \
 &&   echo "  specs:" \
@@ -43,51 +63,27 @@ set -o noclobber && ( true \
 &&   echo "  concretizer:" \
 &&   echo "    unify: true" \
 &&   echo "  config:" \
-&&   echo "    install_tree: /opt/software" \
-&&   echo "  view: /opt/views/view" \
-) > /opt/spack-environment/spack.yaml
+&&   echo "    install_tree: ~/software" \
+&&   echo "  view: ~/views/view" \
+) > spack-environment/spack.yaml
 
-# Install the software, remove unnecessary deps
-RUN cd /opt/spack-environment \
+# Install the software
+# Modifications to the environment that are necessary to run
+RUN export PATH=$PWD/spack/bin:$PATH \
+    && . $PWD/spack/share/spack/setup-env.sh \
+    && cd spack-environment \
     && spack env activate . \
     && spack buildcache keys --install --trust \
-    && spack install --fail-fast \
-    && spack gc -y
+    && spack install --fail-fast  \
+    && spack env activate --sh -d . > activate.sh
 
-# Install sudo (if needed)
-RUN apt update \
-    && apt install -y sudo
-
-# Modifications to the environment that are necessary to run
-RUN cd /opt/spack-environment && \
-    spack env activate --sh -d . > activate.sh
-
-# Bare OS image to run the installed executables
-FROM ubuntu:22.04
-
-COPY --from=builder /opt/spack-environment /opt/spack-environment
-COPY --from=builder /opt/software /opt/software
-
-# paths.view is a symlink, so copy the parent to avoid dereferencing and duplicating it
-COPY --from=builder /opt/views /opt/views
-
-RUN ln -s /opt/views/view /opt/view 
-
-# Switch to the user 'docker'
-RUN groupadd docker \
-    && useradd -m -g docker docker \
-    && echo 'docker:docker' | chpasswd \
-    && chown docker:docker /home/docker \
-    && echo 'docker ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers 
-USER docker 
-WORKDIR /home/docker 
+#RUN ln -s views/view view 
 
 # Set up a boot-up environment
 # /etc/profile removes *sbin locations from PATH for non-root users
 # Modify .bashrc to find /sbin/ldconfig even after test scripts do a
 # 'sudo -u docker --login'
 RUN echo 'PATH=${PATH}:/usr/local/sbin:/usr/sbin:/sbin' >> .bashrc
-RUN echo '.' /opt/spack-environment/activate.sh >> .bashrc 
+RUN echo '.' ~/spack-environment/activate.sh >> .bashrc 
 
 CMD [ "/bin/bash" ]
-
