@@ -43,6 +43,9 @@ RUN groupadd docker \
 USER docker 
 WORKDIR /home/docker 
 
+RUN chown -R docker:docker /opt/spack-environment \
+    /opt/software /opt/views /opt/view
+
 # Set up a boot-up environment
 # /etc/profile removes *sbin locations from PATH for non-root users
 # Modify .bashrc to find /sbin/ldconfig even after test scripts do a
