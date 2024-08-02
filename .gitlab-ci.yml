@@ -34,7 +34,6 @@ test-ubuntu_22.04:
   stage: test
   script:
     - cd "build" 
-    - sudo apt install -y modprobe
     - sudo modprobe loop
     - sudo modprobe squashfs
     - sudo modprobe overlay
