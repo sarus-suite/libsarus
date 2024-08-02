@@ -34,5 +34,6 @@ test-ubuntu_22.04:
   stage: test
   script:
     - cd "build" 
+    - ls /sys/fs/
     - CTEST_OUTPUT_ON_FAILURE=1 ASAN_OPTIONS=detect_leaks=1 ctest --exclude-regex AsRoot
     - sudo -E CTEST_OUTPUT_ON_FAILURE=1 ASAN_OPTIONS=detect_leaks=1 ctest --tests-regex AsRoot
