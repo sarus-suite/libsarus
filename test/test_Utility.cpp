@@ -495,12 +495,8 @@ TEST(UtilityTestGroup, resolveSharedLibAbi) {
 }
 
 TEST(UtilityTestGroup, getSharedLibSoname) {
-    // FIXME: hard-coded relative path.
     auto dummyLibsDir = boost::filesystem::path{__FILE__}
-        .parent_path()
-        .parent_path()
-        .parent_path()
-        .parent_path() / "CI/dummy_libs";
+        .parent_path() / "dummy_libs";
     CHECK_EQUAL(libsarus::sharedlibs::getSoname(dummyLibsDir / "libc.so.6-host", "readelf"), std::string("libc.so.6"));
     CHECK_EQUAL(libsarus::sharedlibs::getSoname(dummyLibsDir / "ld-linux-x86-64.so.2-host", "readelf"), std::string("ld-linux-x86-64.so.2"));
     CHECK_THROWS(libsarus::Error, libsarus::sharedlibs::getSoname(dummyLibsDir / "lib_dummy_0.so", "readelf"));
@@ -524,12 +520,8 @@ TEST(UtilityTestGroup, isLibc) {
 }
 
 TEST(UtilityTestGroup, is64bitSharedLib) {
-    // FIXME: hard-coded relative path.
     auto dummyLibsDir = boost::filesystem::path{__FILE__}
-        .parent_path()
-        .parent_path()
-        .parent_path()
-        .parent_path() / "CI/dummy_libs";
+        .parent_path() / "dummy_libs";
     CHECK(libsarus::sharedlibs::is64bitSharedLib(dummyLibsDir / "libc.so.6-host", "readelf"));
     CHECK(libsarus::sharedlibs::is64bitSharedLib(dummyLibsDir / "ld-linux-x86-64.so.2-host", "readelf"));
     CHECK(!libsarus::sharedlibs::is64bitSharedLib(dummyLibsDir / "libc.so.6-32bit-container", "readelf"));
