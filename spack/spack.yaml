@@ -10,6 +10,7 @@ spack:
   - cmake
   - zlib-ng
   - tini
+  - wget
   - boost@1.85+filesystem+regex
   - python@3
   - py-setuptools
