@@ -35,11 +35,3 @@ spack:
 
   mirrors:
     v0.22.1: https://binaries.spack.io/v0.22.1
-
-  ci:
-    enable-artifacts-buildcache: true
-    rebuild-index: false
-    target: gitlab
-    pipeline-gen:
-    - submapping: []
-      match_behavior: first

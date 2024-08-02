@@ -9,5 +9,3 @@ spack mirror add v0.22.1 https://binaries.spack.io/v0.22.1
 spack buildcache keys --install --trust
 spack env activate spack
 spack install
-
-# TODO: install sudo if needed.
