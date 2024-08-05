@@ -76,19 +76,34 @@ prepare_containerize "$TARGET_OS"
 
 add_inline_placeholder "FINAL_OS_IMAGE"
 add_inline_placeholder "OS_PKG_MANAGER"
+add_inline_placeholder "SPACK_DEP_PKGS"
 
 case $TARGET_OS in
   "ubuntu:22.04")
     FINAL_OS_IMAGE="ubuntu:22.04"
     OS_PKG_MANAGER="DEBIAN_FRONTEND=noninteractive apt"
+    SPACK_DEP_PKGS="build-essential ca-certificates coreutils curl \
+      environment-modules gfortran git gpg lsb-release \
+      python3 python3-distutils python3-venv unzip zip"
     ;;
   "opensuseleap:15")
     FINAL_OS_IMAGE="opensuse/leap:15"
     OS_PKG_MANAGER="zypper -y"
+    SPACK_DEP_PKGS="" # TODO
     ;;
   "rocky:9")
     FINAL_OS_IMAGE="rockylinux:9"
-    OS_PKG_MANAGER="yum"
+    OS_PKG_MANAGER="dnf"
+    SPACK_DEP_PKGS="epel-release \
+      autoconf automake binutils bison flex gcc gcc-c++ gdb \
+      glibc-devel libtool make pkgconf pkgconf-m4 pkgconf-pkg-config \
+      redhat-rpm-config rpm-build rpm-sign strace \
+      asciidoc byacc diffstat git intltool jna ltrace patchutils \
+      perl-Fedora-VSP perl-generators pesign source-highlight systemtap \
+      valgrind valgrind-devel \
+      findutils gcc-gfortran gnupg2 hostname iproute \
+      python3 python3-pip python3-setuptools unzip python3-botocore"
+      # curl redhat-lsb-core python3-boto3
     ;;
   *)
     echo "error: shouldn't reach here."
@@ -97,8 +112,9 @@ esac
 
 add_multiline_placeholder "SPACK_YAML_FILE"
 
+ORG_SPACK_YAML_FILE=../spack.yaml
 SPACK_YAML_FILE=/tmp/.spack.yaml
-cp spack.yaml $SPACK_YAML_FILE
+cp $ORG_SPACK_YAML_FILE $SPACK_YAML_FILE
 sed -i '/^$/d' $SPACK_YAML_FILE
 sed -i 's,\(.*\),\&\&   echo "\1" \\,g' $SPACK_YAML_FILE
 cat <<EOF >>$SPACK_YAML_FILE

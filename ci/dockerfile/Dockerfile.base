@@ -1,11 +1,8 @@
 FROM @@FINAL_OS_IMAGE@@
 
 # Install sudo and Spack dependencies 
-RUN @@OS_PKG_MANAGER@@ update \
-    && @@OS_PKG_MANAGER@@ install -y sudo \
-        build-essential ca-certificates coreutils curl \
-        environment-modules gfortran git gpg lsb-release \
-        python3 python3-distutils python3-venv unzip zip 
+RUN @@OS_PKG_MANAGER@@ update -y \
+    && @@OS_PKG_MANAGER@@ install -y sudo @@SPACK_DEP_PKGS@@
 
 # Create the user 'docker'
 RUN groupadd docker \
