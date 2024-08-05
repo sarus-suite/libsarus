@@ -1,4 +1,8 @@
 #!/bin/bash
+# Script: install_dep.sh
+#
+# Install all dependencies needed to build libsarus using Spack.
+# CAVEAT: dependencies are locally installed in the Spack directory.
 
 LIBSARUS_ROOT_PATH=$(dirname $(realpath "${BASH_SOURCE[0]}"))
 

@@ -84,12 +84,14 @@ case $TARGET_OS in
     OS_PKG_MANAGER="DEBIAN_FRONTEND=noninteractive apt"
     SPACK_DEP_PKGS="build-essential ca-certificates coreutils curl \
       environment-modules gfortran git gpg lsb-release \
-      python3 python3-distutils python3-venv unzip zip"
+      python3 python3-distutils unzip zip"
     ;;
   "opensuseleap:15")
     FINAL_OS_IMAGE="opensuse/leap:15"
-    OS_PKG_MANAGER="zypper -y"
-    SPACK_DEP_PKGS="" # TODO
+    OS_PKG_MANAGER="zypper"
+    SPACK_DEP_PKGS="gcc gcc-c++ gdb glibc-devel libtool make pkgconf \
+      pkgconf gcc-fortran git lsb-release python311 patchutils \
+      python3-distutils-extra unzip zip bzip2 gzip xz"
     ;;
   "rocky:9")
     FINAL_OS_IMAGE="rockylinux:9"
@@ -103,7 +105,7 @@ case $TARGET_OS in
       valgrind valgrind-devel \
       findutils gcc-gfortran gnupg2 hostname iproute \
       python3 python3-pip python3-setuptools unzip python3-botocore"
-      # curl redhat-lsb-core python3-boto3
+      # curl redhat-lsb-core
     ;;
   *)
     echo "error: shouldn't reach here."

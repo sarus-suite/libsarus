@@ -2,8 +2,18 @@ variables:
   GIT_SUBMODULE_STRATEGY: recursive
 
 stages:
+  - check
   - build
   - test
+
+#-----------------------------------------------------------------------------#
+# Generic jobs
+#-----------------------------------------------------------------------------#
+
+.check-general:
+  stage: check
+  script:
+    - ./check_host.sh
 
 .build-general:
   stage: build
@@ -12,17 +22,10 @@ stages:
   script:
     - ./build.sh
   artifacts:
+    expire_in: 1 hour
     when: on_success
     paths:
       - "build/"
-
-build-rockylinux_9:
-  image: jfrog.svc.cscs.ch/vcef/libsarus/rockylinux:9
-  extends: .build-general
-
-#build-ubuntu_22.04:
-#  image: jfrog.svc.cscs.ch/vcef/libsarus/ubuntu:22.04 
-#  extends: .build-general
 
 .test-general:
   stage: test
@@ -31,10 +34,42 @@ build-rockylinux_9:
     - CTEST_OUTPUT_ON_FAILURE=1 ASAN_OPTIONS=detect_leaks=1 ctest --exclude-regex AsRoot
     - sudo env "PATH=$PATH" CTEST_OUTPUT_ON_FAILURE=1 ASAN_OPTIONS=detect_leaks=1 ctest --tests-regex AsRoot
 
+#-----------------------------------------------------------------------------#
+# Specialized jobs 
+#-----------------------------------------------------------------------------#
+
+#check-ubuntu_22.04:
+#  image: jfrog.svc.cscs.ch/vcef/libsarus/ubuntu:22.04 
+#  extends: .check-general
+
+check-rockylinux_9:
+  image: jfrog.svc.cscs.ch/vcef/libsarus/rockylinux:9
+  extends: .check-general
+
+#check-opensuse_leap_15:
+#  image: jfrog.svc.cscs.ch/vcef/libsarus/opensuse_leap:15 
+#  extends: .check-general
+
+#build-ubuntu_22.04:
+#  image: jfrog.svc.cscs.ch/vcef/libsarus/ubuntu:22.04 
+#  extends: .build-general
+
+build-rockylinux_9:
+  image: jfrog.svc.cscs.ch/vcef/libsarus/rockylinux:9
+  extends: .build-general
+
+#build-opensuse_leap_15:
+#  image: jfrog.svc.cscs.ch/vcef/libsarus/opensuse_leap:15 
+#  extends: .build-general
+
+#test-ubuntu_22.04:
+#  image: jfrog.svc.cscs.ch/vcef/libsarus/ubuntu:22.04 
+#  extends: .test-general
+
 test-rockylinux_9:
   image: jfrog.svc.cscs.ch/vcef/libsarus/rockylinux:9 
   extends: .test-general
 
-#test-ubuntu_22.04:
-#  image: jfrog.svc.cscs.ch/vcef/libsarus/ubuntu:22.04 
+#test-opensuse_leap_15
+#  image: jfrog.svc.cscs.ch/vcef/libsarus/opensuse_leap:15 
 #  extends: .test-general

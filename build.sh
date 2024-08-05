@@ -1,4 +1,7 @@
 #!/bin/bash
+# Script: build.sh
+#
+# Build libsarus with the dependencies installed by Spack.
 
 LIBSARUS_ROOT_PATH=$(dirname $(realpath "${BASH_SOURCE[0]}"))
 LOCAL_SPACK_PATH=$LIBSARUS_ROOT_PATH/ci/spack/bin
