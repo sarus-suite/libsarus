@@ -121,6 +121,7 @@ cat <<EOF >>$SPACK_YAML_FILE
 &&   echo "  concretizer:" \\
 &&   echo "    unify: true" \\
 &&   echo "  config:" \\
+&&   echo "    build_jobs: 8" \\
 &&   echo "    install_tree: ~/software" \\
 &&   echo "  view: ~/views/view" \\
 EOF

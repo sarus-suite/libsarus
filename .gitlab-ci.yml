@@ -5,26 +5,7 @@ stages:
   - build
   - test
 
-#build-ubuntu_22.04:
-#  image: jfrog.svc.cscs.ch/vcef/libsarus/ubuntu:22.04 
-#  stage: build
-#  before_script:
-#    - git config --global --add safe.directory $PWD 
-#  script:
-#    - ./build.sh
-#  artifacts:
-#    when: on_success
-#    paths:
-#      - "build/"
-
-#build-opensuseleap_15:
-#  stage: build
-#  script:
-#    - echo "Compiling the code..."
-#    - echo "Compile complete."
-
-build-rockylinux_9:
-  image: jfrog.svc.cscs.ch/vcef/libsarus/rockylinux:9
+.build-general:
   stage: build
   before_script:
     - git config --global --add safe.directory $PWD 
@@ -35,18 +16,25 @@ build-rockylinux_9:
     paths:
       - "build/"
 
-#test-ubuntu_22.04:
-#  image: jfrog.svc.cscs.ch/vcef/libsarus/ubuntu:22.04 
-#  stage: test
-#  script:
-#    - cd "build" 
-#    - CTEST_OUTPUT_ON_FAILURE=1 ASAN_OPTIONS=detect_leaks=1 ctest --exclude-regex AsRoot
-#    - sudo env "PATH=$PATH" CTEST_OUTPUT_ON_FAILURE=1 ASAN_OPTIONS=detect_leaks=1 ctest --tests-regex AsRoot
+build-rockylinux_9:
+  image: jfrog.svc.cscs.ch/vcef/libsarus/rockylinux:9
+  extends: .build-general
 
-test-rockylinux_9:
-  image: jfrog.svc.cscs.ch/vcef/libsarus/rockylinux:9 
+#build-ubuntu_22.04:
+#  image: jfrog.svc.cscs.ch/vcef/libsarus/ubuntu:22.04 
+#  extends: .build-general
+
+.test-general:
   stage: test
   script:
     - cd "build" 
     - CTEST_OUTPUT_ON_FAILURE=1 ASAN_OPTIONS=detect_leaks=1 ctest --exclude-regex AsRoot
     - sudo env "PATH=$PATH" CTEST_OUTPUT_ON_FAILURE=1 ASAN_OPTIONS=detect_leaks=1 ctest --tests-regex AsRoot
+
+test-rockylinux_9:
+  image: jfrog.svc.cscs.ch/vcef/libsarus/rockylinux:9 
+  extends: .test-general
+
+#test-ubuntu_22.04:
+#  image: jfrog.svc.cscs.ch/vcef/libsarus/ubuntu:22.04 
+#  extends: .test-general
