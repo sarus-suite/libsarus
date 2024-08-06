@@ -26,7 +26,7 @@ pass() {
   echo -e "-- Check for $1 - okay" >&3
   shift
   for MSG in "$@"; do
-    echo ">> $MSG" >&3
+    echo -e ">> $MSG" >&3
   done
 }
 
@@ -34,7 +34,7 @@ warn() {
   echo -e "-- Check for $1 - $(yellowify warning)" >&3
   shift
   for MSG in "$@"; do
-    echo ">> $MSG" >&3
+    echo -e ">> $MSG" >&3
   done
 }
 
@@ -42,7 +42,7 @@ fail() {
   echo -e "-- Check for $1 - $(reddify failed)" >&3
   shift
   for MSG in "$@"; do
-    echo ">> $MSG" >&3
+    echo -e ">> $MSG" >&3
   done
   HAS_ERROR=1
 }
