@@ -52,6 +52,7 @@ fi
 
 # Check: kernel modules
 REQUIRED_MODULES="loop squashfs overlay"
+ls /lib
 ls /lib/modules/
 ls /lib/modules/`uname -r`
 for _REQ_MOD in $REQUIRED_MODULES; do
