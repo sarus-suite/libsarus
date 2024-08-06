@@ -51,7 +51,7 @@ else
 fi
 
 # Check: kernel modules
-if [[ ! -f /dev/loop* ]]; then
+if [[ ! -f /dev/loop0 ]]; then
   fail "kernel module (loop)" \
     "Kernel module 'loop' not loaded" \
     "Consider executing '# modprobe loop'"
@@ -89,7 +89,6 @@ fi
 REQUIRED_COMPONENTS="filesystem regex"
 MINIMUM_BOOST_VER="1.85.0"
 for _REQ_BOOST in $REQUIRED_COMPONENTS; do
-  ldconfig -v
   OBTAINED_BOOST_VER=$(ldconfig -v | grep libboost_$_REQ_BOOST | awk -F"[. ]" '{ printf "%s.%s.%s", $3, $4, $5 }')
   if [ $(ver_to_num $OBTAINED_BOOST_VER) -lt $(ver_to_num $MINIMUM_BOOST_VER) ]; then
     if [ -z $OBTAINED_BOOST_VER ]; then
