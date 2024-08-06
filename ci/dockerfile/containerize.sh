@@ -89,7 +89,7 @@ case $TARGET_OS in
   "opensuseleap:15")
     FINAL_OS_IMAGE="opensuse/leap:15"
     OS_PKG_MANAGER="zypper"
-    SPACK_DEP_PKGS="gcc gcc-c++ gdb glibc-devel libtool make pkgconf \
+    SPACK_DEP_PKGS="gcc gcc-c++ gdb glibc-devel libtool make \
       pkgconf gcc-fortran git lsb-release python311 patchutils \
       python3-distutils-extra unzip zip bzip2 gzip xz"
     ;;

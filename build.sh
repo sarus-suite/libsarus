@@ -18,7 +18,7 @@ BUILD_TYPE=Debug
 if [[ $($LOCAL_SPACK_PATH/spack env status) == *"No active env"* ]]; then 
   export PATH=$LOCAL_SPACK_PATH:$PATH
   . $LIBSARUS_ROOT_PATH/ci/spack/share/spack/setup-env.sh
-  spack env activate spack
+  spack env activate ci 
 fi
 
 cmake -DCMAKE_TOOLCHAIN_FILE=$BUILD_DIR/../cmake/toolchain_files/$TOOLCHAIN_FILE \

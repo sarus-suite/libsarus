@@ -13,25 +13,29 @@ ver_to_num() {
   echo "$@" | awk -F. '{ printf("%d%03d%03d\n", $1,$2,$3); }';
 }
 
+reddify() {
+  echo "\033[0;31m$1\033[0m"
+}
+
 pass() {
-  echo "[+] check: $1: okay." >&3
+  echo -e "-- Check for $1 - okay" >&3
   shift
   for MSG in "$@"; do
-    echo "[+] - $MSG" >&3
+    echo ">> $MSG" >&3
   done
 }
 
 fail() {
-  echo "[-] check: $1: failed." >&3
+  echo -e "-- Check for $1 - $(reddify failed)" >&3
   shift
   for MSG in "$@"; do
-    echo "[-]  - $MSG" >&3
+    echo ">> $MSG" >&3
   done
   HAS_ERROR=1
 }
 
 info() {
-  echo "[*] $1" >&3
+  echo -e "-- $1" >&3
 }
 
 #-----------------------------------------------------------------------------#
@@ -41,7 +45,7 @@ MINIMUM_KERNEL_VER="3.0"
 OBTAINED_KERNEL_VER=$(cat /proc/version | grep -Eo '[0-9]\.[0-9]+\.[0-9]+' | head -n1)
 if [ $(ver_to_num $OBTAINED_KERNEL_VER) -lt $(ver_to_num $MINIMUM_KERNEL_VER) ]; then
   fail "kernel version" \
-    "system version ($OBTAINED_KERNEL_VER) smaller than minimum ($MINIMUM_KERNEL_VER)."
+    "System version ($OBTAINED_KERNEL_VER) smaller than minimum ($MINIMUM_KERNEL_VER)"
 else
   pass "kernel version"
 fi
@@ -51,8 +55,8 @@ REQUIRED_MODULES="loop squashfs overlay"
 for _REQ_MOD in $REQUIRED_MODULES; do
   if ! grep "\/$_REQ_MOD.ko" /lib/modules/`uname -r`/modules.*; then
     fail "kernel module ($_REQ_MOD)" \
-      "'$_REQ_MOD' not loaded." \
-      "consider executing '# modprobe $_REQ_MOD'"
+      "Kernel module '$_REQ_MOD' not loaded" \
+      "Consider executing '# modprobe $_REQ_MOD'"
   else
     pass "kernel module ($_REQ_MOD)"
   fi
@@ -63,7 +67,7 @@ MINIMUM_MOUNT_VER="2.20.0" # to get autoclear flag automatically be enabled
 OBTAINED_MOUNT_VER=$(mount --version | grep -Eo '[0-9]\.[0-9]+\.[0-9]+' | head -n1)
 if [ $(ver_to_num $OBTAINED_MOUNT_VER) -lt $(ver_to_num $MINIMUM_MOUNT_VER) ]; then
   fail "mount-utils" \
-    "system version ($OBTAINED_KERNEL_VER) smaller than minimum ($MINIMUM_KERNEL_VER)."
+    "System version ($OBTAINED_KERNEL_VER) smaller than minimum ($MINIMUM_KERNEL_VER)"
 else
   pass "mount-utils"
 fi
@@ -75,9 +79,9 @@ for _REQ_BOOST in $REQUIRED_COMPONENTS; do
   OBTAINED_BOOST_VER=$(ldconfig -v | grep libboost_$_REQ_BOOST | awk -F"[. ]" '{ printf "%s.%s.%s", $3, $4, $5 }')
   if [ $(ver_to_num $OBTAINED_BOOST_VER) -lt $(ver_to_num $MINIMUM_BOOST_VER) ]; then
     if [ -z $OBTAINED_BOOST_VER ]; then
-      _DIAG="'$_REQ_BOOST' not installed."
+      _DIAG="Library '$_REQ_BOOST' not installed"
     else
-      _DIAG="system version ($OBTAINED_BOOST_VER) smaller than minimum ($MINIMUM_BOOST_VER)."
+      _DIAG="System version ($OBTAINED_BOOST_VER) smaller than minimum ($MINIMUM_BOOST_VER)"
     fi
     fail "libboost ($_REQ_BOOST)" "$_DIAG"
   else
@@ -87,9 +91,9 @@ done
 
 # Finalize
 if [ -n "$HAS_ERROR" ]; then
-  info "check failed"
+  info "Check $(reddify failed)"
   exit 1
 else
-  info "check successful"
+  info "Check successful"
   exit 0
 fi
