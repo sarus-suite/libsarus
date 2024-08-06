@@ -6,7 +6,7 @@
 
 exec 3>&1
 exec 2>/dev/null
-exec >/dev/null
+#exec >/dev/null
 
 # In reference to: https://apple.stackexchange.com/questions/83939/compare-multi-digit-version-numbers-in-bash/123408#123408
 ver_to_num() {
