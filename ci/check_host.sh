@@ -2,8 +2,9 @@
 # Script: check_host.sh
 #
 # Check whether the runtime host environment is compatible with libsarus.
-# CAVEAT: not to be confused with the *build* environment.
 # Written to be usable both on a bare-metal and inside a container.
+# CAVEAT: not to be confused with the *build* environment.
+# CAVEAT: set '--no-dep' if no library dependency check is needed.
 
 exec 3>&1
 exec 2>/dev/null

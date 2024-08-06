@@ -91,17 +91,16 @@ case $TARGET_OS in
     OS_PKG_MANAGER="zypper"
     SPACK_DEP_PKGS="binutils bzip2 clingo cpp cpp7 dbus-1 file gcc gcc-c++ \
       gcc-fortran gcc7 gcc7-c++ gcc7-fortran gio-branding-SLE git git-core \
-      glib2-tools glibc-devel gzip less libasan4 libatomic1 libbz2-devel \
+      glib2-tools glibc-devel gzip less libatomic1 libbz2-devel \
       libcilkrts5 libclingo4 libctf-nobfd0 libctf0 libdbus-1-3 libduktape206 \
       libexpat1 libgdbm4 libgfortran4 libgio-2_0-0 libgmodule-2_0-0 \
-      libgobject-2_0-0 libgomp1 libisl15 libitm1 libjitterentropy3 liblsan0 \
+      libgobject-2_0-0 libgomp1 libisl15 libitm1 libjitterentropy3 \
       libmpc3 libmpfr6 libmpx2 libmpxwrappers2 libopenssl1_1 \
       libpolkit-agent-1-0 libpolkit-gobject-1-0 libpython3_6m1_0 \
-      libquadmath0 libsha1detectcoll1 libstdc++6-devel-gcc7 libtsan0 \
+      libquadmath0 libsha1detectcoll1 libstdc++6-devel-gcc7 \
       libubsan0 libxcrypt-devel linux-glibc-devel make patch perl perl-Error \
       perl-Git pkg-config polkit python3-base python3-cffi python3-clingo \
-      python3-pycparser shared-mime-info spack spack-recipes sudo tar unzip \
-      which xz curl"
+      python3-pycparser shared-mime-info tar unzip which xz curl"
     ;;
   "rocky:9")
     FINAL_OS_IMAGE="rockylinux:9"

@@ -192,6 +192,9 @@ TEST(UtilityTestGroup, makeUniquePathWithRandomSuffix) {
 }
 
 TEST(UtilityTestGroup, createFoldersIfNecessary) {
+    if (boost::filesystem::exists("/tmp/grandparent"))
+        boost::filesystem::remove_all("/tmp/grandparent");
+
     libsarus::filesystem::createFoldersIfNecessary("/tmp/grandparent/parent/child");
     CHECK((libsarus::filesystem::getOwner("/tmp/grandparent/parent") == std::tuple<uid_t, gid_t>{0, 0}));
     CHECK((libsarus::filesystem::getOwner("/tmp/grandparent/parent/child") == std::tuple<uid_t, gid_t>{0, 0}));
@@ -204,6 +207,9 @@ TEST(UtilityTestGroup, createFoldersIfNecessary) {
 }
 
 TEST(UtilityTestGroup, createFileIfNecessary) {
+    if (boost::filesystem::exists("/tmp/testFile"))
+        boost::filesystem::remove_all("/tmp/testFile");
+
     libsarus::filesystem::createFileIfNecessary("/tmp/testFile");
     CHECK((libsarus::filesystem::getOwner("/tmp/testFile") == std::tuple<uid_t, gid_t>{0, 0}));
     boost::filesystem::remove_all("/tmp/testFile");
