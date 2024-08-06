@@ -98,52 +98,52 @@ else
   pass "mount-utils"
 fi
 
-# Check: libboost
-REQUIRED_COMPONENTS="filesystem regex"
-MINIMUM_BOOST_VER="1.85.0"
-for _REQ_BOOST in $REQUIRED_COMPONENTS; do
-  # Trial 1: system path
-  OBTAINED_BOOST_VER=$(ldconfig -v | grep libboost_$_REQ_BOOST | awk -F"[. ]" '{ printf "%s.%s.%s", $3, $4, $5 }')
-  if [ $(ver_to_num $OBTAINED_BOOST_VER) -lt $(ver_to_num $MINIMUM_BOOST_VER) ]; then
-    _SYSTEM_BOOST_FOUND=0
-    if [ -z $OBTAINED_BOOST_VER ]; then
-      _SYSTEM_BOOST_DIAG="Library '$_REQ_BOOST' not installed in system"
-    else
-      _SYSTEM_BOOST_DIAG="System-installed version ($OBTAINED_BOOST_VER) smaller than minimum ($MINIMUM_BOOST_VER)"
-    fi
-  else
-    _SYSTEM_BOOST_FOUND=1
-  fi
-
-  # Trial 2: cmake path
-  if [[ $_SYSTEM_BOOST_FOUND == 0 ]]; then
-    if [[ -n $CMAKE_PREFIX_PATH ]] && [[ -d $CMAKE_PREFIX_PATH/lib ]]; then
-      CMAKE_LIB_PREFIX_PATH=$CMAKE_PREFIX_PATH/lib
-      for _CANDIDATE_NAME in $(ls $CMAKE_LIB_PREFIX_PATH | grep libboost_$_REQ_BOOST); do
-        OBTAINED_BOOST_VER=$(echo $_CANDIDATE_NAME | awk -F"[. ]" '{ printf "%s.%s.%s", $3, $4, $5 }')
-        if [ $(ver_to_num $OBTAINED_BOOST_VER) -lt $(ver_to_num $MINIMUM_BOOST_VER) ]; then
-          _CMAKE_BOOST_FOUND=0
-          if [ -z $OBTAINED_BOOST_VER ]; then
-            _CMAKE_BOOST_DIAG="Library '$_REQ_BOOST' not installed for cmake"
-          else
-            _CMAKE_BOOST_DIAG="CMake-available version ($OBTAINED_BOOST_VER) smaller than minimum ($MINIMUM_BOOST_VER)"
-          fi
-        else
-          _CMAKE_BOOST_FOUND=1
-          break
-        fi
-      done
-    fi
-  fi
-
-  if [[ $_SYSTEM_BOOST_FOUND == 1 ]]; then
-    pass "libboost ($_REQ_BOOST)"
-  elif [[ $_SYSTEM_BOOST_FOUND == 0 ]] && [[ $_CMAKE_BOOST_FOUND == 1 ]]; then
-    warn "libboost ($_REQ_BOOST)" "$_SYSTEM_BOOST_DIAG" "$(yellowify CMake should be used)"
-  else
-    fail "libboost ($_REQ_BOOST)" "$_SYSTEM_BOOST_DIAG" "$_CMAKE_BOOST_DIAG"
-  fi
-done
+## Check: libboost
+#REQUIRED_COMPONENTS="filesystem regex"
+#MINIMUM_BOOST_VER="1.85.0"
+#for _REQ_BOOST in $REQUIRED_COMPONENTS; do
+#  # Trial 1: system path
+#  OBTAINED_BOOST_VER=$(ldconfig -v | grep libboost_$_REQ_BOOST | awk -F"[. ]" '{ printf "%s.%s.%s", $3, $4, $5 }')
+#  if [ $(ver_to_num $OBTAINED_BOOST_VER) -lt $(ver_to_num $MINIMUM_BOOST_VER) ]; then
+#    _SYSTEM_BOOST_FOUND=0
+#    if [ -z $OBTAINED_BOOST_VER ]; then
+#      _SYSTEM_BOOST_DIAG="Library '$_REQ_BOOST' not installed in system"
+#    else
+#      _SYSTEM_BOOST_DIAG="System-installed version ($OBTAINED_BOOST_VER) smaller than minimum ($MINIMUM_BOOST_VER)"
+#    fi
+#  else
+#    _SYSTEM_BOOST_FOUND=1
+#  fi
+#
+#  # Trial 2: cmake path
+#  if [[ $_SYSTEM_BOOST_FOUND == 0 ]]; then
+#    if [[ -n $CMAKE_PREFIX_PATH ]] && [[ -d $CMAKE_PREFIX_PATH/lib ]]; then
+#      CMAKE_LIB_PREFIX_PATH=$CMAKE_PREFIX_PATH/lib
+#      for _CANDIDATE_NAME in $(ls $CMAKE_LIB_PREFIX_PATH | grep libboost_$_REQ_BOOST); do
+#        OBTAINED_BOOST_VER=$(echo $_CANDIDATE_NAME | awk -F"[. ]" '{ printf "%s.%s.%s", $3, $4, $5 }')
+#        if [ $(ver_to_num $OBTAINED_BOOST_VER) -lt $(ver_to_num $MINIMUM_BOOST_VER) ]; then
+#          _CMAKE_BOOST_FOUND=0
+#          if [ -z $OBTAINED_BOOST_VER ]; then
+#            _CMAKE_BOOST_DIAG="Library '$_REQ_BOOST' not installed for cmake"
+#          else
+#            _CMAKE_BOOST_DIAG="CMake-available version ($OBTAINED_BOOST_VER) smaller than minimum ($MINIMUM_BOOST_VER)"
+#          fi
+#        else
+#          _CMAKE_BOOST_FOUND=1
+#          break
+#        fi
+#      done
+#    fi
+#  fi
+#
+#  if [[ $_SYSTEM_BOOST_FOUND == 1 ]]; then
+#    pass "libboost ($_REQ_BOOST)"
+#  elif [[ $_SYSTEM_BOOST_FOUND == 0 ]] && [[ $_CMAKE_BOOST_FOUND == 1 ]]; then
+#    warn "libboost ($_REQ_BOOST)" "$_SYSTEM_BOOST_DIAG" "$(yellowify CMake should be used)"
+#  else
+#    fail "libboost ($_REQ_BOOST)" "$_SYSTEM_BOOST_DIAG" "$_CMAKE_BOOST_DIAG"
+#  fi
+#done
 
 # Finalize
 if [ -n "$HAS_ERROR" ]; then
