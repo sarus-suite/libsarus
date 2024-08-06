@@ -13,7 +13,7 @@ stages:
 .check-general:
   stage: check
   script:
-    - sudo ./check_host.sh
+    - ./check_host.sh
 
 .build-general:
   stage: build

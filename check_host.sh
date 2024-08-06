@@ -51,17 +51,29 @@ else
 fi
 
 # Check: kernel modules
-REQUIRED_MODULES="loop squashfs overlay"
-for _REQ_MOD in $REQUIRED_MODULES; do
-  ls /lib/modules
-  if ! grep "\/$_REQ_MOD.ko" /lib/modules/`uname -r`/modules.*; then
-    fail "kernel module ($_REQ_MOD)" \
-      "Kernel module '$_REQ_MOD' not loaded" \
-      "Consider executing '# modprobe $_REQ_MOD'"
-  else
-    pass "kernel module ($_REQ_MOD)"
-  fi
-done
+if [[ ! -f /dev/loop* ]]; then
+  fail "kernel module (loop)" \
+    "Kernel module 'loop' not loaded" \
+    "Consider executing '# modprobe loop'"
+else
+  pass "kernel module (loop)"
+fi
+
+if ! cat /proc/filesystems | grep "squashfs"; then
+  fail "kernel module (squashfs)" \
+    "Kernel module 'squashfs' not loaded" \
+    "Consider executing '# modprobe squashfs'"
+else
+  pass "kernel module (squashfs)"
+fi
+
+if ! lsmod | grep overlay; then
+  fail "kernel module (overlay)" \
+    "Kernel module 'overlay' not loaded" \
+    "Consider executing '# modprobe overlay'"
+else
+  pass "kernel module (overlay)"
+fi
 
 # Check: mount-utils
 MINIMUM_MOUNT_VER="2.20.0" # to get autoclear flag automatically be enabled
