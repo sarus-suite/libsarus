@@ -15,7 +15,7 @@ ver_to_num() {
 }
 
 yellowify() {
-  echo "\033[1;33m$1\033[0m"
+  echo "\033[0;33m$1\033[0m"
 }
 
 reddify() {
