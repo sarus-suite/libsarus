@@ -13,7 +13,7 @@ stages:
 .check-general:
   stage: check
   script:
-    - ./check_host.sh
+    - ci/check_host.sh
 
 .build-general:
   stage: build

@@ -101,7 +101,7 @@ case $TARGET_OS in
       libubsan0 libxcrypt-devel linux-glibc-devel make patch perl perl-Error \
       perl-Git pkg-config polkit python3-base python3-cffi python3-clingo \
       python3-pycparser shared-mime-info spack spack-recipes sudo tar unzip \
-      which xz"
+      which xz curl"
     ;;
   "rocky:9")
     FINAL_OS_IMAGE="rockylinux:9"
