@@ -6,7 +6,7 @@
 
 exec 3>&1
 #exec 2>/dev/null
-exec >/dev/null
+#exec >/dev/null
 
 # In reference to: https://apple.stackexchange.com/questions/83939/compare-multi-digit-version-numbers-in-bash/123408#123408
 ver_to_num() {
@@ -76,6 +76,7 @@ fi
 REQUIRED_COMPONENTS="filesystem regex"
 MINIMUM_BOOST_VER="1.85.0"
 for _REQ_BOOST in $REQUIRED_COMPONENTS; do
+  ldconfig -v | grep libboost_$_REQ_BOOST
   OBTAINED_BOOST_VER=$(ldconfig -v | grep libboost_$_REQ_BOOST | awk -F"[. ]" '{ printf "%s.%s.%s", $3, $4, $5 }')
   if [ $(ver_to_num $OBTAINED_BOOST_VER) -lt $(ver_to_num $MINIMUM_BOOST_VER) ]; then
     if [ -z $OBTAINED_BOOST_VER ]; then
