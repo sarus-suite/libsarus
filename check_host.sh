@@ -53,6 +53,7 @@ fi
 # Check: kernel modules
 REQUIRED_MODULES="loop squashfs overlay"
 for _REQ_MOD in $REQUIRED_MODULES; do
+  ls /lib/modules
   if ! grep "\/$_REQ_MOD.ko" /lib/modules/`uname -r`/modules.*; then
     fail "kernel module ($_REQ_MOD)" \
       "Kernel module '$_REQ_MOD' not loaded" \
