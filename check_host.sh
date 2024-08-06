@@ -51,7 +51,7 @@ else
 fi
 
 # Check: kernel modules
-if [[ ! -f /dev/loop0 ]]; then
+if [ ! -f /dev/loop0 ]; then
   fail "kernel module (loop)" \
     "Kernel module 'loop' not loaded" \
     "Consider executing '# modprobe loop'"
