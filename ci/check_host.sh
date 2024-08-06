@@ -15,11 +15,11 @@ ver_to_num() {
 }
 
 yellowify() {
-  echo "\033[0;33m$1\033[0m"
+  echo "\033[0;33m$@\033[0m"
 }
 
 reddify() {
-  echo "\033[0;31m$1\033[0m"
+  echo "\033[0;31m$@\033[0m"
 }
 
 pass() {
