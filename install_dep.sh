@@ -11,5 +11,5 @@ export PATH=$LIBSARUS_ROOT_PATH/ci/spack/bin:$PATH
 
 spack mirror add v0.22.1 https://binaries.spack.io/v0.22.1
 spack buildcache keys --install --trust
-spack env activate spack
+spack env activate ci 
 spack install

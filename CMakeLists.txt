@@ -13,14 +13,13 @@ set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE 1)
 message(STATUS "Installation directory: " ${CMAKE_INSTALL_PREFIX})
 
 # Build statically-linked executables
-if(NOT ${BUILD_SHARED})
+if(${BUILD_STATIC})
   set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
   set(CMAKE_EXE_LINKER_FLAGS "-static")
   set(CMAKE_LINK_SEARCH_START_STATIC TRUE)
   set(CMAKE_LINK_SEARCH_END_STATIC TRUE)
   set(Boost_USE_STATIC_LIBS ON)
-  set(Boost_USE_STATIC_RUNTIME ON)
-endif(NOT ${BUILD_SHARED})
+endif(${BUILD_STATIC})
 
 # Define CMake variables
 set(ENABLE_UNIT_TESTS TRUE CACHE BOOL 

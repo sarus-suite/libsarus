@@ -1,0 +1,2 @@
+/usr/bin/ar qc libsarus_testaux.a CMakeFiles/libsarus_testaux.dir/filesystem.o CMakeFiles/libsarus_testaux.dir/hook.o CMakeFiles/libsarus_testaux.dir/misc.o
+/usr/bin/ranlib libsarus_testaux.a

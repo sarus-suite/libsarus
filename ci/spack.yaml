@@ -20,3 +20,30 @@ spack:
     v0.22.1: https://binaries.spack.io/v0.22.1
     aws: https://spack-llnl-mirror.s3-us-west-2.amazonaws.com/
     e4s: https://cache.e4s.io
+  compilers:
+  - compiler:
+      spec: clang@=14.0.0
+      paths:
+        cc: /usr/bin/clang
+        cxx: /usr/bin/clang++
+        f77: null
+        fc: null
+      flags: {}
+      operating_system: ubuntu22.04
+      target: x86_64
+      modules: []
+      environment: {}
+      extra_rpaths: []
+  - compiler:
+      spec: gcc@=11.4.0
+      paths:
+        cc: /usr/bin/gcc
+        cxx: /usr/bin/g++
+        f77: /usr/bin/gfortran
+        fc: /usr/bin/gfortran
+      flags: {}
+      operating_system: ubuntu22.04
+      target: x86_64
+      modules: []
+      environment: {}
+      extra_rpaths: []
