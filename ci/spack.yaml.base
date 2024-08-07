@@ -1,0 +1,22 @@
+spack:
+  specs:
+  - gcc@12.3.0
+  - glibc
+  - kmod
+  - autoconf
+  - automake
+  #- gnupg
+  - squashfs
+  - cmake
+  - zlib-ng
+  - wget
+  - boost@1.85+filesystem+regex
+  - python@3
+  - py-setuptools
+  - py-psutil
+  - py-gcovr
+
+  mirrors:
+    v0.22.1: https://binaries.spack.io/v0.22.1
+    aws: https://spack-llnl-mirror.s3-us-west-2.amazonaws.com/
+    e4s: https://cache.e4s.io

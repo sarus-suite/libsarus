@@ -89,6 +89,7 @@ case $TARGET_OS in
   "opensuseleap:15")
     FINAL_OS_IMAGE="opensuse/leap:15"
     OS_PKG_MANAGER="zypper"
+    # TODO: installing absolutely everything possibly required. Need to cut.
     SPACK_DEP_PKGS="binutils bzip2 clingo cpp cpp7 dbus-1 file gcc gcc-c++ \
       gcc-fortran gcc7 gcc7-c++ gcc7-fortran gio-branding-SLE git git-core \
       glib2-tools glibc-devel gzip less libatomic1 libbz2-devel \
@@ -100,11 +101,13 @@ case $TARGET_OS in
       libquadmath0 libsha1detectcoll1 libstdc++6-devel-gcc7 \
       libubsan0 libxcrypt-devel linux-glibc-devel make patch perl perl-Error \
       perl-Git pkg-config polkit python3-base python3-cffi python3-clingo \
-      python3-pycparser shared-mime-info tar unzip which xz curl"
+      python3-pycparser shared-mime-info tar unzip which xz \
+      curl libcurl-devel glibc-utils"
     ;;
   "rocky:9")
     FINAL_OS_IMAGE="rockylinux:9"
     OS_PKG_MANAGER="dnf"
+    # TODO: installing absolutely everything possibly required. Need to cut.
     SPACK_DEP_PKGS="epel-release \
       autoconf automake binutils bison flex gcc gcc-c++ gdb \
       glibc-devel libtool make pkgconf pkgconf-m4 pkgconf-pkg-config \
@@ -123,7 +126,7 @@ esac
 
 add_multiline_placeholder "SPACK_YAML_FILE"
 
-ORG_SPACK_YAML_FILE=../spack.yaml
+ORG_SPACK_YAML_FILE=../spack.yaml.base
 SPACK_YAML_FILE=/tmp/.spack.yaml
 cp $ORG_SPACK_YAML_FILE $SPACK_YAML_FILE
 sed -i '/^$/d' $SPACK_YAML_FILE

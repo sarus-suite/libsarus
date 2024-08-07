@@ -42,34 +42,34 @@ stages:
 #  image: jfrog.svc.cscs.ch/vcef/libsarus/ubuntu:22.04 
 #  extends: .check-general
 
-check-rockylinux_9:
-  image: jfrog.svc.cscs.ch/vcef/libsarus/rockylinux:9
-  extends: .check-general
-
-#check-opensuse_leap_15:
-#  image: jfrog.svc.cscs.ch/vcef/libsarus/opensuse_leap:15 
+#check-rockylinux_9:
+#  image: jfrog.svc.cscs.ch/vcef/libsarus/rockylinux:9
 #  extends: .check-general
+
+check-opensuse_leap_15:
+  image: jfrog.svc.cscs.ch/vcef/libsarus/opensuseleap:15 
+  extends: .check-general
 
 #build-ubuntu_22.04:
 #  image: jfrog.svc.cscs.ch/vcef/libsarus/ubuntu:22.04 
 #  extends: .build-general
 
-build-rockylinux_9:
-  image: jfrog.svc.cscs.ch/vcef/libsarus/rockylinux:9
-  extends: .build-general
-
-#build-opensuse_leap_15:
-#  image: jfrog.svc.cscs.ch/vcef/libsarus/opensuse_leap:15 
+#build-rockylinux_9:
+#  image: jfrog.svc.cscs.ch/vcef/libsarus/rockylinux:9
 #  extends: .build-general
+
+build-opensuse_leap_15:
+  image: jfrog.svc.cscs.ch/vcef/libsarus/opensuseleap:15 
+  extends: .build-general
 
 #test-ubuntu_22.04:
 #  image: jfrog.svc.cscs.ch/vcef/libsarus/ubuntu:22.04 
 #  extends: .test-general
 
-test-rockylinux_9:
-  image: jfrog.svc.cscs.ch/vcef/libsarus/rockylinux:9 
-  extends: .test-general
-
-#test-opensuse_leap_15
-#  image: jfrog.svc.cscs.ch/vcef/libsarus/opensuse_leap:15 
+#test-rockylinux_9:
+#  image: jfrog.svc.cscs.ch/vcef/libsarus/rockylinux:9 
 #  extends: .test-general
+
+test-opensuse_leap_15:
+  image: jfrog.svc.cscs.ch/vcef/libsarus/opensuseleap:15 
+  extends: .test-general

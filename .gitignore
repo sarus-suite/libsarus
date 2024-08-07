@@ -25,3 +25,4 @@ Dockerfile.gen.*
 RELEASE_NOTES.md
 spack.lock
 .spack-env
+spack.yaml

@@ -15,12 +15,24 @@ ver_to_num() {
   echo "$@" | awk -F. '{ printf("%d%03d%03d\n", $1,$2,$3); }';
 }
 
+yellowify() {
+  echo "\033[0;33m$1\033[0m"
+}
+
 reddify() {
   echo "\033[0;31m$1\033[0m"
 }
 
 pass() {
   echo -e "-- Check for $1 - okay" >&3
+  shift
+  for MSG in "$@"; do
+    echo ">> $MSG" >&3
+  done
+}
+
+skip() {
+  echo -e "-- Check for $1 - $(yellowify skipped)" >&3
   shift
   for MSG in "$@"; do
     echo ">> $MSG" >&3
@@ -93,10 +105,10 @@ else
 fi
 
 # Check: libboost
-if [[ $DEP_CHECK == 1 ]]; then
-  REQUIRED_COMPONENTS="filesystem regex"
-  MINIMUM_BOOST_VER="1.85.0"
-  for _REQ_BOOST in $REQUIRED_COMPONENTS; do
+REQUIRED_COMPONENTS="filesystem regex"
+MINIMUM_BOOST_VER="1.85.0"
+for _REQ_BOOST in $REQUIRED_COMPONENTS; do
+  if [[ $DEP_CHECK == 1 ]]; then
     OBTAINED_BOOST_VER=$(ldconfig -v | grep libboost_$_REQ_BOOST | awk -F"[. ]" '{ printf "%s.%s.%s", $3, $4, $5 }')
     if [ $(ver_to_num $OBTAINED_BOOST_VER) -lt $(ver_to_num $MINIMUM_BOOST_VER) ]; then
       if [ -z $OBTAINED_BOOST_VER ]; then
@@ -108,8 +120,11 @@ if [[ $DEP_CHECK == 1 ]]; then
     else
       pass "libboost ($_REQ_BOOST)"
     fi
-  done
-fi
+  else
+    skip "libboost ($_REQ_BOOST)" \
+      "Make sure to install this on the runtime environment"
+  fi
+done
 
 # Finalize
 if [ -n "$HAS_ERROR" ]; then
