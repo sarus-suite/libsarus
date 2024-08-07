@@ -86,7 +86,7 @@ else
   pass "kernel module (squashfs)"
 fi
 
-if ! lsmod | grep overlay; then
+if ! cat /proc/filesystems | grep "overlay"; then
   fail "kernel module (overlay)" \
     "Kernel module 'overlay' not loaded" \
     "Consider executing '# modprobe overlay'"
