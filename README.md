@@ -38,7 +38,7 @@ $ ./build.sh
 
 #### Test
 
-1. **Check if your system can run tests.**
+1. **Check if your system can run tests.** The dependency check is unnecessary as tests are pre-linked to dependencies at build time.
 
 ```
 $ ./ci/check_host.sh --no-dep
