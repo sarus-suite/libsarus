@@ -11,6 +11,14 @@ INSTALL_DIR=$PWD/build/install
 TOOLCHAIN_FILE=gcc.cmake
 BUILD_TYPE=Debug
 
+for _ARG in "$@"; do
+  if [[ $_ARG == "-D*" ]]; then
+    _KEY=${_ARG#-D}; KEY=${_KEY%=*}
+    VALUE=${_ARG#*=}
+    declare $KEY=$VALUE
+  fi
+done 
+
 # WARNING: the local testing environment and GitLab CI/CD use Spack differently;
 # for local testing, dependencies are installed in
 # $LIBSARUS_ROOT_PATH/ci/spack but for GitLab CI/CD, dependencies are

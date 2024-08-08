@@ -21,7 +21,7 @@ stages:
   before_script:
     - git config --global --add safe.directory $PWD 
   script:
-    - BUILD_DIR=$PWD/build-${IMAGE_NAME} ./build.sh
+    - ./build.sh -DBUILD_DIR=$PWD/build-${IMAGE_NAME}
   artifacts:
     expire_in: 1 hour
     when: on_success
