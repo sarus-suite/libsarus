@@ -11,12 +11,12 @@ INSTALL_DIR=$PWD/build/install
 TOOLCHAIN_FILE=gcc.cmake
 BUILD_TYPE=Debug
 
-# Re-define variables if needed.
+# (Re)define variables if needed.
 for _ARG in "$@"; do
   if [[ $_ARG == -D* ]]; then
     _KEY=${_ARG#-D}; KEY=${_KEY%=*}
     VALUE=${_ARG#*=}
-    echo "Resetting $KEY to $VALUE..."
+    echo "Setting $KEY to $VALUE..."
     declare $KEY=$VALUE
   fi
 done 
@@ -39,4 +39,4 @@ cmake -DCMAKE_TOOLCHAIN_FILE=$BUILD_DIR/../cmake/toolchain_files/$TOOLCHAIN_FILE
       -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
       -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
       -B $BUILD_DIR -S .
-make -C $BUILD_DIR install
+make -C $BUILD_DIR
