@@ -15,6 +15,7 @@ for _ARG in "$@"; do
   if [[ $_ARG == "-D*" ]]; then
     _KEY=${_ARG#-D}; KEY=${_KEY%=*}
     VALUE=${_ARG#*=}
+    echo "Resetting $KEY to $VALUE..."
     declare $KEY=$VALUE
   fi
 done 
