@@ -2,6 +2,29 @@
 
 LIBSARUS_ROOT_PATH=$(dirname $(realpath "${BASH_SOURCE[0]}"))/..
 
+usage() {
+  echo "usage: $0 [OPTIONS...] <target_os>"
+  echo "  -p      Print supported OSes"
+}
+
+parse_options() {
+  # Parse options
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      -p)
+        echo $SUPPORTED_OS
+        exit 0
+        ;;
+      *)      
+        TARGET_OS="$1"
+        shift
+        ;;
+    esac
+  done
+}
+
+#------------------------------------------------------------------------------#
+
 SUPPORTED_OS=
 
 add_supported_os() {
@@ -21,7 +44,7 @@ prepare_containerize() {
   TARGET_DOCKERFILE_NAME=Dockerfile.gen."$1"
 
   if ! is_supported_os "$1"; then
-    echo "usage: $0 <target_os>"
+    usage
     exit
   fi
 
@@ -70,8 +93,9 @@ replace_placeholders() {
 add_supported_os "ubuntu:22.04"
 add_supported_os "opensuseleap:15"
 add_supported_os "rocky:9"
-
-TARGET_OS="$1"
+  
+TARGET_OS=""
+parse_options "$@"
 prepare_containerize "$TARGET_OS" 
 
 add_inline_placeholder "FINAL_OS_IMAGE"

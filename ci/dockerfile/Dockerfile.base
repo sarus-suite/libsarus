@@ -49,5 +49,5 @@ RUN { echo '#!/bin/bash' \
     && chmod a+x entry.sh 
 
 # Start container
-ENTRYPOINT [ "./entry.sh" ]
+ENTRYPOINT [ "/home/docker/entry.sh" ]
 CMD [ "/bin/bash" ]
