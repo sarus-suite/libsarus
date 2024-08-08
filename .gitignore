@@ -27,3 +27,4 @@ spack.lock
 .spack-env
 spack.yaml
 CTestTestfile.cmake
+cmake_install.cmake
