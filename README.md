@@ -62,4 +62,4 @@ You can enter a container environment where all dependencies were already instal
 $ ci/enter_buildenv.sh
 ```
 
-This will create a container image if necessary and bring you inside the container. The `libsarus` root directory will be mounted to `~/libsarus`, where you can build and test `libsarus` as usual. **Caveat: your host environment (i.e., outside the container) still need to pass `ci/check_host.sh` to properly run tests inside the container.**
+This will create a container image if necessary and bring you inside the container. The `libsarus` root directory will be mounted to `~/libsarus`, where you can build and test `libsarus` as usual. **Caveat: your host environment (i.e., outside the container) still needs to pass `ci/check_host.sh` to properly run tests inside the container.**
