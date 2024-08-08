@@ -18,7 +18,11 @@ Essential code collection for custom container runtime development.
 Runtime requirements can be checked with `ci/check_host.sh`.
 
 
-## Build
+## Build and Test
+
+### On the host
+
+#### Build
 
 1. **Install third-party dependencies.** `install_dep.sh` will install all necessary dependencies in the local directory using Spack.
 
@@ -32,8 +36,7 @@ $ ./install_dep.sh
 $ ./build.sh
 ```
 
-
-## Test
+#### Test
 
 1. **Check if your system can run tests.**
 
@@ -53,8 +56,7 @@ $ ./build.sh
 $ cd build; sudo ctest #OPTIONAL: --output-on-failure
 ```
 
-
-## Using container environment
+### In a container
 
 You can enter a container environment where all dependencies were already installed as follows.
 
@@ -62,4 +64,6 @@ You can enter a container environment where all dependencies were already instal
 $ ci/enter_buildenv.sh
 ```
 
-This will create a container image if necessary and bring you inside the container. The `libsarus` root directory will be mounted to `~/libsarus`, where you can build and test `libsarus` as usual. **Caveat: your host environment (i.e., outside the container) still needs to pass `ci/check_host.sh` to properly run tests inside the container.**
+This will create a container image if necessary and bring you inside the container. The `libsarus` root directory will be mounted to `~/libsarus`, where you can build and test `libsarus` as usual. 
+
+**Caveat: your host environment (i.e., outside the container) still needs to pass `ci/check_host.sh` to properly run tests inside the container.**
