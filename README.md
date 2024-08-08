@@ -41,10 +41,10 @@ $ cd build; sudo ctest #OPTIONAL: --output-on-failure
 
 ## Using container environment
 
-You can enter a container environment where all dependencies were already installed with the following command.
+You can enter a container environment where all dependencies were already installed as follows.
 
 ```
 $ ci/enter_buildenv.sh
 ```
 
-You can build and test `libsarus` inside the container as usual. Notice that **your host environment (i.e., outside the container) still need to pass `ci/check_host.sh` to properly run tests.**
+This will create a container image if necessary and bring you inside the container. The `libsarus` root directory will be mounted to `~/libsarus`, where you can build and test `libsarus` as usual. **Caveat: your host environment (i.e., outside the container) still need to pass `ci/check_host.sh` to properly run tests inside the container.**
