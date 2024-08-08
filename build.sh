@@ -19,6 +19,9 @@ BUILD_TYPE=Debug
 if [[ $($LOCAL_SPACK_PATH/spack env status) == *"No active env"* ]]; then 
   export PATH=$LOCAL_SPACK_PATH:$PATH
   . $LIBSARUS_ROOT_PATH/ci/spack/share/spack/setup-env.sh
+  if [ ! -f $LIBSARUS_ROOT_PATH/ci/spack.yaml ]; then
+    cp $LIBSARUS_ROOT_PATH/ci/spack.yaml.base $LIBSARUS_ROOT_PATH/ci/spack.yaml
+  fi
   spack env activate ci 
 fi
 

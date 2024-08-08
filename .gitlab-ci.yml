@@ -38,6 +38,7 @@ stages:
 # Specialized jobs 
 #-----------------------------------------------------------------------------#
 
+# NOTE: all images should pass the check if and only if any image passes it.
 check-unified:
   extends: .check-general
 

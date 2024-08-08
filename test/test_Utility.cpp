@@ -241,6 +241,11 @@ TEST(UtilityTestGroup, copyFile) {
 }
 
 TEST(UtilityTestGroup, copyFolder) {
+    if (boost::filesystem::exists("/tmp/src-folder"))
+        boost::filesystem::remove_all("/tmp/src-folder");
+    if (boost::filesystem::exists("/tmp/dst-folder"))
+        boost::filesystem::remove_all("/tmp/dst-folder");
+
     libsarus::filesystem::createFoldersIfNecessary("/tmp/src-folder/subfolder");
     libsarus::filesystem::createFileIfNecessary("/tmp/src-folder/file0");
     libsarus::filesystem::createFileIfNecessary("/tmp/src-folder/subfolder/file1");
