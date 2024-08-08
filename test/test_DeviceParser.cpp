@@ -9,11 +9,12 @@
  */
 
 #include "aux/filesystem.hpp"
-#include "aux/unitTestMain.hpp"
 #include "DeviceParser.hpp"
 #include "Logger.hpp"
 #include "PathRAII.hpp"
 #include "Utility.hpp"
+
+#include <gtest/gtest.h>
 
 
 namespace libsarus {
@@ -53,25 +54,25 @@ public:
         auto parser = libsarus::DeviceParser{rootfsDir, userIdentity};
 
         if(isParseErrorExpected) {
-            CHECK_THROWS(libsarus::Error, parser.parseDeviceRequest(deviceRequest));
+            EXPECT_THROW(parser.parseDeviceRequest(deviceRequest), libsarus::Error);
             return;
         }
 
         auto mountObject = parser.parseDeviceRequest(deviceRequest);
 
         if(expectedSource) {
-            CHECK(mountObject->getSource() == *expectedSource);
+            EXPECT_EQ(mountObject->getSource(), *expectedSource);
         }
 
         if(expectedDestination) {
-            CHECK(mountObject->getDestination() == *expectedDestination);
+            EXPECT_EQ(mountObject->getDestination(), *expectedDestination);
         }
 
         if(expectedAccess) {
-            CHECK(mountObject->getAccess().string() == *expectedAccess);
+            EXPECT_EQ(mountObject->getAccess().string(), *expectedAccess);
         }
 
-        CHECK_EQUAL(mountObject->getFlags(), *expectedFlags);
+        EXPECT_EQ(mountObject->getFlags(), *expectedFlags);
     }
 
 private:
@@ -84,8 +85,9 @@ private:
     bool isParseErrorExpected = false;
 };
 
-TEST_GROUP(DeviceParserTestGroup) {
-    void setup() {
+class DeviceParserTestGroup : public testing::Test {
+protected:
+    DeviceParserTestGroup() {
         auto testDevice = boost::filesystem::path("/dev/sarusTestDevice0");
         auto testDeviceMajorID = 511u;
         auto testDeviceMinorID = 511u;
@@ -95,18 +97,14 @@ TEST_GROUP(DeviceParserTestGroup) {
         aux::filesystem::createCharacterDeviceFile(testDevice, testDeviceMajorID, testDeviceMinorID);
     }
 
-    void teardown() {
+    ~DeviceParserTestGroup() override {
         auto testDevice = boost::filesystem::path("/dev/sarusTestDevice0");
         boost::filesystem::remove(testDevice);
     }
 
 };
 
-#ifdef ASROOT
-TEST(DeviceParserTestGroup, basic_checks) {
-#else
-IGNORE_TEST(DeviceParserTestGroup, basic_checks) {
-#endif
+TEST_F(DeviceParserTestGroup, basic_checks) {
     // empty request
     DeviceParserChecker{""}.expectParseError();
 
@@ -115,11 +113,7 @@ IGNORE_TEST(DeviceParserTestGroup, basic_checks) {
     DeviceParserChecker{"/dev/sarusTestDevice0:/dev/device1:/dev/device2:/dev/device3:rw"}.expectParseError();
 }
 
-#ifdef ASROOT
-TEST(DeviceParserTestGroup, source_and_destination) {
-#else
-IGNORE_TEST(DeviceParserTestGroup, source_and_destination) {
-#endif
+TEST_F(DeviceParserTestGroup, source_and_destination) {
     // only source path provided
     DeviceParserChecker{"/dev/sarusTestDevice0"}
         .expectSource("/dev/sarusTestDevice0")
@@ -140,11 +134,7 @@ IGNORE_TEST(DeviceParserTestGroup, source_and_destination) {
     DeviceParserChecker{":"}.expectParseError();
 }
 
-#ifdef ASROOT
-TEST(DeviceParserTestGroup, access) {
-#else
-IGNORE_TEST(DeviceParserTestGroup, access) {
-#endif
+TEST_F(DeviceParserTestGroup, access) {
     // only source path provided
     DeviceParserChecker{"/dev/sarusTestDevice0:rw"}
         .expectSource("/dev/sarusTestDevice0")
@@ -174,4 +164,3 @@ IGNORE_TEST(DeviceParserTestGroup, access) {
 
 }}
 
-SARUS_UNITTEST_MAIN_FUNCTION();

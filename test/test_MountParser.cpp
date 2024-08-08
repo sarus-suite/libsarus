@@ -8,10 +8,10 @@
  *
  */
 
+#include <gtest/gtest.h>
 #include <rapidjson/allocators.h>
 #include <rapidjson/document.h>
 
-#include "aux/unitTestMain.hpp"
 #include "Logger.hpp"
 #include "MountParser.hpp"
 #include "PathRAII.hpp"
@@ -81,22 +81,22 @@ public:
         auto map = libsarus::string::parseMap(mountRequest);
 
         if(isParseErrorExpected) {
-            CHECK_THROWS(libsarus::Error, parser.parseMountRequest(map));
+            EXPECT_THROW(parser.parseMountRequest(map), libsarus::Error);
             return;
         }
 
         auto mountObject = parser.parseMountRequest(map);
 
         if(expectedSource) {
-            CHECK(mountObject->getSource() == *expectedSource);
+            EXPECT_EQ(mountObject->getSource(), *expectedSource);
         }
 
         if(expectedDestination) {
-            CHECK(mountObject->getDestination() == *expectedDestination);
+            EXPECT_EQ(mountObject->getDestination(), *expectedDestination);
         }
 
         if(expectedFlags) {
-            CHECK_EQUAL(mountObject->getFlags(), *expectedFlags);
+            EXPECT_EQ(mountObject->getFlags(), *expectedFlags);
         }
     }
 
@@ -110,10 +110,11 @@ private:
     bool isParseErrorExpected = false;
 };
 
-TEST_GROUP(MountParserTestGroup) {
+class MountParserTestGroup : public testing::Test {
+protected:
 };
 
-TEST(MountParserTestGroup, mount_type) {
+TEST_F(MountParserTestGroup, mount_type) {
     // bind
     MountParserChecker{"type=bind,source=/src,destination=/dest"};
 
@@ -125,7 +126,7 @@ TEST(MountParserTestGroup, mount_type) {
     MountParserChecker{"type=invalid,source=/src,nation=/dest"}.expectParseError();
 }
 
-TEST(MountParserTestGroup, source_and_destination_of_bind_mount) {
+TEST_F(MountParserTestGroup, source_and_destination_of_bind_mount) {
     MountParserChecker{"type=bind,source=/src,destination=/dest"}
         .expectSource("/src")
         .expectDestination("/dest");
@@ -163,7 +164,7 @@ TEST(MountParserTestGroup, source_and_destination_of_bind_mount) {
     MountParserChecker{"type=bind,source=/src,destination=/opt/sarus"}.expectParseError();
 }
 
-TEST(MountParserTestGroup, user_flags_of_bind_mount) {
+TEST_F(MountParserTestGroup, user_flags_of_bind_mount) {
     // no flags: defaults to recursive, private, read/write mount
     MountParserChecker{"type=bind,source=/src,destination=/dest"}
         .expectFlags(MS_REC | MS_PRIVATE);
@@ -177,7 +178,7 @@ TEST(MountParserTestGroup, user_flags_of_bind_mount) {
     MountParserChecker{"type=bind,source=/src,destination=dest,bind-propagation=recursive"}.expectParseError();
 }
 
-TEST(MountParserTestGroup, site_flags_of_bind_mount) {
+TEST_F(MountParserTestGroup, site_flags_of_bind_mount) {
     // no flags: defaults to recursive, private, read/write mount
     MountParserChecker{"type=bind,source=/src,destination=/dest"}
         .parseAsSiteMount().expectFlags(MS_REC | MS_PRIVATE);
@@ -189,4 +190,3 @@ TEST(MountParserTestGroup, site_flags_of_bind_mount) {
 
 }}
 
-SARUS_UNITTEST_MAIN_FUNCTION();

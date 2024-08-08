@@ -15,15 +15,16 @@
 #include <vector>
 
 #include <boost/regex.hpp>
+#include <gtest/gtest.h>
 
-#include "aux/unitTestMain.hpp"
 #include "Logger.hpp"
 
 
 namespace libsarus {
 namespace test {
 
-TEST_GROUP(LoggerTestGroup) {
+class LoggerTestGroup : public testing::Test {
+protected:
 };
 
 class LoggerChecker {
@@ -63,7 +64,7 @@ private:
     void check(const std::ostringstream& stream, const std::string& expectedPattern) const {
         auto regex = boost::regex(expectedPattern);
         boost::cmatch matches;
-        CHECK(boost::regex_match(stream.str().c_str(), matches, regex));
+        EXPECT_TRUE(boost::regex_match(stream.str().c_str(), matches, regex));
     }
 
 private:
@@ -74,7 +75,7 @@ private:
     std::string expectedPatternInStderr;
 };
 
-TEST(LoggerTestGroup, logger) {
+TEST_F(LoggerTestGroup, logger) {
     const std::string generalMessage = "GENERAL message";
     const std::string debugMessage = "DEBUG message";
     const std::string infoMessage = "INFO message";
@@ -134,4 +135,3 @@ TEST(LoggerTestGroup, logger) {
 
 }}
 
-SARUS_UNITTEST_MAIN_FUNCTION();

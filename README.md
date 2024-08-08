@@ -3,24 +3,39 @@
 Essential code collection for custom container runtime development.
 
 
-## Requirements
+## Runtime Requirements
 
-### Build
-
-- TODO
-
-### Runtime
-
-- Linux kernel 3.0+ (with `cgroup-v1`)
+- Linux kernel 3.0+ (with `cgroups-v1`)
 - Kernel modules (`loop`, `squashfs`, `overlay`)
 - libboost 1.85.0+
 
-Runtime requirements can be checked with `ci/check_host.sh`.
+Use `ci/check_host.sh` to check runtime requirements.
 
 
 ## Build and Test
 
 ### On the host
+
+You can develop, build, and test `libsarus` directly on your host machine.
+
+#### Requirements
+
+- Linux kernel 3.0+ (with `cgroups-v1`)
+- Kernel modules (`loop`, `squashfs`, `overlay`)
+- Spack dependencies (See [this link](https://spack.readthedocs.io/en/latest/getting_started.html))
+
+Use `ci/check_host.sh --no-dep` to check build requirements (except for Spack dependencies).
+
+<details>
+  <summary>Click here for procedure</summary>
+
+#### Clone
+
+Make sure to clone every submodule when cloning.
+
+```
+$ git clone --recursive <repo_url>
+```
 
 #### Build
 
@@ -50,20 +65,79 @@ $ ./ci/check_host.sh --no-dep
 $ ./build.sh
 ```
 
-3. **Run `ctest` with `sudo`.**
+3. **Run `ctest` in `build`.**
 
 ```
-$ cd build; sudo ctest #OPTIONAL: --output-on-failure
+$ ctest -E AsRoot        # Do unprivileged tests
+$ sudo ctest -R AsRoot   # Do privileged tests
 ```
+
+</details>
 
 ### In a container
 
-You can enter a container environment where all dependencies were already installed as follows.
+Alternatively, you can build and test `libsarus` in a container image while doing development on your host machine. A provided script will enter a container image with all dependencies pre-installed and mount the `libsarus` root directory to `~/libsarus`.
+
+#### Requirements
+
+- Linux kernel 3.0+ (with `cgroups-v1`)
+- Kernel modules (`loop`, `squashfs`, `overlay`)
+- Docker
+
+Use `ci/check_host.sh --no-dep` to check build requirements (except for Docker).
+
+<details>
+  <summary>Click here for procedure</summary>
+
+#### Clone
+
+Make sure to clone every submodule when cloning.
+
+```
+$ git clone --recursive <repo_url>
+```
+
+#### Entering a container
+
+Enter a container environment as follows.
 
 ```
 $ ci/enter_buildenv.sh
 ```
 
-This will create a container image if necessary and bring you inside the container. The `libsarus` root directory will be mounted to `~/libsarus`, where you can build and test `libsarus` as usual. 
+#### Build
 
-**Caveat: your host environment (i.e., outside the container) still needs to pass `ci/check_host.sh` to properly run tests inside the container.**
+1. **Install third-party dependencies.** `install_dep.sh` will install all necessary dependencies in the local directory using Spack.
+
+```
+$ ./install_dep.sh
+```
+
+2. **Build `libsarus`**. `build.sh` will build `libsarus` using the dependencies installed by Spack.
+
+```
+$ ./build.sh
+```
+
+#### Test
+
+1. **Check if your system can run tests.** The dependency check is unnecessary as tests are pre-linked to dependencies at build time.
+
+```
+$ ./ci/check_host.sh --no-dep
+```
+
+2. **Build `libsarus`.**
+
+```
+$ ./build.sh
+```
+
+3. **Run `ctest` in `build`.** `env "PATH=$PATH"` forwards the path of Spack-installed dependencies to `sudo`.
+
+```
+$ ctest -E AsRoot                         # Do unprivileged tests
+$ sudo env "PATH=$PATH" ctest -R AsRoot   # Do privileged tests
+```
+
+</details>
