@@ -22,6 +22,14 @@ Runtime requirements can be checked with `ci/check_host.sh`.
 
 ### On the host
 
+#### Clone
+
+Make sure to clone every submodule when cloning.
+
+```
+$ git clone --recursive <repo_url>
+```
+
 #### Build
 
 1. **Install third-party dependencies.** `install_dep.sh` will install all necessary dependencies in the local directory using Spack.
