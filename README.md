@@ -3,6 +3,21 @@
 Essential code collection for custom container runtime development.
 
 
+## Requirements
+
+### Build
+
+- TODO
+
+### Runtime
+
+- Linux kernel 3.0+ (with `cgroup-v1`)
+- Kernel modules (`loop`, `squashfs`, `overlay`)
+- libboost 1.85.0+
+
+Runtime requirements can be checked with `ci/check_host.sh`.
+
+
 ## Build
 
 1. **Install third-party dependencies.** `install_dep.sh` will install all necessary dependencies in the local directory using Spack.
