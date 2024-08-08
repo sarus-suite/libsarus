@@ -8,13 +8,11 @@
  *
  */
 
-// NOTE: Boost library must be included before CppUTest
-
 #include <sstream>
 
 #include <boost/filesystem.hpp>
+#include <gtest/gtest.h>
 
-#include "aux/unitTestMain.hpp"
 #include "Error.hpp"
 #include "Lockfile.hpp"
 #include "Logger.hpp"
@@ -24,38 +22,37 @@
 namespace libsarus {
 namespace test {
 
-TEST_GROUP(CLIArgumentsTestGroup) {
+class CLIArgumentsTestGroup : public testing::Test {
+protected:
 };
 
-TEST(CLIArgumentsTestGroup, serialize) {
+TEST_F(CLIArgumentsTestGroup, serialize) {
     auto args = libsarus::CLIArguments{"command", "arg0", "arg1"};
 
     std::stringstream os;
     os << args;
 
-    CHECK_EQUAL(os.str(), std::string{"[\"command\", \"arg0\", \"arg1\"]"});
+    EXPECT_EQ(os.str(), std::string{"[\"command\", \"arg0\", \"arg1\"]"});
 };
 
-TEST(CLIArgumentsTestGroup, deserialize) {
+TEST_F(CLIArgumentsTestGroup, deserialize) {
     std::stringstream is("[\"command\", \"arg0\", \"arg1\"]");
 
     libsarus::CLIArguments args;
     is >> args;
 
     auto expected = libsarus::CLIArguments{"command", "arg0", "arg1"};
-    CHECK(args == expected);
+    EXPECT_EQ(args, expected);
 };
 
-TEST(CLIArgumentsTestGroup, string) {
+TEST_F(CLIArgumentsTestGroup, string) {
     std::stringstream is("[\"command\", \"arg0\", \"arg1\"]");
 
     libsarus::CLIArguments args;
     is >> args;
 
     auto expected = std::string{"command arg0 arg1"};
-    CHECK(args.string() == expected);
+    EXPECT_EQ(args.string(), expected);
 };
 
 }}
-
-SARUS_UNITTEST_MAIN_FUNCTION();
