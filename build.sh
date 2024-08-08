@@ -11,8 +11,9 @@ INSTALL_DIR=$PWD/build/install
 TOOLCHAIN_FILE=gcc.cmake
 BUILD_TYPE=Debug
 
+# Re-define variables if needed.
 for _ARG in "$@"; do
-  if [[ $_ARG == "-D*" ]]; then
+  if [[ $_ARG == -D* ]]; then
     _KEY=${_ARG#-D}; KEY=${_KEY%=*}
     VALUE=${_ARG#*=}
     echo "Resetting $KEY to $VALUE..."
