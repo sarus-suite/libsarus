@@ -59,7 +59,7 @@ TEST_F(ErrorTestGroup, oneStackTraceEntry) {
         functionThatThrows();
     }
     catch(const libsarus::Error& error) {
-        auto expectedFirstEntry = libsarus::Error::ErrorTraceEntry{"first error message", "test_Error.cpp", 24, "functionThatThrows"};
+        auto expectedFirstEntry = libsarus::Error::ErrorTraceEntry{"first error message", "test_Error.cpp", 26, "functionThatThrows"};
 
         EXPECT_EQ(error.getErrorTrace().size(), 1);
         EXPECT_EQ(error.getErrorTrace()[0], expectedFirstEntry);
@@ -72,8 +72,8 @@ TEST_F(ErrorTestGroup, twoStackTraceEntries) {
         functionThatRethrows();
     }
     catch (const libsarus::Error& error) {
-        auto expectedFirstEntry = libsarus::Error::ErrorTraceEntry{"first error message", "test_Error.cpp", 24, "functionThatThrows"};
-        auto expectedSecondEntry = libsarus::Error::ErrorTraceEntry{"second error message", "test_Error.cpp", 32, "functionThatRethrows"};
+        auto expectedFirstEntry = libsarus::Error::ErrorTraceEntry{"first error message", "test_Error.cpp", 26, "functionThatThrows"};
+        auto expectedSecondEntry = libsarus::Error::ErrorTraceEntry{"second error message", "test_Error.cpp", 34, "functionThatRethrows"};
 
         EXPECT_EQ(error.getErrorTrace().size(), 2);
         EXPECT_EQ(error.getErrorTrace()[0], expectedFirstEntry);
@@ -88,7 +88,7 @@ TEST_F(ErrorTestGroup, fromStdException) {
     }
     catch(const libsarus::Error& error) {
         auto expectedFirstEntry = libsarus::Error::ErrorTraceEntry{"first error message", "unspecified location", -1, "runtime error"};
-        auto expectedSecondEntry = libsarus::Error::ErrorTraceEntry{"second error message", "test_Error.cpp", 39, "functionThatThrowsFromStdException"};
+        auto expectedSecondEntry = libsarus::Error::ErrorTraceEntry{"second error message", "test_Error.cpp", 41, "functionThatThrowsFromStdException"};
 
         EXPECT_EQ(error.getErrorTrace().size(), 2);
         EXPECT_EQ(error.getErrorTrace()[0], expectedFirstEntry);
@@ -102,7 +102,7 @@ TEST_F(ErrorTestGroup, oneStackTraceEntry_throwWithLogLevelDebug) {
         functionThatThrowsWithLogLevelDebug();
     }
     catch(const libsarus::Error& error) {
-        auto expectedFirstEntry = libsarus::Error::ErrorTraceEntry{"first error message", "test_Error.cpp", 43, "functionThatThrowsWithLogLevelDebug"};
+        auto expectedFirstEntry = libsarus::Error::ErrorTraceEntry{"first error message", "test_Error.cpp", 45, "functionThatThrowsWithLogLevelDebug"};
 
         EXPECT_EQ(error.getErrorTrace().size(), 1);
         EXPECT_EQ(error.getErrorTrace()[0], expectedFirstEntry);
@@ -115,8 +115,8 @@ TEST_F(ErrorTestGroup, twoStackTraceEntries_rethrowWithLogLevelDebug) {
         functionThatRethrowsWithLogLevelDebug();
     }
     catch (const libsarus::Error& error) {
-        auto expectedFirstEntry = libsarus::Error::ErrorTraceEntry{"first error message", "test_Error.cpp", 24, "functionThatThrows"};
-        auto expectedSecondEntry = libsarus::Error::ErrorTraceEntry{"second error message", "test_Error.cpp", 51, "functionThatRethrowsWithLogLevelDebug"};
+        auto expectedFirstEntry = libsarus::Error::ErrorTraceEntry{"first error message", "test_Error.cpp", 26, "functionThatThrows"};
+        auto expectedSecondEntry = libsarus::Error::ErrorTraceEntry{"second error message", "test_Error.cpp", 53, "functionThatRethrowsWithLogLevelDebug"};
 
         EXPECT_EQ(error.getErrorTrace().size(), 2);
         EXPECT_EQ(error.getErrorTrace()[0], expectedFirstEntry);

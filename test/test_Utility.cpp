@@ -53,6 +53,7 @@ TEST_F(UtilityTestGroup, parseEnvironmentVariables) {
 }
 
 TEST_F(UtilityTestGroup, getEnvironmentVariable) {
+    auto testKey = std::string{"SARUS_UNITTEST_GETVAR"};
     auto testValue = std::string{"dummy"};
 
     // test with variable unset
@@ -65,18 +66,19 @@ TEST_F(UtilityTestGroup, getEnvironmentVariable) {
 }
 
 TEST_F(UtilityTestGroup, setEnvironmentVariable) {
+    auto testKey = std::string{"SARUS_UNITTEST_GETVAR"};
     auto testValue = std::string{"dummy"};
 
     // test with variable not set
     if (unsetenv(testKey.c_str()) != 0) {
         auto message = boost::format("Error un-setting the variable used by the test: %s") % strerror(errno);
-        FAIL(message.str().c_str());
+        FAIL() << message.str().c_str();
     }
     libsarus::environment::setVariable(testKey, testValue);
     char *envValue = getenv(testKey.c_str());
     if (envValue == nullptr) {
         auto message = boost::format("Error getting the test variable from the environment");
-        FAIL(message.str().c_str());
+        FAIL() << message.str().c_str();
     }
     EXPECT_EQ(std::string(envValue), testValue);
 
@@ -86,7 +88,7 @@ TEST_F(UtilityTestGroup, setEnvironmentVariable) {
     envValue = getenv(testKey.c_str());
     if (envValue == nullptr) {
         auto message = boost::format("Error getting the test variable from the environment");
-        FAIL(message.str().c_str());
+        FAIL() << message.str().c_str();
     }
     EXPECT_EQ(std::string(envValue), testValue);
 }
@@ -195,13 +197,13 @@ TEST_F(UtilityTestGroup, createFoldersIfNecessary) {
         boost::filesystem::remove_all("/tmp/grandparent");
 
     libsarus::filesystem::createFoldersIfNecessary("/tmp/grandparent/parent/child");
-    EXPECT_EQ((libsarus::filesystem::getOwner("/tmp/grandparent/parent"), std::tuple<uid_t, gid_t>{0, 0}));
-    EXPECT_EQ((libsarus::filesystem::getOwner("/tmp/grandparent/parent/child"), std::tuple<uid_t, gid_t>{0, 0}));
+    EXPECT_EQ(libsarus::filesystem::getOwner("/tmp/grandparent/parent"), (std::tuple<uid_t, gid_t>{0, 0}));
+    EXPECT_EQ(libsarus::filesystem::getOwner("/tmp/grandparent/parent/child"), (std::tuple<uid_t, gid_t>{0, 0}));
     boost::filesystem::remove_all("/tmp/grandparent");
 
     libsarus::filesystem::createFoldersIfNecessary("/tmp/grandparent/parent/child", 1000, 1000);
-    EXPECT_EQ((libsarus::filesystem::getOwner("/tmp/grandparent/parent"), std::tuple<uid_t, gid_t>{1000, 1000}));
-    EXPECT_EQ((libsarus::filesystem::getOwner("/tmp/grandparent/parent/child") , std::tuple<uid_t, gid_t>{1000, 1000}));
+    EXPECT_EQ(libsarus::filesystem::getOwner("/tmp/grandparent/parent"), (std::tuple<uid_t, gid_t>{1000, 1000}));
+    EXPECT_EQ(libsarus::filesystem::getOwner("/tmp/grandparent/parent/child"), (std::tuple<uid_t, gid_t>{1000, 1000}));
     boost::filesystem::remove_all("/tmp/grandparent");
 }
 
@@ -210,11 +212,11 @@ TEST_F(UtilityTestGroup, createFileIfNecessary) {
         boost::filesystem::remove_all("/tmp/testFile");
 
     libsarus::filesystem::createFileIfNecessary("/tmp/testFile");
-    EXPECT_EQ((libsarus::filesystem::getOwner("/tmp/testFile"), std::tuple<uid_t, gid_t>{0, 0}));
+    EXPECT_EQ(libsarus::filesystem::getOwner("/tmp/testFile"), (std::tuple<uid_t, gid_t>{0, 0}));
     boost::filesystem::remove_all("/tmp/testFile");
 
     libsarus::filesystem::createFileIfNecessary("/tmp/testFile", 1000, 1000);
-    EXPECT_EQ((libsarus::filesystem::getOwner("/tmp/testFile"), std::tuple<uid_t, gid_t>{1000, 1000}));
+    EXPECT_EQ(libsarus::filesystem::getOwner("/tmp/testFile"), (std::tuple<uid_t, gid_t>{1000, 1000}));
     boost::filesystem::remove_all("/tmp/testFile");
 }
 
@@ -225,16 +227,16 @@ TEST_F(UtilityTestGroup, copyFile) {
 
     // implicit owner
     libsarus::filesystem::copyFile(testDir / "src", testDir / "dst");
-    EXPECT_EQ((libsarus::filesystem::getOwner(testDir / "dst"), std::tuple<uid_t, gid_t>{0, 0}));
+    EXPECT_EQ(libsarus::filesystem::getOwner(testDir / "dst"), (std::tuple<uid_t, gid_t>{0, 0}));
 
     // explicit owner + overwrite existing file
     libsarus::filesystem::copyFile(testDir / "src", testDir / "dst", 1000, 1000);
-    EXPECT_EQ((libsarus::filesystem::getOwner(testDir / "dst"), std::tuple<uid_t, gid_t>{1000, 1000}));
+    EXPECT_EQ(libsarus::filesystem::getOwner(testDir / "dst"), (std::tuple<uid_t, gid_t>{1000, 1000}));
 
     // explicit owner + non-existing directory
     libsarus::filesystem::copyFile(testDir / "src", testDir / "non-existing-folder/dst", 1000, 1000);
-    EXPECT_EQ((libsarus::filesystem::getOwner(testDir / "non-existing-folder"), std::tuple<uid_t, gid_t>{1000, 1000}));
-    EXPECT_EQ((libsarus::filesystem::getOwner(testDir / "non-existing-folder/dst"), std::tuple<uid_t, gid_t>{1000, 1000}));
+    EXPECT_EQ(libsarus::filesystem::getOwner(testDir / "non-existing-folder"), (std::tuple<uid_t, gid_t>{1000, 1000}));
+    EXPECT_EQ(libsarus::filesystem::getOwner(testDir / "non-existing-folder/dst"), (std::tuple<uid_t, gid_t>{1000, 1000}));
 
     boost::filesystem::remove_all(testDir);
 }
@@ -250,13 +252,13 @@ TEST_F(UtilityTestGroup, copyFolder) {
     libsarus::filesystem::createFileIfNecessary("/tmp/src-folder/subfolder/file1");
 
     libsarus::filesystem::copyFolder("/tmp/src-folder", "/tmp/dst-folder");
-    EXPECT_EQ((libsarus::filesystem::getOwner("/tmp/dst-folder/file0"), std::tuple<uid_t, gid_t>{0, 0}));
-    EXPECT_EQ((libsarus::filesystem::getOwner("/tmp/dst-folder/subfolder/file1"), std::tuple<uid_t, gid_t>{0, 0}));
+    EXPECT_EQ(libsarus::filesystem::getOwner("/tmp/dst-folder/file0"), (std::tuple<uid_t, gid_t>{0, 0}));
+    EXPECT_EQ(libsarus::filesystem::getOwner("/tmp/dst-folder/subfolder/file1"), (std::tuple<uid_t, gid_t>{0, 0}));
     boost::filesystem::remove_all("/tmp/dst-folder");
 
     libsarus::filesystem::copyFolder("/tmp/src-folder", "/tmp/dst-folder", 1000, 1000);
-    EXPECT_EQ((libsarus::filesystem::getOwner("/tmp/dst-folder/file0"), std::tuple<uid_t, gid_t>{1000, 1000}));
-    EXPECT_EQ((libsarus::filesystem::getOwner("/tmp/dst-folder/subfolder/file1"), std::tuple<uid_t, gid_t>{1000, 1000}));
+    EXPECT_EQ(libsarus::filesystem::getOwner("/tmp/dst-folder/file0"), (std::tuple<uid_t, gid_t>{1000, 1000}));
+    EXPECT_EQ(libsarus::filesystem::getOwner("/tmp/dst-folder/subfolder/file1"), (std::tuple<uid_t, gid_t>{1000, 1000}));
     boost::filesystem::remove_all("/tmp/dst-folder");
     boost::filesystem::remove_all("/tmp/src-folder");
 }

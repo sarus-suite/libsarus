@@ -414,15 +414,15 @@ TEST_F(HooksUtilityTestGroup, whitelistDeviceInCgroup) {
 }
 
 TEST_F(HooksUtilityTestGroup, parseLibcVersionFromLddOutput) {
-    EXPECT_EQ((std::tuple<unsigned int, unsigned int>{2, 34}, parseLibcVersionFromLddOutput(
+    EXPECT_EQ((std::tuple<unsigned int, unsigned int>{2, 34}), parseLibcVersionFromLddOutput(
             "ldd (GNU libc) 2.34\n"
             "Copyright (C) 2021 Free Software Foundation, Inc.\n"
             "This is free software; see the source for copying conditions.  There is NO\n"
             "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
-            "Written by Roland McGrath and Ulrich Drepper.")));
-    EXPECT_EQ((std::tuple<unsigned int, unsigned int>{2, 31}, parseLibcVersionFromLddOutput("ldd (Ubuntu GLIBC 2.31-0ubuntu9.2) 2.31")));
-    EXPECT_EQ((std::tuple<unsigned int, unsigned int>{0, 0}, parseLibcVersionFromLddOutput("ldd (GNU libc) 0.0")));
-    EXPECT_EQ((std::tuple<unsigned int, unsigned int>{100, 100}, parseLibcVersionFromLddOutput("ldd (GNU libc) 100.100")));
+            "Written by Roland McGrath and Ulrich Drepper."));
+    EXPECT_EQ((std::tuple<unsigned int, unsigned int>{2, 31}), parseLibcVersionFromLddOutput("ldd (Ubuntu GLIBC 2.31-0ubuntu9.2) 2.31"));
+    EXPECT_EQ((std::tuple<unsigned int, unsigned int>{0, 0}), parseLibcVersionFromLddOutput("ldd (GNU libc) 0.0"));
+    EXPECT_EQ((std::tuple<unsigned int, unsigned int>{100, 100}), parseLibcVersionFromLddOutput("ldd (GNU libc) 100.100"));
 }
 
 }}
