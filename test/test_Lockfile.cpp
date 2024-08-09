@@ -28,9 +28,9 @@ protected:
 };
 
 TEST_F(LockfileTestGroup, creation_of_physical_lockfile) {
-    CHECK(!boost::filesystem::exists(lockfile));
+    EXPECT_FALSE(boost::filesystem::exists(lockfile));
     libsarus::Lockfile lock{fileToLock};
-    CHECK(boost::filesystem::exists(lockfile));
+    EXPECT_TRUE(boost::filesystem::exists(lockfile));
 }
 
 TEST_F(LockfileTestGroup, lock_acquisition) {

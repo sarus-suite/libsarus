@@ -36,7 +36,7 @@ TEST_F(UtilityTestGroup, parseEnvironmentVariables) {
     {
         auto env = std::array<char*, 1>{nullptr};
         auto map = libsarus::environment::parseVariables(env.data());
-        CHECK(map.empty());
+        EXPECT_TRUE(map.empty());
     }
     // non-empty environment
     {
@@ -48,7 +48,7 @@ TEST_F(UtilityTestGroup, parseEnvironmentVariables) {
             {"key0", ""},
             {"key1", "value1"}
         };
-        CHECK(actualMap == expectedMap);
+        EXPECT_EQ(actualMap, expectedMap);
     }
 }
 
@@ -143,7 +143,7 @@ TEST_F(UtilityTestGroup, switchIdentity) {
 
     EXPECT_EQ(geteuid(), 0);
     EXPECT_EQ(getegid(), 0);
-    CHECK(boost::filesystem::exists(testDirRAII.getPath() / "file"));
+    EXPECT_TRUE(boost::filesystem::exists(testDirRAII.getPath() / "file"));
 }
 
 TEST_F(UtilityTestGroup, setFilesystemUid) {
@@ -187,7 +187,7 @@ TEST_F(UtilityTestGroup, makeUniquePathWithRandomSuffix) {
 
     auto matches = boost::cmatch{};
     auto expectedRegex = boost::regex("^/tmp/file-[A-z]{16}$");
-    CHECK(boost::regex_match(uniquePath.string().c_str(), matches, expectedRegex));
+    EXPECT_TRUE(boost::regex_match(uniquePath.string().c_str(), matches, expectedRegex));
 }
 
 TEST_F(UtilityTestGroup, createFoldersIfNecessary) {
@@ -195,13 +195,13 @@ TEST_F(UtilityTestGroup, createFoldersIfNecessary) {
         boost::filesystem::remove_all("/tmp/grandparent");
 
     libsarus::filesystem::createFoldersIfNecessary("/tmp/grandparent/parent/child");
-    CHECK((libsarus::filesystem::getOwner("/tmp/grandparent/parent") == std::tuple<uid_t, gid_t>{0, 0}));
-    CHECK((libsarus::filesystem::getOwner("/tmp/grandparent/parent/child") == std::tuple<uid_t, gid_t>{0, 0}));
+    EXPECT_EQ((libsarus::filesystem::getOwner("/tmp/grandparent/parent"), std::tuple<uid_t, gid_t>{0, 0}));
+    EXPECT_EQ((libsarus::filesystem::getOwner("/tmp/grandparent/parent/child"), std::tuple<uid_t, gid_t>{0, 0}));
     boost::filesystem::remove_all("/tmp/grandparent");
 
     libsarus::filesystem::createFoldersIfNecessary("/tmp/grandparent/parent/child", 1000, 1000);
-    CHECK((libsarus::filesystem::getOwner("/tmp/grandparent/parent") == std::tuple<uid_t, gid_t>{1000, 1000}));
-    CHECK((libsarus::filesystem::getOwner("/tmp/grandparent/parent/child")  == std::tuple<uid_t, gid_t>{1000, 1000}));
+    EXPECT_EQ((libsarus::filesystem::getOwner("/tmp/grandparent/parent"), std::tuple<uid_t, gid_t>{1000, 1000}));
+    EXPECT_EQ((libsarus::filesystem::getOwner("/tmp/grandparent/parent/child") , std::tuple<uid_t, gid_t>{1000, 1000}));
     boost::filesystem::remove_all("/tmp/grandparent");
 }
 
@@ -210,11 +210,11 @@ TEST_F(UtilityTestGroup, createFileIfNecessary) {
         boost::filesystem::remove_all("/tmp/testFile");
 
     libsarus::filesystem::createFileIfNecessary("/tmp/testFile");
-    CHECK((libsarus::filesystem::getOwner("/tmp/testFile") == std::tuple<uid_t, gid_t>{0, 0}));
+    EXPECT_EQ((libsarus::filesystem::getOwner("/tmp/testFile"), std::tuple<uid_t, gid_t>{0, 0}));
     boost::filesystem::remove_all("/tmp/testFile");
 
     libsarus::filesystem::createFileIfNecessary("/tmp/testFile", 1000, 1000);
-    CHECK((libsarus::filesystem::getOwner("/tmp/testFile") == std::tuple<uid_t, gid_t>{1000, 1000}));
+    EXPECT_EQ((libsarus::filesystem::getOwner("/tmp/testFile"), std::tuple<uid_t, gid_t>{1000, 1000}));
     boost::filesystem::remove_all("/tmp/testFile");
 }
 
@@ -225,16 +225,16 @@ TEST_F(UtilityTestGroup, copyFile) {
 
     // implicit owner
     libsarus::filesystem::copyFile(testDir / "src", testDir / "dst");
-    CHECK((libsarus::filesystem::getOwner(testDir / "dst") == std::tuple<uid_t, gid_t>{0, 0}));
+    EXPECT_EQ((libsarus::filesystem::getOwner(testDir / "dst"), std::tuple<uid_t, gid_t>{0, 0}));
 
     // explicit owner + overwrite existing file
     libsarus::filesystem::copyFile(testDir / "src", testDir / "dst", 1000, 1000);
-    CHECK((libsarus::filesystem::getOwner(testDir / "dst") == std::tuple<uid_t, gid_t>{1000, 1000}));
+    EXPECT_EQ((libsarus::filesystem::getOwner(testDir / "dst"), std::tuple<uid_t, gid_t>{1000, 1000}));
 
     // explicit owner + non-existing directory
     libsarus::filesystem::copyFile(testDir / "src", testDir / "non-existing-folder/dst", 1000, 1000);
-    CHECK((libsarus::filesystem::getOwner(testDir / "non-existing-folder") == std::tuple<uid_t, gid_t>{1000, 1000}));
-    CHECK((libsarus::filesystem::getOwner(testDir / "non-existing-folder/dst") == std::tuple<uid_t, gid_t>{1000, 1000}));
+    EXPECT_EQ((libsarus::filesystem::getOwner(testDir / "non-existing-folder"), std::tuple<uid_t, gid_t>{1000, 1000}));
+    EXPECT_EQ((libsarus::filesystem::getOwner(testDir / "non-existing-folder/dst"), std::tuple<uid_t, gid_t>{1000, 1000}));
 
     boost::filesystem::remove_all(testDir);
 }
@@ -250,13 +250,13 @@ TEST_F(UtilityTestGroup, copyFolder) {
     libsarus::filesystem::createFileIfNecessary("/tmp/src-folder/subfolder/file1");
 
     libsarus::filesystem::copyFolder("/tmp/src-folder", "/tmp/dst-folder");
-    CHECK((libsarus::filesystem::getOwner("/tmp/dst-folder/file0") == std::tuple<uid_t, gid_t>{0, 0}));
-    CHECK((libsarus::filesystem::getOwner("/tmp/dst-folder/subfolder/file1") == std::tuple<uid_t, gid_t>{0, 0}));
+    EXPECT_EQ((libsarus::filesystem::getOwner("/tmp/dst-folder/file0"), std::tuple<uid_t, gid_t>{0, 0}));
+    EXPECT_EQ((libsarus::filesystem::getOwner("/tmp/dst-folder/subfolder/file1"), std::tuple<uid_t, gid_t>{0, 0}));
     boost::filesystem::remove_all("/tmp/dst-folder");
 
     libsarus::filesystem::copyFolder("/tmp/src-folder", "/tmp/dst-folder", 1000, 1000);
-    CHECK((libsarus::filesystem::getOwner("/tmp/dst-folder/file0") == std::tuple<uid_t, gid_t>{1000, 1000}));
-    CHECK((libsarus::filesystem::getOwner("/tmp/dst-folder/subfolder/file1") == std::tuple<uid_t, gid_t>{1000, 1000}));
+    EXPECT_EQ((libsarus::filesystem::getOwner("/tmp/dst-folder/file0"), std::tuple<uid_t, gid_t>{1000, 1000}));
+    EXPECT_EQ((libsarus::filesystem::getOwner("/tmp/dst-folder/subfolder/file1"), std::tuple<uid_t, gid_t>{1000, 1000}));
     boost::filesystem::remove_all("/tmp/dst-folder");
     boost::filesystem::remove_all("/tmp/src-folder");
 }
@@ -294,7 +294,7 @@ TEST_F(UtilityTestGroup, parseMap) {
     // empty list
     {
         auto map = libsarus::string::parseMap("");
-        CHECK(map.empty());
+        EXPECT_TRUE(map.empty());
     }
     // one key-value pair
     {
@@ -316,28 +316,28 @@ TEST_F(UtilityTestGroup, parseMap) {
         auto list = "key_only";
         auto map = libsarus::string::parseMap(list);
         EXPECT_EQ(map.size(), 1);
-        CHECK(map["key_only"] == "");
+        EXPECT_EQ(map["key_only"], "");
     }
     {
         auto list = "key_only_at_begin,key=value";
         auto map = libsarus::string::parseMap(list);
         EXPECT_EQ(map.size(), 2);
-        CHECK(map["key_only_at_begin"] == "");
-        CHECK(map["key"] == "value");
+        EXPECT_EQ(map["key_only_at_begin"], "");
+        EXPECT_EQ(map["key"], "value");
     }
     {
         auto list = "key=value,key_only_at_end";
         auto map = libsarus::string::parseMap(list);
         EXPECT_EQ(map.size(), 2);
-        CHECK(map["key"] == "value");
-        CHECK(map["key_only_at_end"] == "");
+        EXPECT_EQ(map["key"], "value");
+        EXPECT_EQ(map["key_only_at_end"], "");
     }
     {
         auto list = "key_only0,key_only1";
         auto map = libsarus::string::parseMap(list);
         EXPECT_EQ(map.size(), 2);
-        CHECK(map["key_only0"] == "");
-        CHECK(map["key_only1"] == "");
+        EXPECT_EQ(map["key_only0"], "");
+        EXPECT_EQ(map["key_only1"], "");
     }
     // missing key error
     {
@@ -373,79 +373,79 @@ TEST_F(UtilityTestGroup, realpathWithinRootfs) {
     libsarus::filesystem::createFileIfNecessary(rootfs / "dir0/dir1/file");
 
     // folder
-    CHECK(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1") == "/dir0/dir1");
+    EXPECT_EQ(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1"), "/dir0/dir1");
 
     // file
-    CHECK(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/file") == "/dir0/dir1/file");
+    EXPECT_EQ(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/file"), "/dir0/dir1/file");
 
     // relative symlink
     EXPECT_EQ(symlink("../../dir0/dir1", (rootfs / "dir0/dir1/link_relative").string().c_str()), 0);
-    CHECK(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/link_relative") == "/dir0/dir1");
+    EXPECT_EQ(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/link_relative"), "/dir0/dir1");
 
     // relative symlink that spills (out of rootfs)
     EXPECT_EQ(symlink("../../../../dir0/dir1", (rootfs / "dir0/dir1/link_relative_that_spills").string().c_str()), 0);
-    CHECK(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/link_relative_that_spills") == "/dir0/dir1");
+    EXPECT_EQ(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/link_relative_that_spills"), "/dir0/dir1");
 
     // relative symlink recursive
     EXPECT_EQ(symlink("../../dir0/dir1/link_relative/dir2/dir3", (rootfs / "dir0/dir1/link_relative_recursive").string().c_str()), 0);
-    CHECK(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/link_relative_recursive") == "/dir0/dir1/dir2/dir3");
+    EXPECT_EQ(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/link_relative_recursive"), "/dir0/dir1/dir2/dir3");
 
     // relative symlink recursive that spills (out of rootfs)
     EXPECT_EQ(symlink("../../../dir0/dir1/link_relative_that_spills/dir2/dir3", (rootfs / "dir0/dir1/link_relative_recursive_that_spills").string().c_str()), 0);
-    CHECK(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/link_relative_recursive_that_spills") == "/dir0/dir1/dir2/dir3");
+    EXPECT_EQ(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/link_relative_recursive_that_spills"), "/dir0/dir1/dir2/dir3");
 
     // absolute symlink
     EXPECT_EQ(symlink("/dir0/dir1", (rootfs / "dir0/dir1/link_absolute").string().c_str()), 0);
-    CHECK(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/link_absolute") == "/dir0/dir1");
+    EXPECT_EQ(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/link_absolute"), "/dir0/dir1");
 
     // absolute symlink that spills (out of rootfs)
     EXPECT_EQ(symlink("/dir0/dir1/../../../../dir0/dir1", (rootfs / "dir0/dir1/link_absolute_that_spills").string().c_str()), 0);
-    CHECK(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/link_absolute_that_spills") == "/dir0/dir1");
+    EXPECT_EQ(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/link_absolute_that_spills"), "/dir0/dir1");
 
     // absolute symlink recursive
     EXPECT_EQ(symlink("/dir0/dir1/link_absolute/dir2/dir3", (rootfs / "dir0/dir1/link_absolute_recursive").string().c_str()), 0);
-    CHECK(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/link_absolute_recursive") == "/dir0/dir1/dir2/dir3");
+    EXPECT_EQ(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/link_absolute_recursive"), "/dir0/dir1/dir2/dir3");
 
     // absolute symlink recursive that spills (out of rootfs)
     EXPECT_EQ(symlink("/dir0/dir1/link_absolute_that_spills/dir2/dir3", (rootfs / "dir0/dir1/link_absolute_recursive_that_spills").string().c_str()), 0);
-    CHECK(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/link_absolute_recursive_that_spills") == "/dir0/dir1/dir2/dir3");
+    EXPECT_EQ(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/link_absolute_recursive_that_spills"), "/dir0/dir1/dir2/dir3");
 
     // absolute symlink sharing no part of the path with the target
     EXPECT_EQ(symlink("/dir0/dir1", (rootfs / "dirX/link_absolute_with_no_common_path").string().c_str()), 0);
-    CHECK(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dirX/link_absolute_with_no_common_path") == "/dir0/dir1");
+    EXPECT_EQ(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dirX/link_absolute_with_no_common_path"), "/dir0/dir1");
 }
 
 TEST_F(UtilityTestGroup, getSharedLibLinkerName) {
-    CHECK(libsarus::sharedlibs::getLinkerName("file.so") == "file.so");
-    CHECK(libsarus::sharedlibs::getLinkerName("file.so.1") == "file.so");
-    CHECK(libsarus::sharedlibs::getLinkerName("file.so.1.0") == "file.so");
-    CHECK(libsarus::sharedlibs::getLinkerName("file.so.1.0.0") == "file.so");
+    EXPECT_EQ(libsarus::sharedlibs::getLinkerName("file.so"), "file.so");
+    EXPECT_EQ(libsarus::sharedlibs::getLinkerName("file.so.1"), "file.so");
+    EXPECT_EQ(libsarus::sharedlibs::getLinkerName("file.so.1.0"), "file.so");
+    EXPECT_EQ(libsarus::sharedlibs::getLinkerName("file.so.1.0.0"), "file.so");
 
     CHECK_THROWS(libsarus::Error, libsarus::sharedlibs::getLinkerName("not-a-shared-lib"));
     CHECK_THROWS(libsarus::Error, libsarus::sharedlibs::getLinkerName("not-a-shared-lib.soa"));
 }
 
 TEST_F(UtilityTestGroup, isSharedLib) {
-    CHECK(libsarus::filesystem::isSharedLib("/dir/libc.so") == true);
-    CHECK(libsarus::filesystem::isSharedLib("libc.so") == true);
-    CHECK(libsarus::filesystem::isSharedLib("libc.so.1") == true);
-    CHECK(libsarus::filesystem::isSharedLib("libc.so.1.2") == true);
+    EXPECT_EQ(libsarus::filesystem::isSharedLib("/dir/libc.so"), true);
+    EXPECT_EQ(libsarus::filesystem::isSharedLib("libc.so"), true);
+    EXPECT_EQ(libsarus::filesystem::isSharedLib("libc.so.1"), true);
+    EXPECT_EQ(libsarus::filesystem::isSharedLib("libc.so.1.2"), true);
 
-    CHECK(libsarus::filesystem::isSharedLib("libc") == false);
-    CHECK(libsarus::filesystem::isSharedLib("libc.s") == false);
-    CHECK(libsarus::filesystem::isSharedLib("ld.so.conf") == false);
-    CHECK(libsarus::filesystem::isSharedLib("ld.so.cache") == false);
+    EXPECT_EQ(libsarus::filesystem::isSharedLib("libc"), false);
+    EXPECT_EQ(libsarus::filesystem::isSharedLib("libc.s"), false);
+    EXPECT_EQ(libsarus::filesystem::isSharedLib("ld.so.conf"), false);
+    EXPECT_EQ(libsarus::filesystem::isSharedLib("ld.so.cache"), false);
 }
 
 TEST_F(UtilityTestGroup, parseSharedLibAbi) {
     CHECK_THROWS(libsarus::Error, libsarus::sharedlibs::parseAbi("invalid"));
-    CHECK(libsarus::sharedlibs::parseAbi("libc.so") == (std::vector<std::string>{}));
-    CHECK(libsarus::sharedlibs::parseAbi("libc.so.1") == (std::vector<std::string>{"1"}));
-    CHECK(libsarus::sharedlibs::parseAbi("libc.so.1.2") == (std::vector<std::string>{"1", "2"}));
-    CHECK(libsarus::sharedlibs::parseAbi("libc.so.1.2.3") == (std::vector<std::string>{"1", "2", "3"}));
-    CHECK(libsarus::sharedlibs::parseAbi("libc.so.1.2.3rc1") == (std::vector<std::string>{"1", "2", "3rc1"}));
+    EXPECT_EQ(libsarus::sharedlibs::parseAbi("libc.so"), (std::vector<std::string>{}));
+    EXPECT_EQ(libsarus::sharedlibs::parseAbi("libc.so.1"), (std::vector<std::string>{"1"}));
+    EXPECT_EQ(libsarus::sharedlibs::parseAbi("libc.so.1.2"), (std::vector<std::string>{"1", "2"}));
+    EXPECT_EQ(libsarus::sharedlibs::parseAbi("libc.so.1.2.3"), (std::vector<std::string>{"1", "2", "3"}));
+    EXPECT_EQ(libsarus::sharedlibs::parseAbi("libc.so.1.2.3rc1"), (std::vector<std::string>{"1", "2", "3rc1"}));
 
-    CHECK(libsarus::sharedlibs::parseAbi("libfoo.so.0") == (std::vector<std::string>{"0"}));
+    EXPECT_EQ(libsarus::sharedlibs::parseAbi("libfoo.so.0"), (std::vector<std::string>{"0"}));
 }
 
 TEST_F(UtilityTestGroup, resolveSharedLibAbi) {
@@ -460,48 +460,48 @@ TEST_F(UtilityTestGroup, resolveSharedLibAbi) {
 
     // libtest.so
     libsarus::filesystem::createFileIfNecessary(testDir / "libtest.so");
-    CHECK(libsarus::sharedlibs::resolveAbi(testDir / "libtest.so") == std::vector<std::string>{});
+    EXPECT_EQ(libsarus::sharedlibs::resolveAbi(testDir / "libtest.so"), std::vector<std::string>{});
 
     // libtest.so.1
     libsarus::filesystem::createFileIfNecessary(testDir / "libtest.so.1");
-    CHECK(libsarus::sharedlibs::resolveAbi(testDir / "libtest.so.1") == std::vector<std::string>{"1"});
+    EXPECT_EQ(libsarus::sharedlibs::resolveAbi(testDir / "libtest.so.1"), std::vector<std::string>{"1"});
 
     // libtest_symlink.so.1 -> libtest_symlink.so.1.2
     libsarus::filesystem::createFileIfNecessary(testDir / "libtest_symlink.so.1.2");
     boost::filesystem::create_symlink(testDir / "libtest_symlink.so.1.2", testDir / "libtest_symlink.so.1");
-    CHECK(libsarus::sharedlibs::resolveAbi(testDir / "libtest_symlink.so.1") == (std::vector<std::string>{"1", "2"}));
+    EXPECT_EQ(libsarus::sharedlibs::resolveAbi(testDir / "libtest_symlink.so.1"), (std::vector<std::string>{"1", "2"}));
 
     // libtest_symlink.so.1.2.3 -> libtest_symlink.so.1.2
     boost::filesystem::create_symlink(testDir / "libtest_symlink.so.1.2", testDir / "libtest_symlink.so.1.2.3");
-    CHECK(libsarus::sharedlibs::resolveAbi(testDir / "libtest_symlink.so.1.2.3") == (std::vector<std::string>{"1", "2", "3"}));
+    EXPECT_EQ(libsarus::sharedlibs::resolveAbi(testDir / "libtest_symlink.so.1.2.3"), (std::vector<std::string>{"1", "2", "3"}));
 
     // libtest_symlink.so -> libtest_symlink.so.1.2.3 -> libtest_symlink.so.1.2
     boost::filesystem::create_symlink(testDir / "libtest_symlink.so.1.2.3", testDir / "libtest_symlink.so");
-    CHECK(libsarus::sharedlibs::resolveAbi(testDir / "libtest_symlink.so") == (std::vector<std::string>{"1", "2", "3"}));
+    EXPECT_EQ(libsarus::sharedlibs::resolveAbi(testDir / "libtest_symlink.so"), (std::vector<std::string>{"1", "2", "3"}));
 
     // subdir/libtest_symlink.so -> ../libtest_symlink.so.1.2.3 -> libtest_symlink.so.1.2
     libsarus::filesystem::createFoldersIfNecessary(testDir / "subdir");
     boost::filesystem::create_symlink("../libtest_symlink.so.1.2.3", testDir / "subdir/libtest_symlink.so");
-    CHECK(libsarus::sharedlibs::resolveAbi(testDir / "subdir/libtest_symlink.so") == (std::vector<std::string>{"1", "2", "3"}));
+    EXPECT_EQ(libsarus::sharedlibs::resolveAbi(testDir / "subdir/libtest_symlink.so"), (std::vector<std::string>{"1", "2", "3"}));
 
     // /libtest_symlink_within_rootdir.so -> /subdir/libtest_symlink_within_rootdir.so.1 -> ../libtest_symlink_within_rootdir.so.1.2
     boost::filesystem::create_symlink("/subdir/libtest_symlink_within_rootdir.so.1", testDir / "libtest_symlink_within_rootdir.so");
     boost::filesystem::create_symlink("../libtest_symlink_within_rootdir.so.1.2", testDir / "/subdir/libtest_symlink_within_rootdir.so.1");
     libsarus::filesystem::createFileIfNecessary(testDir / "libtest_symlink_within_rootdir.so.1.2");
-    CHECK(libsarus::sharedlibs::resolveAbi("/libtest_symlink_within_rootdir.so", testDir) == (std::vector<std::string>{"1", "2"}));
+    EXPECT_EQ(libsarus::sharedlibs::resolveAbi("/libtest_symlink_within_rootdir.so", testDir), (std::vector<std::string>{"1", "2"}));
 
     // Some vendors have symlinks with incompatible major versions,
     // like libvdpau_nvidia.so.1 -> libvdpau_nvidia.so.440.33.01.
     // For these cases, we trust the vendor and resolve the Lib Abi to that of the symlink.
     // Note here we use libtest.so.1 as the "original lib file" and create a symlink to it.
     boost::filesystem::create_symlink(testDir / "libtest.so.1", testDir / "libtest.so.234.56");
-    CHECK(libsarus::sharedlibs::resolveAbi(testDir / "libtest.so.234.56") == (std::vector<std::string>{"234", "56"}));
+    EXPECT_EQ(libsarus::sharedlibs::resolveAbi(testDir / "libtest.so.234.56"), (std::vector<std::string>{"234", "56"}));
 
     boost::filesystem::create_symlink("../libtest.so.1.2", testDir / "subdir" / "libtest.so.234.56");
-    CHECK(libsarus::sharedlibs::resolveAbi(testDir / "subdir" / "libtest.so.234.56") == (std::vector<std::string>{"234", "56"}));
+    EXPECT_EQ(libsarus::sharedlibs::resolveAbi(testDir / "subdir" / "libtest.so.234.56"), (std::vector<std::string>{"234", "56"}));
 
     boost::filesystem::create_symlink("../libtest.so.1.2", testDir / "subdir" / "libtest.so.234");
-    CHECK(libsarus::sharedlibs::resolveAbi(testDir / "subdir" / "libtest.so.234") == (std::vector<std::string>{"234"}));
+    EXPECT_EQ(libsarus::sharedlibs::resolveAbi(testDir / "subdir" / "libtest.so.234"), (std::vector<std::string>{"234"}));
 }
 
 TEST_F(UtilityTestGroup, getSharedLibSoname) {
@@ -514,27 +514,27 @@ TEST_F(UtilityTestGroup, getSharedLibSoname) {
 
 TEST_F(UtilityTestGroup, isLibc) {
     // libc
-    CHECK(libsarus::filesystem::isLibc("libc.so"));
-    CHECK(libsarus::filesystem::isLibc("libc.so.6"));
-    CHECK(libsarus::filesystem::isLibc("libc-2.29.so"));
-    CHECK(libsarus::filesystem::isLibc("/libc.so"));
-    CHECK(libsarus::filesystem::isLibc("../libc.so"));
-    CHECK(libsarus::filesystem::isLibc("dir/libc.so"));
-    CHECK(libsarus::filesystem::isLibc("dir/dir/libc.so"));
-    CHECK(libsarus::filesystem::isLibc("/root/libc.so"));
-    CHECK(libsarus::filesystem::isLibc("/root/dir/libc.so"));
+    EXPECT_TRUE(libsarus::filesystem::isLibc("libc.so"));
+    EXPECT_TRUE(libsarus::filesystem::isLibc("libc.so.6"));
+    EXPECT_TRUE(libsarus::filesystem::isLibc("libc-2.29.so"));
+    EXPECT_TRUE(libsarus::filesystem::isLibc("/libc.so"));
+    EXPECT_TRUE(libsarus::filesystem::isLibc("../libc.so"));
+    EXPECT_TRUE(libsarus::filesystem::isLibc("dir/libc.so"));
+    EXPECT_TRUE(libsarus::filesystem::isLibc("dir/dir/libc.so"));
+    EXPECT_TRUE(libsarus::filesystem::isLibc("/root/libc.so"));
+    EXPECT_TRUE(libsarus::filesystem::isLibc("/root/dir/libc.so"));
 
     // not libc
-    CHECK(!libsarus::filesystem::isLibc("libcl.so"));
-    CHECK(!libsarus::filesystem::isLibc("libc_bogus.so"));
+    EXPECT_FALSE(libsarus::filesystem::isLibc("libcl.so"));
+    EXPECT_FALSE(libsarus::filesystem::isLibc("libc_bogus.so"));
 }
 
 TEST_F(UtilityTestGroup, is64bitSharedLib) {
     auto dummyLibsDir = boost::filesystem::path{__FILE__}
         .parent_path() / "dummy_libs";
-    CHECK(libsarus::sharedlibs::is64bitSharedLib(dummyLibsDir / "libc.so.6-host", "readelf"));
-    CHECK(libsarus::sharedlibs::is64bitSharedLib(dummyLibsDir / "ld-linux-x86-64.so.2-host", "readelf"));
-    CHECK(!libsarus::sharedlibs::is64bitSharedLib(dummyLibsDir / "libc.so.6-32bit-container", "readelf"));
+    EXPECT_TRUE(libsarus::sharedlibs::is64bitSharedLib(dummyLibsDir / "libc.so.6-host", "readelf"));
+    EXPECT_TRUE(libsarus::sharedlibs::is64bitSharedLib(dummyLibsDir / "ld-linux-x86-64.so.2-host", "readelf"));
+    EXPECT_FALSE(libsarus::sharedlibs::is64bitSharedLib(dummyLibsDir / "libc.so.6-32bit-container", "readelf"));
 }
 
 TEST_F(UtilityTestGroup, serializeJSON) {
@@ -573,7 +573,7 @@ TEST_F(UtilityTestGroup, getCpuAffinity_setCpuAffinity) {
     libsarus::process::setCpuAffinity(newCpus);
 
     // check
-    CHECK(libsarus::process::getCpuAffinity() == newCpus);
+    EXPECT_EQ(libsarus::process::getCpuAffinity(), newCpus);
 
     // restore initial affinity
     libsarus::process::setCpuAffinity(initialCpus);

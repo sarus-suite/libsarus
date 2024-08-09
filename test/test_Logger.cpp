@@ -64,7 +64,7 @@ private:
     void check(const std::ostringstream& stream, const std::string& expectedPattern) const {
         auto regex = boost::regex(expectedPattern);
         boost::cmatch matches;
-        CHECK(boost::regex_match(stream.str().c_str(), matches, regex));
+        EXPECT_TRUE(boost::regex_match(stream.str().c_str(), matches, regex));
     }
 
 private:

@@ -82,10 +82,10 @@ TEST_F(DeviceMountTestGroup, getters) {
         auto devAccess = libsarus::DeviceAccess("rwm");
 
         auto devMount = DeviceMount(std::move(mountObject), devAccess);
-        CHECK(devMount.getType() == 'c');
-        CHECK(devMount.getMajorID() == majorID);
-        CHECK(devMount.getMinorID() == minorID);
-        CHECK(devMount.getAccess().string() == std::string{"rwm"});
+        EXPECT_EQ(devMount.getType(), 'c');
+        EXPECT_EQ(devMount.getMajorID(), majorID);
+        EXPECT_EQ(devMount.getMinorID(), minorID);
+        EXPECT_EQ(devMount.getAccess().string(), std::string{"rwm"});
 
         boost::filesystem::remove(testDeviceFile);
     }
@@ -99,10 +99,10 @@ TEST_F(DeviceMountTestGroup, getters) {
         auto devAccess = libsarus::DeviceAccess("rw");
 
         auto devMount = DeviceMount(std::move(mountObject), devAccess);
-        CHECK(devMount.getType() == 'b');
+        EXPECT_EQ(devMount.getType(), 'b');
         EXPECT_EQ(devMount.getMajorID(),  majorID);
-        CHECK(devMount.getMinorID() == minorID);
-        CHECK(devMount.getAccess().string() == std::string{"rw"});
+        EXPECT_EQ(devMount.getMinorID(), minorID);
+        EXPECT_EQ(devMount.getAccess().string(), std::string{"rw"});
 
         boost::filesystem::remove(testDeviceFile);
     }
@@ -133,12 +133,12 @@ TEST_F(DeviceMountTestGroup, performMount) {
 
     // perform the mount
     libsarus::DeviceMount{std::move(mountObject), devAccess}.performMount();
-    CHECK(aux::filesystem::isSameBindMountedFile(sourceFile, rootfsDir / destinationFile));
-    CHECK(libsarus::filesystem::getDeviceID(rootfsDir / destinationFile) == makedev(majorID, minorID));
-    CHECK(libsarus::filesystem::getDeviceType(rootfsDir / destinationFile) == 'c');
+    EXPECT_TRUE(aux::filesystem::isSameBindMountedFile(sourceFile, rootfsDir / destinationFile));
+    EXPECT_EQ(libsarus::filesystem::getDeviceID(rootfsDir / destinationFile), makedev(majorID, minorID));
+    EXPECT_EQ(libsarus::filesystem::getDeviceType(rootfsDir / destinationFile), 'c');
 
     // cleanup
-    CHECK(umount((rootfsDir / destinationFile).c_str()) == 0);
+    EXPECT_EQ(umount((rootfsDir / destinationFile).c_str()), 0);
     boost::filesystem::remove(sourceFile);
 }
 

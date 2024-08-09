@@ -22,34 +22,34 @@ protected:
 
 TEST_F(DeviceAccessTestGroup, valid_inputs) {
     auto access = DeviceAccess("rwm");
-    CHECK(access.string() == "rwm");
+    EXPECT_EQ(access.string(), "rwm");
 
     access = DeviceAccess("wmr");
-    CHECK(access.string() == "rwm");
+    EXPECT_EQ(access.string(), "rwm");
 
     access = DeviceAccess("r");
-    CHECK(access.string() == "r");
+    EXPECT_EQ(access.string(), "r");
 
     access = DeviceAccess("w");
-    CHECK(access.string() == "w");
+    EXPECT_EQ(access.string(), "w");
 
     access = DeviceAccess("m");
-    CHECK(access.string() == "m");
+    EXPECT_EQ(access.string(), "m");
 
     access = DeviceAccess("rw");
-    CHECK(access.string() == "rw");
+    EXPECT_EQ(access.string(), "rw");
 
     access = DeviceAccess("wr");
-    CHECK(access.string() == "rw");
+    EXPECT_EQ(access.string(), "rw");
 
     access = DeviceAccess("mr");
-    CHECK(access.string() == "rw");
+    EXPECT_EQ(access.string(), "rw");
 
     access = DeviceAccess("wm");
-    CHECK(access.string() == "wm");
+    EXPECT_EQ(access.string(), "wm");
 
     access = DeviceAccess("mw");
-    CHECK(access.string() == "wm");
+    EXPECT_EQ(access.string(), "wm");
 }
 
 TEST_F(DeviceAccessTestGroup, invalid_inputs) {

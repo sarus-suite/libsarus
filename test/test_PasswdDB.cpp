@@ -65,31 +65,31 @@ TEST_F(PasswdDBTestGroup, testRead) {
     passwd = PasswdDB{file};
     const auto& entries = passwd.getEntries();
 
-    CHECK(entries.size() == 3);
+    EXPECT_EQ(entries.size(), 3);
 
-    CHECK(entries[0].loginName == "loginName0");
-    CHECK(entries[0].encryptedPassword == "x");
-    CHECK(entries[0].uid == 1000);
-    CHECK(entries[0].gid == 1001);
-    CHECK(entries[0].userNameOrCommentField == "UserNameOrCommentField0");
-    CHECK(entries[0].userHomeDirectory == "/home/dir0");
-    CHECK(!entries[0].userCommandInterpreter);
+    EXPECT_EQ(entries[0].loginName, "loginName0");
+    EXPECT_EQ(entries[0].encryptedPassword, "x");
+    EXPECT_EQ(entries[0].uid, 1000);
+    EXPECT_EQ(entries[0].gid, 1001);
+    EXPECT_EQ(entries[0].userNameOrCommentField, "UserNameOrCommentField0");
+    EXPECT_EQ(entries[0].userHomeDirectory, "/home/dir0");
+    EXPECT_FALSE(entries[0].userCommandInterpreter);
 
-    CHECK(entries[1].loginName == "loginName1");
-    CHECK(entries[1].encryptedPassword == "encryptedPass1");
-    CHECK(entries[1].uid == 4294967294UL);
-    CHECK(entries[1].gid == 4294967294UL);
-    CHECK(entries[1].userNameOrCommentField == "UserNameOrCommentField1");
-    CHECK(entries[1].userHomeDirectory == "/home/dir1");
-    CHECK(*entries[1].userCommandInterpreter == "/optional/UserCommandInterpreter1");
+    EXPECT_EQ(entries[1].loginName, "loginName1");
+    EXPECT_EQ(entries[1].encryptedPassword, "encryptedPass1");
+    EXPECT_EQ(entries[1].uid, 4294967294UL);
+    EXPECT_EQ(entries[1].gid, 4294967294UL);
+    EXPECT_EQ(entries[1].userNameOrCommentField, "UserNameOrCommentField1");
+    EXPECT_EQ(entries[1].userHomeDirectory, "/home/dir1");
+    EXPECT_EQ(*entries[1].userCommandInterpreter, "/optional/UserCommandInterpreter1");
 
-    CHECK(entries[2].loginName == "loginName2");
-    CHECK(entries[2].encryptedPassword == "x");
-    CHECK(entries[2].uid == 1000);
-    CHECK(entries[2].gid == 1001);
-    CHECK(entries[2].userNameOrCommentField == "UserNameOrCommentField2");
-    CHECK(entries[2].userHomeDirectory == "/home/dir2");
-    CHECK(!entries[2].userCommandInterpreter);
+    EXPECT_EQ(entries[2].loginName, "loginName2");
+    EXPECT_EQ(entries[2].encryptedPassword, "x");
+    EXPECT_EQ(entries[2].uid, 1000);
+    EXPECT_EQ(entries[2].gid, 1001);
+    EXPECT_EQ(entries[2].userNameOrCommentField, "UserNameOrCommentField2");
+    EXPECT_EQ(entries[2].userHomeDirectory, "/home/dir2");
+    EXPECT_FALSE(entries[2].userCommandInterpreter);
 }
 
 TEST_F(PasswdDBTestGroup, testWrite) {
@@ -113,8 +113,8 @@ TEST_F(PasswdDBTestGroup, testGetUsername) {
 }
 
 TEST_F(PasswdDBTestGroup, testGetHomeDirectory) {
-    CHECK(passwd.getHomeDirectory(1000) == boost::filesystem::path{"/home/dir0"});
-    CHECK(passwd.getHomeDirectory(2000) == boost::filesystem::path{"/home/dir1"});
+    EXPECT_EQ(passwd.getHomeDirectory(1000), boost::filesystem::path{"/home/dir0"});
+    EXPECT_EQ(passwd.getHomeDirectory(2000), boost::filesystem::path{"/home/dir1"});
 }
 
 }}

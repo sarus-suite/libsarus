@@ -88,11 +88,11 @@ public:
         auto mountObject = parser.parseMountRequest(map);
 
         if(expectedSource) {
-            CHECK(mountObject->getSource() == *expectedSource);
+            EXPECT_EQ(mountObject->getSource(), *expectedSource);
         }
 
         if(expectedDestination) {
-            CHECK(mountObject->getDestination() == *expectedDestination);
+            EXPECT_EQ(mountObject->getDestination(), *expectedDestination);
         }
 
         if(expectedFlags) {

@@ -22,7 +22,7 @@
 namespace libsarus {
 namespace test {
 
-class CLIArgumentsTestGroup : public testing:Test {
+class CLIArgumentsTestGroup : public testing::Test {
 protected:
 };
 

@@ -45,7 +45,7 @@ TEST_F(HooksUtilityTestGroup, parseStateOfContainerFromStdin) {
     aux::hook::writeOCIContainerStateToStdin(expectedBundleDir.getPath());
     auto containerState = parseStateOfContainerFromStdin();
 
-    CHECK(containerState.bundle() == expectedBundleDir.getPath());
+    EXPECT_EQ(containerState.bundle(), expectedBundleDir.getPath());
     EXPECT_EQ(containerState.pid(), expectedPid);
 }
 
@@ -66,8 +66,8 @@ TEST_F(HooksUtilityTestGroup, getEnvironmentVariableValueFromOCIBundle) {
         config["process"]["env"].PushBack("TEST_VAR_SET_NOEMPTY2=value2", allocator);
         libsarus::json::write(config, bundleConfigFile);
         auto value = getEnvironmentVariableValueFromOCIBundle("TEST_VAR_SET_NOEMPTY1", testBundleDir.getPath());
-        CHECK(bool(value));
-        CHECK(*value == std::string("value1"));
+        EXPECT_TRUE(bool(value));
+        EXPECT_EQ(*value, std::string("value1"));
         config["process"]["env"].SetArray();
     }
     // Variable set and empty
@@ -77,8 +77,8 @@ TEST_F(HooksUtilityTestGroup, getEnvironmentVariableValueFromOCIBundle) {
         config["process"]["env"].PushBack("TEST_VAR_SET_NOEMPTY2=value2", allocator);
         libsarus::json::write(config, bundleConfigFile);
         auto value = getEnvironmentVariableValueFromOCIBundle("TEST_VAR_SET_EMPTY", testBundleDir.getPath());
-        CHECK(bool(value));
-        CHECK(*value == std::string(""));
+        EXPECT_TRUE(bool(value));
+        EXPECT_EQ(*value, std::string(""));
         config["process"]["env"].SetArray();
     }
     // Variable not set
@@ -87,7 +87,7 @@ TEST_F(HooksUtilityTestGroup, getEnvironmentVariableValueFromOCIBundle) {
         config["process"]["env"].PushBack("TEST_VAR_SET_NOEMPTY2=value2", allocator);
         libsarus::json::write(config, bundleConfigFile);
         auto value = getEnvironmentVariableValueFromOCIBundle("TEST_VAR_NOT_SET", testBundleDir.getPath());
-        CHECK_FALSE(value);
+        EXPECT_FALSE(value);
         config["process"]["env"].SetArray();
     }
 }
@@ -108,8 +108,8 @@ TEST_F(HooksUtilityTestGroup, findSubsystemMountPaths) {
         boost::filesystem::path returnedMountRoot;
         boost::filesystem::path returnedMountPoint;
         std::tie(returnedMountRoot, returnedMountPoint) = findSubsystemMountPaths("devices", testDir.getPath(), 1);
-        CHECK(boost::filesystem::equivalent(returnedMountRoot, expectedMountRoot));
-        CHECK(boost::filesystem::equivalent(returnedMountPoint, expectedMountPoint));
+        EXPECT_TRUE(boost::filesystem::equivalent(returnedMountRoot, expectedMountRoot));
+        EXPECT_TRUE(boost::filesystem::equivalent(returnedMountPoint, expectedMountPoint));
     }
     // multiple cgroup lines
     {
@@ -124,8 +124,8 @@ TEST_F(HooksUtilityTestGroup, findSubsystemMountPaths) {
         boost::filesystem::path returnedMountRoot;
         boost::filesystem::path returnedMountPoint;
         std::tie(returnedMountRoot, returnedMountPoint) = findSubsystemMountPaths("devices", testDir.getPath(), 1);
-        CHECK(boost::filesystem::equivalent(returnedMountRoot, expectedMountRoot));
-        CHECK(boost::filesystem::equivalent(returnedMountPoint, expectedMountPoint));
+        EXPECT_TRUE(boost::filesystem::equivalent(returnedMountRoot, expectedMountRoot));
+        EXPECT_TRUE(boost::filesystem::equivalent(returnedMountPoint, expectedMountPoint));
     }
     // multiple lines with several fs types
     {
@@ -143,8 +143,8 @@ TEST_F(HooksUtilityTestGroup, findSubsystemMountPaths) {
         boost::filesystem::path returnedMountRoot;
         boost::filesystem::path returnedMountPoint;
         std::tie(returnedMountRoot, returnedMountPoint) = findSubsystemMountPaths("devices", testDir.getPath(), 1);
-        CHECK(boost::filesystem::equivalent(returnedMountRoot, expectedMountRoot));
-        CHECK(boost::filesystem::equivalent(returnedMountPoint, expectedMountPoint));
+        EXPECT_TRUE(boost::filesystem::equivalent(returnedMountRoot, expectedMountRoot));
+        EXPECT_TRUE(boost::filesystem::equivalent(returnedMountPoint, expectedMountPoint));
     }
     // mount root different from filesystem root
     {
@@ -163,7 +163,7 @@ TEST_F(HooksUtilityTestGroup, findSubsystemMountPaths) {
         boost::filesystem::path returnedMountPoint;
         std::tie(returnedMountRoot, returnedMountPoint) = findSubsystemMountPaths("devices", testDir.getPath(), 1);
         EXPECT_EQ(returnedMountRoot.string(), expectedMountRoot.string());
-        CHECK(boost::filesystem::equivalent(returnedMountPoint, expectedMountPoint));
+        EXPECT_TRUE(boost::filesystem::equivalent(returnedMountPoint, expectedMountPoint));
     }
     // line with no optional fields
     {
@@ -181,8 +181,8 @@ TEST_F(HooksUtilityTestGroup, findSubsystemMountPaths) {
         boost::filesystem::path returnedMountRoot;
         boost::filesystem::path returnedMountPoint;
         std::tie(returnedMountRoot, returnedMountPoint) = findSubsystemMountPaths("devices", testDir.getPath(), 1);
-        CHECK(boost::filesystem::equivalent(returnedMountRoot, expectedMountRoot));
-        CHECK(boost::filesystem::equivalent(returnedMountPoint, expectedMountPoint));
+        EXPECT_TRUE(boost::filesystem::equivalent(returnedMountRoot, expectedMountRoot));
+        EXPECT_TRUE(boost::filesystem::equivalent(returnedMountPoint, expectedMountPoint));
     }
     // malformed line on another entry (/proc missing superOptions and filesystem type)
     {
@@ -200,8 +200,8 @@ TEST_F(HooksUtilityTestGroup, findSubsystemMountPaths) {
         boost::filesystem::path returnedMountRoot;
         boost::filesystem::path returnedMountPoint;
         std::tie(returnedMountRoot, returnedMountPoint) = findSubsystemMountPaths("devices", testDir.getPath(), 1);
-        CHECK(boost::filesystem::equivalent(returnedMountRoot, expectedMountRoot));
-        CHECK(boost::filesystem::equivalent(returnedMountPoint, expectedMountPoint));
+        EXPECT_TRUE(boost::filesystem::equivalent(returnedMountRoot, expectedMountRoot));
+        EXPECT_TRUE(boost::filesystem::equivalent(returnedMountPoint, expectedMountPoint));
     }
     // mount root resides in another cgroup namespace
     {
@@ -390,7 +390,7 @@ TEST_F(HooksUtilityTestGroup, findCgroupPath) {
     // test with expected path existing
     libsarus::filesystem::createFoldersIfNecessary(expectedPath);
     auto returnedPath = findCgroupPath("devices", testDir.getPath(), 1);
-    CHECK(boost::filesystem::equivalent(returnedPath, expectedPath));
+    EXPECT_TRUE(boost::filesystem::equivalent(returnedPath, expectedPath));
 }
 
 TEST_F(HooksUtilityTestGroup, whitelistDeviceInCgroup) {
@@ -414,15 +414,15 @@ TEST_F(HooksUtilityTestGroup, whitelistDeviceInCgroup) {
 }
 
 TEST_F(HooksUtilityTestGroup, parseLibcVersionFromLddOutput) {
-    CHECK((std::tuple<unsigned int, unsigned int>{2, 34} == parseLibcVersionFromLddOutput(
+    EXPECT_EQ((std::tuple<unsigned int, unsigned int>{2, 34}, parseLibcVersionFromLddOutput(
             "ldd (GNU libc) 2.34\n"
             "Copyright (C) 2021 Free Software Foundation, Inc.\n"
             "This is free software; see the source for copying conditions.  There is NO\n"
             "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
             "Written by Roland McGrath and Ulrich Drepper.")));
-    CHECK((std::tuple<unsigned int, unsigned int>{2, 31} == parseLibcVersionFromLddOutput("ldd (Ubuntu GLIBC 2.31-0ubuntu9.2) 2.31")));
-    CHECK((std::tuple<unsigned int, unsigned int>{0, 0} == parseLibcVersionFromLddOutput("ldd (GNU libc) 0.0")));
-    CHECK((std::tuple<unsigned int, unsigned int>{100, 100} == parseLibcVersionFromLddOutput("ldd (GNU libc) 100.100")));
+    EXPECT_EQ((std::tuple<unsigned int, unsigned int>{2, 31}, parseLibcVersionFromLddOutput("ldd (Ubuntu GLIBC 2.31-0ubuntu9.2) 2.31")));
+    EXPECT_EQ((std::tuple<unsigned int, unsigned int>{0, 0}, parseLibcVersionFromLddOutput("ldd (GNU libc) 0.0")));
+    EXPECT_EQ((std::tuple<unsigned int, unsigned int>{100, 100}, parseLibcVersionFromLddOutput("ldd (GNU libc) 100.100")));
 }
 
 }}

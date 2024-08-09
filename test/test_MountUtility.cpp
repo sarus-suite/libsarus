@@ -40,7 +40,7 @@ TEST_F(MountUtilitiesTestGroup, get_validated_mount_source_test) {
     // Test existing directory
     libsarus::filesystem::createFoldersIfNecessary(source_dir_2);
     auto* expected = realpath(source_dir_2.c_str(), NULL);
-    CHECK(libsarus::mount::getValidatedMountSource(source_dir_2) == boost::filesystem::path(expected));
+    EXPECT_EQ(libsarus::mount::getValidatedMountSource(source_dir_2), boost::filesystem::path(expected));
 
     // Cleanup
     free(expected);
@@ -62,18 +62,18 @@ TEST_F(MountUtilitiesTestGroup, get_validated_mount_destination_test) {
     auto imageSquashfs = boost::filesystem::path{__FILE__}.parent_path() / "test_image.squashfs";
     libsarus::mount::loopMountSquashfs(imageSquashfs, rootfsDir / otherDeviceDir);
     CHECK_THROWS(libsarus::Error, libsarus::mount::getValidatedMountDestination(otherDeviceDir, rootfsDir));
-    CHECK(umount((rootfsDir / otherDeviceDir).c_str()) == 0);
+    EXPECT_EQ(umount((rootfsDir / otherDeviceDir).c_str()), 0);
 
     // Test non-existing mount point
     auto nonExistingDir = boost::filesystem::path{"/nonExistingMountPoint"};
     auto expected = rootfsDir / nonExistingDir;
-    CHECK(libsarus::mount::getValidatedMountDestination(nonExistingDir, rootfsDir) == expected);
+    EXPECT_EQ(libsarus::mount::getValidatedMountDestination(nonExistingDir, rootfsDir), expected);
 
     // Test existing mount point
     auto existingDir = boost::filesystem::path{"/file_in_squashfs_image"};
     expected = rootfsDir / existingDir;
     libsarus::filesystem::createFoldersIfNecessary(expected);
-    CHECK(libsarus::mount::getValidatedMountDestination(existingDir, rootfsDir) == expected);
+    EXPECT_EQ(libsarus::mount::getValidatedMountDestination(existingDir, rootfsDir), expected);
 }
 
 TEST_F(MountUtilitiesTestGroup, bindMount) {
@@ -89,13 +89,13 @@ TEST_F(MountUtilitiesTestGroup, bindMount) {
     libsarus::mount::bindMount(fromDir, toDir);
 
     // check that "file" is in the mounted directory
-    CHECK(boost::filesystem::exists(toDir / "file"));
+    EXPECT_TRUE(boost::filesystem::exists(toDir / "file"));
 
     // check that mounted directory is writable
     libsarus::filesystem::createFileIfNecessary(toDir / "file-successfull-write-attempt");
 
     // cleanup
-    CHECK(umount(toDir.c_str()) == 0);
+    EXPECT_EQ(umount(toDir.c_str()), 0);
 }
 
 TEST_F(MountUtilitiesTestGroup, bindMountReadOnly) {
@@ -111,13 +111,13 @@ TEST_F(MountUtilitiesTestGroup, bindMountReadOnly) {
     libsarus::mount::bindMount(fromDir, toDir, MS_RDONLY);
 
     // check that "file" is in the mounted directory
-    CHECK(boost::filesystem::exists(toDir / "file"));
+    EXPECT_TRUE(boost::filesystem::exists(toDir / "file"));
 
     // check that mounted directory is read-only
     CHECK_THROWS(libsarus::Error, libsarus::filesystem::createFileIfNecessary(toDir / "file-failed-write-attempt"));
 
     // cleanup
-    CHECK(umount(toDir.c_str()) == 0);
+    EXPECT_EQ(umount(toDir.c_str()), 0);
 }
 
 TEST_F(MountUtilitiesTestGroup, bindMountRecursive) {
@@ -134,18 +134,18 @@ TEST_F(MountUtilitiesTestGroup, bindMountRecursive) {
     libsarus::filesystem::createFileIfNecessary(c / "d.txt");
 
     // check that "d.txt" is in the mounted directory
-    CHECK(!boost::filesystem::exists(b / "d.txt"));
+    EXPECT_FALSE(boost::filesystem::exists(b / "d.txt"));
     libsarus::mount::bindMount(c, b);
-    CHECK(boost::filesystem::exists(b / "d.txt"));
+    EXPECT_TRUE(boost::filesystem::exists(b / "d.txt"));
 
     // check that mounts are recursive by default
-    CHECK(!boost::filesystem::exists(a / "d.txt"));
+    EXPECT_FALSE(boost::filesystem::exists(a / "d.txt"));
     libsarus::mount::bindMount(b, a);
-    CHECK(boost::filesystem::exists(a / "d.txt"));
+    EXPECT_TRUE(boost::filesystem::exists(a / "d.txt"));
 
     // cleanup
-    CHECK(umount(b.c_str()) == 0);
-    CHECK(umount(a.c_str()) == 0);
+    EXPECT_EQ(umount(b.c_str()), 0);
+    EXPECT_EQ(umount(a.c_str()), 0);
 }
 
 TEST_F(MountUtilitiesTestGroup, loopMountSquashfs) {
@@ -155,9 +155,9 @@ TEST_F(MountUtilitiesTestGroup, loopMountSquashfs) {
 
     auto imageSquashfs = boost::filesystem::path{__FILE__}.parent_path() / "test_image.squashfs";
     libsarus::mount::loopMountSquashfs(imageSquashfs, mountPoint);
-    CHECK(boost::filesystem::exists(mountPoint / "file_in_squashfs_image"));
+    EXPECT_TRUE(boost::filesystem::exists(mountPoint / "file_in_squashfs_image"));
 
-    CHECK(umount(mountPoint.string().c_str()) == 0);
+    EXPECT_EQ(umount(mountPoint.string().c_str()), 0);
 }
 
 }}
