@@ -22,10 +22,11 @@ if(${BUILD_STATIC})
 endif(${BUILD_STATIC})
 
 # Define CMake variables
-set(ENABLE_UNIT_TESTS TRUE CACHE BOOL 
-  "Build unit tests. Also downloads and builds the CppUTest framework [TRUE]")
-set(ENABLE_TESTS_WITH_VALGRIND FALSE CACHE BOOL 
-  "Run each unit test through valgrind [FALSE]")
+set(ENABLE_UNIT_TESTS TRUE CACHE BOOL "Build unit tests. [TRUE]")
+
+# Set C++ standard 
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Check and set dependencies
 find_package(Boost REQUIRED COMPONENTS filesystem regex)
@@ -37,6 +38,10 @@ add_definitions(-DBOOST_NO_CXX11_SCOPED_ENUMS)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${CMAKE_SOURCE_DIR}/dep/rapidjson/include)
+
+if(${ENABLE_UNIT_TESTS})
+  include_directories(${CMAKE_SOURCE_DIR}/dep/googletest/googletest/include)
+endif(${ENABLE_UNIT_TESTS})
 
 # Print version
 execute_process(COMMAND ${GIT_PATH} describe --tags --dirty --always
@@ -55,9 +60,3 @@ add_subdirectory(src)
 if(${ENABLE_UNIT_TESTS})
   add_subdirectory(test)
 endif(${ENABLE_UNIT_TESTS})
-
-# TODO: possibly irrelevant to libsarus?
-#install(FILES configure_installation.sh DESTINATION ${CMAKE_INSTALL_PREFIX} PERMISSIONS
-#    OWNER_READ OWNER_WRITE OWNER_EXECUTE
-#    GROUP_READ GROUP_EXECUTE
-#    WORLD_READ WORLD_EXECUTE)

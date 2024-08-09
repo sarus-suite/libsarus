@@ -6,3 +6,8 @@ if(${ENABLE_UNIT_TESTS})
   set(CPPUTEST_LIB ${CPPUTEST_FILE} PARENT_SCOPE)
   set(CPPUTEST_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/cpputest/include PARENT_SCOPE)
 endif(${ENABLE_UNIT_TESTS})
+
+# GTest
+if(${ENABLE_UNIT_TESTS})
+  add_subdirectory(googletest)
+endif(${ENABLE_UNIT_TESTS})
