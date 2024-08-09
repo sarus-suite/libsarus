@@ -19,7 +19,8 @@
 namespace libsarus {
 namespace test {
 
-TEST_GROUP(ErrorTestGroup) {
+class ErrorTestGroup : public testing::Test {
+protected:
 };
 
 void functionThatThrows() {
@@ -54,7 +55,7 @@ void functionThatRethrowsWithLogLevelDebug() {
     }
 }
 
-TEST(ErrorTestGroup, oneStackTraceEntry) {
+TEST_F(ErrorTestGroup, oneStackTraceEntry) {
     try {
         functionThatThrows();
     }
@@ -67,7 +68,7 @@ TEST(ErrorTestGroup, oneStackTraceEntry) {
     }
 }
 
-TEST(ErrorTestGroup, twoStackTraceEntries) {
+TEST_F(ErrorTestGroup, twoStackTraceEntries) {
     try {
         functionThatRethrows();
     }
@@ -82,7 +83,7 @@ TEST(ErrorTestGroup, twoStackTraceEntries) {
     }
 }
 
-TEST(ErrorTestGroup, fromStdException) {
+TEST_F(ErrorTestGroup, fromStdException) {
     try {
         functionThatThrowsFromStdException();
     }
@@ -97,7 +98,7 @@ TEST(ErrorTestGroup, fromStdException) {
     }
 }
 
-TEST(ErrorTestGroup, oneStackTraceEntry_throwWithLogLevelDebug) {
+TEST_F(ErrorTestGroup, oneStackTraceEntry_throwWithLogLevelDebug) {
     try {
         functionThatThrowsWithLogLevelDebug();
     }
@@ -110,7 +111,7 @@ TEST(ErrorTestGroup, oneStackTraceEntry_throwWithLogLevelDebug) {
     }
 }
 
-TEST(ErrorTestGroup, twoStackTraceEntries_rethrowWithLogLevelDebug) {
+TEST_F(ErrorTestGroup, twoStackTraceEntries_rethrowWithLogLevelDebug) {
     try {
         functionThatRethrowsWithLogLevelDebug();
     }

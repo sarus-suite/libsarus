@@ -26,7 +26,7 @@ class CLIArgumentsTestGroup : public testing:Test {
 protected:
 };
 
-TEST(CLIArgumentsTestGroup, serialize) {
+TEST_F(CLIArgumentsTestGroup, serialize) {
     auto args = libsarus::CLIArguments{"command", "arg0", "arg1"};
 
     std::stringstream os;
@@ -35,7 +35,7 @@ TEST(CLIArgumentsTestGroup, serialize) {
     EXPECT_EQ(os.str(), std::string{"[\"command\", \"arg0\", \"arg1\"]"});
 };
 
-TEST(CLIArgumentsTestGroup, deserialize) {
+TEST_F(CLIArgumentsTestGroup, deserialize) {
     std::stringstream is("[\"command\", \"arg0\", \"arg1\"]");
 
     libsarus::CLIArguments args;
@@ -45,7 +45,7 @@ TEST(CLIArgumentsTestGroup, deserialize) {
     EXPECT_EQ(args, expected);
 };
 
-TEST(CLIArgumentsTestGroup, string) {
+TEST_F(CLIArgumentsTestGroup, string) {
     std::stringstream is("[\"command\", \"arg0\", \"arg1\"]");
 
     libsarus::CLIArguments args;

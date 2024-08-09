@@ -28,10 +28,11 @@
 namespace libsarus {
 namespace test {
 
-TEST_GROUP(UtilityTestGroup) {
+class UtilityTestGroup : public testing::Test {
+protected:
 };
 
-TEST(UtilityTestGroup, parseEnvironmentVariables) {
+TEST_F(UtilityTestGroup, parseEnvironmentVariables) {
     // empty environment
     {
         auto env = std::array<char*, 1>{nullptr};
@@ -52,7 +53,7 @@ TEST(UtilityTestGroup, parseEnvironmentVariables) {
     }
 }
 
-TEST(UtilityTestGroup, getEnvironmentVariable) {
+TEST_F(UtilityTestGroup, getEnvironmentVariable) {
     auto testKey = std::string{"SARUS_UNITTEST_GETVAR"};
     auto testValue = std::string{"dummy"};
 
@@ -65,7 +66,7 @@ TEST(UtilityTestGroup, getEnvironmentVariable) {
     CHECK_EQUAL(libsarus::environment::getVariable(testKey), testValue);
 }
 
-TEST(UtilityTestGroup, setEnvironmentVariable) {
+TEST_F(UtilityTestGroup, setEnvironmentVariable) {
     auto testKey = std::string{"SARUS_UNITTEST_SETVAR"};
     auto testValue = std::string{"dummy"};
 
@@ -93,7 +94,7 @@ TEST(UtilityTestGroup, setEnvironmentVariable) {
     CHECK_EQUAL(std::string(envValue), testValue);
 }
 
-TEST(UtilityTestGroup, parseKeyValuePair) {
+TEST_F(UtilityTestGroup, parseKeyValuePair) {
     auto pair = libsarus::string::parseKeyValuePair("key=value");
     CHECK_EQUAL(pair.first, std::string("key"));
     CHECK_EQUAL(pair.second, std::string("value"));
@@ -120,7 +121,7 @@ TEST(UtilityTestGroup, parseKeyValuePair) {
     CHECK_THROWS(libsarus::Error, libsarus::string::parseKeyValuePair("=value"));
 }
 
-TEST(UtilityTestGroup, switchIdentity) {
+TEST_F(UtilityTestGroup, switchIdentity) {
     auto testDirRAII = libsarus::PathRAII{ "./sarus-test-switchIdentity" };
     libsarus::filesystem::createFileIfNecessary(testDirRAII.getPath() / "file", 0, 0);
     boost::filesystem::permissions(testDirRAII.getPath(), boost::filesystem::owner_all);
@@ -148,7 +149,7 @@ TEST(UtilityTestGroup, switchIdentity) {
     CHECK(boost::filesystem::exists(testDirRAII.getPath() / "file"));
 }
 
-TEST(UtilityTestGroup, setFilesystemUid) {
+TEST_F(UtilityTestGroup, setFilesystemUid) {
     // switch to unprivileged user
     uid_t unprivilegedUid;
     gid_t unprivilegedGid;
@@ -176,14 +177,14 @@ TEST(UtilityTestGroup, setFilesystemUid) {
     CHECK_EQUAL((uid_t)setfsuid(-1), rootIdentity.uid);
 }
 
-TEST(UtilityTestGroup, executeCommand) {
+TEST_F(UtilityTestGroup, executeCommand) {
     CHECK_EQUAL(libsarus::process::executeCommand("printf stdout"), std::string{"stdout"});
     CHECK_EQUAL(libsarus::process::executeCommand("bash -c 'printf stderr >&2'"), std::string{"stderr"});
     CHECK_THROWS(libsarus::Error, libsarus::process::executeCommand("false"));
     CHECK_THROWS(libsarus::Error, libsarus::process::executeCommand("command-that-doesnt-exist-xyz"));
 }
 
-TEST(UtilityTestGroup, makeUniquePathWithRandomSuffix) {
+TEST_F(UtilityTestGroup, makeUniquePathWithRandomSuffix) {
     auto path = boost::filesystem::path{"/tmp/file"};
     auto uniquePath = libsarus::filesystem::makeUniquePathWithRandomSuffix(path);
 
@@ -192,7 +193,7 @@ TEST(UtilityTestGroup, makeUniquePathWithRandomSuffix) {
     CHECK(boost::regex_match(uniquePath.string().c_str(), matches, expectedRegex));
 }
 
-TEST(UtilityTestGroup, createFoldersIfNecessary) {
+TEST_F(UtilityTestGroup, createFoldersIfNecessary) {
     if (boost::filesystem::exists("/tmp/grandparent"))
         boost::filesystem::remove_all("/tmp/grandparent");
 
@@ -207,7 +208,7 @@ TEST(UtilityTestGroup, createFoldersIfNecessary) {
     boost::filesystem::remove_all("/tmp/grandparent");
 }
 
-TEST(UtilityTestGroup, createFileIfNecessary) {
+TEST_F(UtilityTestGroup, createFileIfNecessary) {
     if (boost::filesystem::exists("/tmp/testFile"))
         boost::filesystem::remove_all("/tmp/testFile");
 
@@ -220,7 +221,7 @@ TEST(UtilityTestGroup, createFileIfNecessary) {
     boost::filesystem::remove_all("/tmp/testFile");
 }
 
-TEST(UtilityTestGroup, copyFile) {
+TEST_F(UtilityTestGroup, copyFile) {
     auto testDirRAII = libsarus::PathRAII{ "./sarus-test-copyFile" };
     const auto& testDir = testDirRAII.getPath();
     libsarus::filesystem::createFileIfNecessary(testDir / "src");
@@ -241,7 +242,7 @@ TEST(UtilityTestGroup, copyFile) {
     boost::filesystem::remove_all(testDir);
 }
 
-TEST(UtilityTestGroup, copyFolder) {
+TEST_F(UtilityTestGroup, copyFolder) {
     if (boost::filesystem::exists("/tmp/src-folder"))
         boost::filesystem::remove_all("/tmp/src-folder");
     if (boost::filesystem::exists("/tmp/dst-folder"))
@@ -263,7 +264,7 @@ TEST(UtilityTestGroup, copyFolder) {
     boost::filesystem::remove_all("/tmp/src-folder");
 }
 
-TEST(UtilityTestGroup, countFilesInDirectory) {
+TEST_F(UtilityTestGroup, countFilesInDirectory) {
     // nominal usage
     {
         auto testDir = boost::filesystem::path("/tmp/file-count-test");
@@ -292,7 +293,7 @@ TEST(UtilityTestGroup, countFilesInDirectory) {
     }
 }
 
-TEST(UtilityTestGroup, parseMap) {
+TEST_F(UtilityTestGroup, parseMap) {
     // empty list
     {
         auto map = libsarus::string::parseMap("");
@@ -366,7 +367,7 @@ TEST(UtilityTestGroup, parseMap) {
     }
 }
 
-TEST(UtilityTestGroup, realpathWithinRootfs) {
+TEST_F(UtilityTestGroup, realpathWithinRootfs) {
     auto path = libsarus::PathRAII{libsarus::filesystem::makeUniquePathWithRandomSuffix("/tmp/sarus-rootfs")};
     const auto& rootfs = path.getPath();
 
@@ -417,7 +418,7 @@ TEST(UtilityTestGroup, realpathWithinRootfs) {
     CHECK(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dirX/link_absolute_with_no_common_path") == "/dir0/dir1");
 }
 
-TEST(UtilityTestGroup, getSharedLibLinkerName) {
+TEST_F(UtilityTestGroup, getSharedLibLinkerName) {
     CHECK(libsarus::sharedlibs::getLinkerName("file.so") == "file.so");
     CHECK(libsarus::sharedlibs::getLinkerName("file.so.1") == "file.so");
     CHECK(libsarus::sharedlibs::getLinkerName("file.so.1.0") == "file.so");
@@ -427,7 +428,7 @@ TEST(UtilityTestGroup, getSharedLibLinkerName) {
     CHECK_THROWS(libsarus::Error, libsarus::sharedlibs::getLinkerName("not-a-shared-lib.soa"));
 }
 
-TEST(UtilityTestGroup, isSharedLib) {
+TEST_F(UtilityTestGroup, isSharedLib) {
     CHECK(libsarus::filesystem::isSharedLib("/dir/libc.so") == true);
     CHECK(libsarus::filesystem::isSharedLib("libc.so") == true);
     CHECK(libsarus::filesystem::isSharedLib("libc.so.1") == true);
@@ -439,7 +440,7 @@ TEST(UtilityTestGroup, isSharedLib) {
     CHECK(libsarus::filesystem::isSharedLib("ld.so.cache") == false);
 }
 
-TEST(UtilityTestGroup, parseSharedLibAbi) {
+TEST_F(UtilityTestGroup, parseSharedLibAbi) {
     CHECK_THROWS(libsarus::Error, libsarus::sharedlibs::parseAbi("invalid"));
     CHECK(libsarus::sharedlibs::parseAbi("libc.so") == (std::vector<std::string>{}));
     CHECK(libsarus::sharedlibs::parseAbi("libc.so.1") == (std::vector<std::string>{"1"}));
@@ -450,7 +451,7 @@ TEST(UtilityTestGroup, parseSharedLibAbi) {
     CHECK(libsarus::sharedlibs::parseAbi("libfoo.so.0") == (std::vector<std::string>{"0"}));
 }
 
-TEST(UtilityTestGroup, resolveSharedLibAbi) {
+TEST_F(UtilityTestGroup, resolveSharedLibAbi) {
     auto testDirRaii = libsarus::PathRAII{
         libsarus::filesystem::makeUniquePathWithRandomSuffix("/tmp/sarus-test-utility-resolveSharedLibAbi")
     };
@@ -506,7 +507,7 @@ TEST(UtilityTestGroup, resolveSharedLibAbi) {
     CHECK(libsarus::sharedlibs::resolveAbi(testDir / "subdir" / "libtest.so.234") == (std::vector<std::string>{"234"}));
 }
 
-TEST(UtilityTestGroup, getSharedLibSoname) {
+TEST_F(UtilityTestGroup, getSharedLibSoname) {
     auto dummyLibsDir = boost::filesystem::path{__FILE__}
         .parent_path() / "dummy_libs";
     CHECK_EQUAL(libsarus::sharedlibs::getSoname(dummyLibsDir / "libc.so.6-host", "readelf"), std::string("libc.so.6"));
@@ -514,7 +515,7 @@ TEST(UtilityTestGroup, getSharedLibSoname) {
     CHECK_THROWS(libsarus::Error, libsarus::sharedlibs::getSoname(dummyLibsDir / "lib_dummy_0.so", "readelf"));
 }
 
-TEST(UtilityTestGroup, isLibc) {
+TEST_F(UtilityTestGroup, isLibc) {
     // libc
     CHECK(libsarus::filesystem::isLibc("libc.so"));
     CHECK(libsarus::filesystem::isLibc("libc.so.6"));
@@ -531,7 +532,7 @@ TEST(UtilityTestGroup, isLibc) {
     CHECK(!libsarus::filesystem::isLibc("libc_bogus.so"));
 }
 
-TEST(UtilityTestGroup, is64bitSharedLib) {
+TEST_F(UtilityTestGroup, is64bitSharedLib) {
     auto dummyLibsDir = boost::filesystem::path{__FILE__}
         .parent_path() / "dummy_libs";
     CHECK(libsarus::sharedlibs::is64bitSharedLib(dummyLibsDir / "libc.so.6-host", "readelf"));
@@ -539,7 +540,7 @@ TEST(UtilityTestGroup, is64bitSharedLib) {
     CHECK(!libsarus::sharedlibs::is64bitSharedLib(dummyLibsDir / "libc.so.6-32bit-container", "readelf"));
 }
 
-TEST(UtilityTestGroup, serializeJSON) {
+TEST_F(UtilityTestGroup, serializeJSON) {
     namespace rj = rapidjson;
     auto json = rj::Document{rj::kObjectType};
     auto& allocator = json.GetAllocator();
@@ -557,11 +558,11 @@ TEST(UtilityTestGroup, serializeJSON) {
     CHECK_EQUAL(libsarus::string::removeWhitespaces(actual), expected);
 }
 
-TEST(UtilityTestGroup, setCpuAffinity_invalid_argument) {
+TEST_F(UtilityTestGroup, setCpuAffinity_invalid_argument) {
     CHECK_THROWS(libsarus::Error, libsarus::process::setCpuAffinity({})); // no CPUs
 }
 
-TEST(UtilityTestGroup, getCpuAffinity_setCpuAffinity) {
+TEST_F(UtilityTestGroup, getCpuAffinity_setCpuAffinity) {
     auto initialCpus = libsarus::process::getCpuAffinity();
 
     if(initialCpus.size() <= 1) {

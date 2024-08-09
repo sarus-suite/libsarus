@@ -17,10 +17,11 @@
 namespace libsarus {
 namespace test {
 
-TEST_GROUP(DeviceAccessTestGroup) {
+class DeviceAccessTestGroup : public testing::Test {
+protected:
 };
 
-TEST(DeviceAccessTestGroup, valid_inputs) {
+TEST_F(DeviceAccessTestGroup, valid_inputs) {
     auto access = DeviceAccess("rwm");
     CHECK(access.string() == "rwm");
 
@@ -52,7 +53,7 @@ TEST(DeviceAccessTestGroup, valid_inputs) {
     CHECK(access.string() == "wm");
 }
 
-TEST(DeviceAccessTestGroup, invalid_inputs) {
+TEST_F(DeviceAccessTestGroup, invalid_inputs) {
     // empty string
     CHECK_THROWS(libsarus::Error, DeviceAccess(""));
 

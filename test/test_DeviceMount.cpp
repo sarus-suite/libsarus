@@ -25,10 +25,11 @@
 namespace libsarus {
 namespace test {
 
-TEST_GROUP(DeviceMountTestGroup) {
+class DeviceMountTestGroup : public testing::Test {
+protected:
 };
 
-TEST(DeviceMountTestGroup, constructor) {
+TEST_F(DeviceMountTestGroup, constructor) {
     auto testDir = libsarus::PathRAII(
         libsarus::filesystem::makeUniquePathWithRandomSuffix(boost::filesystem::current_path() / "deviceMount-test-constructor"));
     libsarus::filesystem::createFoldersIfNecessary(testDir.getPath());
@@ -60,7 +61,7 @@ TEST(DeviceMountTestGroup, constructor) {
     }
 }
 
-TEST(DeviceMountTestGroup, getters) {
+TEST_F(DeviceMountTestGroup, getters) {
     auto testDir = libsarus::PathRAII(
         libsarus::filesystem::makeUniquePathWithRandomSuffix(boost::filesystem::current_path() / "deviceMount-test-getters"));
     libsarus::filesystem::createFoldersIfNecessary(testDir.getPath());
@@ -108,7 +109,7 @@ TEST(DeviceMountTestGroup, getters) {
     }
 }
 
-TEST(DeviceMountTestGroup, performMount) {
+TEST_F(DeviceMountTestGroup, performMount) {
     auto testDir = libsarus::PathRAII(
         libsarus::filesystem::makeUniquePathWithRandomSuffix(boost::filesystem::current_path() / "deviceMount-test-performMount"));
     libsarus::filesystem::createFoldersIfNecessary(testDir.getPath());

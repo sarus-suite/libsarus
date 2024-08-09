@@ -24,7 +24,8 @@
 namespace libsarus {
 namespace test {
 
-TEST_GROUP(LoggerTestGroup) {
+class LoggerTestGroup : public testing::Test {
+protected:
 };
 
 class LoggerChecker {
@@ -75,7 +76,7 @@ private:
     std::string expectedPatternInStderr;
 };
 
-TEST(LoggerTestGroup, logger) {
+TEST_F(LoggerTestGroup, logger) {
     const std::string generalMessage = "GENERAL message";
     const std::string debugMessage = "DEBUG message";
     const std::string infoMessage = "INFO message";

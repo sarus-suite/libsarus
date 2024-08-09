@@ -31,10 +31,11 @@ namespace test {
 
 using namespace libsarus::hook;
 
-TEST_GROUP(HooksUtilityTestGroup) {
+class HooksUtilityTestGroup : public testing::Test {
+protected:
 };
 
-TEST(HooksUtilityTestGroup, parseStateOfContainerFromStdin) {
+TEST_F(HooksUtilityTestGroup, parseStateOfContainerFromStdin) {
     auto expectedPid = getpid();
     auto expectedBundleDir = libsarus::PathRAII(
         libsarus::filesystem::makeUniquePathWithRandomSuffix(boost::filesystem::current_path() / "hooks-test-bundle-dir"));
@@ -49,7 +50,7 @@ TEST(HooksUtilityTestGroup, parseStateOfContainerFromStdin) {
     CHECK_EQUAL(containerState.pid(), expectedPid);
 }
 
-TEST(HooksUtilityTestGroup, getEnvironmentVariableValueFromOCIBundle) {
+TEST_F(HooksUtilityTestGroup, getEnvironmentVariableValueFromOCIBundle) {
     auto testBundleDir = libsarus::PathRAII(
         libsarus::filesystem::makeUniquePathWithRandomSuffix(boost::filesystem::current_path() / "hooks-test-bundle-dir"));
     libsarus::filesystem::createFoldersIfNecessary(testBundleDir.getPath());
@@ -92,7 +93,7 @@ TEST(HooksUtilityTestGroup, getEnvironmentVariableValueFromOCIBundle) {
     }
 }
 
-TEST(HooksUtilityTestGroup, findSubsystemMountPaths) {
+TEST_F(HooksUtilityTestGroup, findSubsystemMountPaths) {
     auto testDir = libsarus::PathRAII(
         libsarus::filesystem::makeUniquePathWithRandomSuffix(boost::filesystem::current_path() / "hooks-test-subsys-mount-point"));
     auto mountinfoPath = testDir.getPath() / "proc" / "1" / "mountinfo";
@@ -246,7 +247,7 @@ TEST(HooksUtilityTestGroup, findSubsystemMountPaths) {
     }
 }
 
-TEST(HooksUtilityTestGroup, findCgroupPathInHierarchy) {
+TEST_F(HooksUtilityTestGroup, findCgroupPathInHierarchy) {
     auto testDir = libsarus::PathRAII(
         libsarus::filesystem::makeUniquePathWithRandomSuffix(boost::filesystem::current_path() / "hooks-test-cgroup-relative-path"));
     auto procFilePath = testDir.getPath() / "proc" / "1" / "cgroup";
@@ -353,7 +354,7 @@ TEST(HooksUtilityTestGroup, findCgroupPathInHierarchy) {
     }
 }
 
-TEST(HooksUtilityTestGroup, findCgroupPath) {
+TEST_F(HooksUtilityTestGroup, findCgroupPath) {
     auto testDir = libsarus::PathRAII(
         libsarus::filesystem::makeUniquePathWithRandomSuffix(boost::filesystem::current_path() / "hooks-test-cgroup-path"));
 
@@ -393,7 +394,7 @@ TEST(HooksUtilityTestGroup, findCgroupPath) {
     CHECK(boost::filesystem::equivalent(returnedPath, expectedPath));
 }
 
-TEST(HooksUtilityTestGroup, whitelistDeviceInCgroup) {
+TEST_F(HooksUtilityTestGroup, whitelistDeviceInCgroup) {
     auto testDir = libsarus::PathRAII(
         libsarus::filesystem::makeUniquePathWithRandomSuffix(boost::filesystem::current_path() / "hooks-test-whitelist-device"));
 
@@ -413,7 +414,7 @@ TEST(HooksUtilityTestGroup, whitelistDeviceInCgroup) {
     CHECK_THROWS(libsarus::Error, whitelistDeviceInCgroup(testDir.getPath(), dummyFile));
 }
 
-TEST(HooksUtilityTestGroup, parseLibcVersionFromLddOutput) {
+TEST_F(HooksUtilityTestGroup, parseLibcVersionFromLddOutput) {
     CHECK((std::tuple<unsigned int, unsigned int>{2, 34} == parseLibcVersionFromLddOutput(
             "ldd (GNU libc) 2.34\n"
             "Copyright (C) 2021 Free Software Foundation, Inc.\n"

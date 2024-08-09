@@ -24,10 +24,11 @@
 namespace libsarus {
 namespace test {
 
-TEST_GROUP(MountTestGroup) {
+class MountTestGroup : public testing::Test {
+protected:
 };
 
-TEST(MountTestGroup, mount_test) {
+TEST_F(MountTestGroup, mount_test) {
     libsarus::UserIdentity userIdentity;
 
     auto bundleDirRAII = libsarus::PathRAII{libsarus::filesystem::makeUniquePathWithRandomSuffix(boost::filesystem::absolute("test-bundle-dir"))};
