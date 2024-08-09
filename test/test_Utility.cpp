@@ -56,7 +56,7 @@ TEST_F(UtilityTestGroup, getEnvironmentVariable) {
     auto testValue = std::string{"dummy"};
 
     // test with variable unset
-    CHECK_THROWS(libsarus::Error, libsarus::environment::getVariable(testKey));
+    EXPECT_THROW(libsarus::environment::getVariable(testKey), libsarus::Error);
 
     // test with variable set
     libsarus::environment::setVariable(testKey, testValue);
@@ -112,10 +112,10 @@ TEST_F(UtilityTestGroup, parseKeyValuePair) {
     EXPECT_EQ(pair.second, std::string("value"));
 
     // empty input
-    CHECK_THROWS(libsarus::Error, libsarus::string::parseKeyValuePair(""));
+    EXPECT_THROW(libsarus::string::parseKeyValuePair(""), libsarus::Error);
 
     // missing key
-    CHECK_THROWS(libsarus::Error, libsarus::string::parseKeyValuePair("=value"));
+    EXPECT_THROW(libsarus::string::parseKeyValuePair("=value"), libsarus::Error);
 }
 
 TEST_F(UtilityTestGroup, switchIdentity) {
@@ -135,8 +135,8 @@ TEST_F(UtilityTestGroup, switchIdentity) {
     EXPECT_EQ(getegid(), unprivilegedIdentity.gid);
 
     // Check it's not possible to read root-owned files or write in root-owned dirs
-    CHECK_THROWS(std::exception, boost::filesystem::exists(testDirRAII.getPath() / "file"));
-    CHECK_THROWS(std::exception, libsarus::filesystem::createFileIfNecessary(testDirRAII.getPath() / "file_fail"));
+    EXPECT_THROW(boost::filesystem::exists(testDirRAII.getPath() / "file"), std::exception);
+    EXPECT_THROW(libsarus::filesystem::createFileIfNecessary(testDirRAII.getPath() / "file_fail"), std::exception);
 
     auto rootIdentity = libsarus::UserIdentity{};
     libsarus::process::switchIdentity(rootIdentity);
@@ -177,8 +177,8 @@ TEST_F(UtilityTestGroup, setFilesystemUid) {
 TEST_F(UtilityTestGroup, executeCommand) {
     EXPECT_EQ(libsarus::process::executeCommand("printf stdout"), std::string{"stdout"});
     EXPECT_EQ(libsarus::process::executeCommand("bash -c 'printf stderr >&2'"), std::string{"stderr"});
-    CHECK_THROWS(libsarus::Error, libsarus::process::executeCommand("false"));
-    CHECK_THROWS(libsarus::Error, libsarus::process::executeCommand("command-that-doesnt-exist-xyz"));
+    EXPECT_THROW(libsarus::process::executeCommand("false"), libsarus::Error);
+    EXPECT_THROW(libsarus::process::executeCommand("command-that-doesnt-exist-xyz"), libsarus::Error);
 }
 
 TEST_F(UtilityTestGroup, makeUniquePathWithRandomSuffix) {
@@ -280,13 +280,13 @@ TEST_F(UtilityTestGroup, countFilesInDirectory) {
     }
     // non-existing directory
     {
-        CHECK_THROWS(libsarus::Error, libsarus::filesystem::countFilesInDirectory("/tmp/" + libsarus::string::generateRandom(16)));
+        EXPECT_THROW(libsarus::filesystem::countFilesInDirectory("/tmp/" + libsarus::string::generateRandom(16)), libsarus::Error);
     }
     // non-directory argument
     {
         auto testFile = libsarus::PathRAII{"/tmp/file-count-test.txt"};
         libsarus::filesystem::createFileIfNecessary(testFile.getPath());
-        CHECK_THROWS(libsarus::Error, libsarus::filesystem::countFilesInDirectory(testFile.getPath()));
+        EXPECT_THROW(libsarus::filesystem::countFilesInDirectory(testFile.getPath()), libsarus::Error);
     }
 }
 
@@ -342,25 +342,25 @@ TEST_F(UtilityTestGroup, parseMap) {
     // missing key error
     {
         auto list = ",key=value";
-        CHECK_THROWS(libsarus::Error, libsarus::string::parseMap(list));
+        EXPECT_THROW(libsarus::string::parseMap(list), libsarus::Error);
     }
     {
         auto list = "key0=value0,,key1=value1";
-        CHECK_THROWS(libsarus::Error, libsarus::string::parseMap(list));
+        EXPECT_THROW(libsarus::string::parseMap(list), libsarus::Error);
     }
     {
         auto list = "key0=value0,";
-        CHECK_THROWS(libsarus::Error, libsarus::string::parseMap(list));
+        EXPECT_THROW(libsarus::string::parseMap(list), libsarus::Error);
     }
     // repeated key error
     {
         auto list = "key0=value0,key0=value1";
-        CHECK_THROWS(libsarus::Error, libsarus::string::parseMap(list));
+        EXPECT_THROW(libsarus::string::parseMap(list), libsarus::Error);
     }
     // too many values error, a.k.a. repeated kv separator
     {
         auto list = "key0=value0=value1";
-        CHECK_THROWS(libsarus::Error, libsarus::string::parseMap(list));
+        EXPECT_THROW(libsarus::string::parseMap(list), libsarus::Error);
     }
 }
 
@@ -421,8 +421,8 @@ TEST_F(UtilityTestGroup, getSharedLibLinkerName) {
     EXPECT_EQ(libsarus::sharedlibs::getLinkerName("file.so.1.0"), "file.so");
     EXPECT_EQ(libsarus::sharedlibs::getLinkerName("file.so.1.0.0"), "file.so");
 
-    CHECK_THROWS(libsarus::Error, libsarus::sharedlibs::getLinkerName("not-a-shared-lib"));
-    CHECK_THROWS(libsarus::Error, libsarus::sharedlibs::getLinkerName("not-a-shared-lib.soa"));
+    EXPECT_THROW(libsarus::sharedlibs::getLinkerName("not-a-shared-lib"), libsarus::Error);
+    EXPECT_THROW(libsarus::sharedlibs::getLinkerName("not-a-shared-lib.soa"), libsarus::Error);
 }
 
 TEST_F(UtilityTestGroup, isSharedLib) {
@@ -438,7 +438,7 @@ TEST_F(UtilityTestGroup, isSharedLib) {
 }
 
 TEST_F(UtilityTestGroup, parseSharedLibAbi) {
-    CHECK_THROWS(libsarus::Error, libsarus::sharedlibs::parseAbi("invalid"));
+    EXPECT_THROW(libsarus::sharedlibs::parseAbi("invalid"), libsarus::Error);
     EXPECT_EQ(libsarus::sharedlibs::parseAbi("libc.so"), (std::vector<std::string>{}));
     EXPECT_EQ(libsarus::sharedlibs::parseAbi("libc.so.1"), (std::vector<std::string>{"1"}));
     EXPECT_EQ(libsarus::sharedlibs::parseAbi("libc.so.1.2"), (std::vector<std::string>{"1", "2"}));
@@ -456,7 +456,7 @@ TEST_F(UtilityTestGroup, resolveSharedLibAbi) {
 
     // invalid library filename
     libsarus::filesystem::createFileIfNecessary(testDir / "invalid");
-    CHECK_THROWS(libsarus::Error, libsarus::sharedlibs::resolveAbi(testDir / "invalid"));
+    EXPECT_THROW(libsarus::sharedlibs::resolveAbi(testDir / "invalid"), libsarus::Error);
 
     // libtest.so
     libsarus::filesystem::createFileIfNecessary(testDir / "libtest.so");
@@ -509,7 +509,7 @@ TEST_F(UtilityTestGroup, getSharedLibSoname) {
         .parent_path() / "dummy_libs";
     EXPECT_EQ(libsarus::sharedlibs::getSoname(dummyLibsDir / "libc.so.6-host", "readelf"), std::string("libc.so.6"));
     EXPECT_EQ(libsarus::sharedlibs::getSoname(dummyLibsDir / "ld-linux-x86-64.so.2-host", "readelf"), std::string("ld-linux-x86-64.so.2"));
-    CHECK_THROWS(libsarus::Error, libsarus::sharedlibs::getSoname(dummyLibsDir / "lib_dummy_0.so", "readelf"));
+    EXPECT_THROW(libsarus::sharedlibs::getSoname(dummyLibsDir / "lib_dummy_0.so", "readelf"), libsarus::Error);
 }
 
 TEST_F(UtilityTestGroup, isLibc) {
@@ -556,7 +556,7 @@ TEST_F(UtilityTestGroup, serializeJSON) {
 }
 
 TEST_F(UtilityTestGroup, setCpuAffinity_invalid_argument) {
-    CHECK_THROWS(libsarus::Error, libsarus::process::setCpuAffinity({})); // no CPUs
+    EXPECT_THROW(libsarus::process::setCpuAffinity({}), libsarus::Error); // no CPUs
 }
 
 TEST_F(UtilityTestGroup, getCpuAffinity_setCpuAffinity) {

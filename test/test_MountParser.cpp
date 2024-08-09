@@ -81,7 +81,7 @@ public:
         auto map = libsarus::string::parseMap(mountRequest);
 
         if(isParseErrorExpected) {
-            CHECK_THROWS(libsarus::Error, parser.parseMountRequest(map));
+            EXPECT_THROW(parser.parseMountRequest(map), libsarus::Error);
             return;
         }
 

@@ -216,7 +216,7 @@ TEST_F(HooksUtilityTestGroup, findSubsystemMountPaths) {
             )
             % expectedMountRoot.string() % expectedMountPoint.string();
         libsarus::filesystem::writeTextFile(mountinfoContent.str(), mountinfoPath, openmode);
-        CHECK_THROWS(libsarus::Error, findSubsystemMountPaths("devices", testDir.getPath(), 1));
+        EXPECT_THROW(findSubsystemMountPaths("devices", testDir.getPath(), 1), libsarus::Error);
     }
     // no line corresponding to searched entry
     {
@@ -227,7 +227,7 @@ TEST_F(HooksUtilityTestGroup, findSubsystemMountPaths) {
                 "49 41 253:2 / /home rw,relatime shared:31 - xfs /dev/mapper/home rw,seclabel,attr2,inode64,noquota"
             );
         libsarus::filesystem::writeTextFile(mountinfoContent.str(), mountinfoPath, openmode);
-        CHECK_THROWS(libsarus::Error, findSubsystemMountPaths("devices", testDir.getPath(), 1));
+        EXPECT_THROW(findSubsystemMountPaths("devices", testDir.getPath(), 1), libsarus::Error);
     }
     // malformed line corresponding to searched entry (missing superOptions and filesystem type)
     {
@@ -242,7 +242,7 @@ TEST_F(HooksUtilityTestGroup, findSubsystemMountPaths) {
             )
             % expectedMountRoot.string() % expectedMountPoint.string();
         libsarus::filesystem::writeTextFile(mountinfoContent.str(), mountinfoPath, openmode);
-        CHECK_THROWS(libsarus::Error, findSubsystemMountPaths("devices", testDir.getPath(), 1));
+        EXPECT_THROW(findSubsystemMountPaths("devices", testDir.getPath(), 1), libsarus::Error);
     }
 }
 
@@ -338,7 +338,7 @@ TEST_F(HooksUtilityTestGroup, findCgroupPathInHierarchy) {
             )
             % expectedPath.string();
         libsarus::filesystem::writeTextFile(procFileContent.str(), procFilePath, openmode);
-        CHECK_THROWS(libsarus::Error, findCgroupPathInHierarchy("devices", testDir.getPath(), subsystemMountRoot, 1));
+        EXPECT_THROW(findCgroupPathInHierarchy("devices", testDir.getPath(), subsystemMountRoot, 1), libsarus::Error);
     }
     // no line corresponding to searched entry
     {
@@ -349,7 +349,7 @@ TEST_F(HooksUtilityTestGroup, findCgroupPathInHierarchy) {
                 "5:cpuset:/"
             );
         libsarus::filesystem::writeTextFile(procFileContent.str(), procFilePath, openmode);
-        CHECK_THROWS(libsarus::Error, findCgroupPathInHierarchy("devices", testDir.getPath(), subsystemMountRoot, 1));
+        EXPECT_THROW(findCgroupPathInHierarchy("devices", testDir.getPath(), subsystemMountRoot, 1), libsarus::Error);
     }
 }
 
@@ -385,7 +385,7 @@ TEST_F(HooksUtilityTestGroup, findCgroupPath) {
     auto expectedPath = mountPointPath / cgroupRelativePath;
 
     // test with expected path not existing
-    CHECK_THROWS(libsarus::Error, findCgroupPath("devices", testDir.getPath(), 1));
+    EXPECT_THROW(findCgroupPath("devices", testDir.getPath(), 1), libsarus::Error);
 
     // test with expected path existing
     libsarus::filesystem::createFoldersIfNecessary(expectedPath);
@@ -410,7 +410,7 @@ TEST_F(HooksUtilityTestGroup, whitelistDeviceInCgroup) {
     // deviceFile argument is not a device
     auto dummyFile = testDir.getPath() / "dummy";
     libsarus::filesystem::createFileIfNecessary(dummyFile);
-    CHECK_THROWS(libsarus::Error, whitelistDeviceInCgroup(testDir.getPath(), dummyFile));
+    EXPECT_THROW(whitelistDeviceInCgroup(testDir.getPath(), dummyFile), libsarus::Error);
 }
 
 TEST_F(HooksUtilityTestGroup, parseLibcVersionFromLddOutput) {

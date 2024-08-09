@@ -56,7 +56,7 @@ TEST_F(DeviceMountTestGroup, constructor) {
         libsarus::filesystem::createFileIfNecessary(noDeviceFile);
         auto mountObject = libsarus::Mount{noDeviceFile, noDeviceFile, mount_flags, rootfsDir, userIdentity};
 
-        CHECK_THROWS(libsarus::Error, DeviceMount(std::move(mountObject), devAccess));
+        EXPECT_THROW(DeviceMount(std::move(mountObject), devAccess), libsarus::Error);
     }
 }
 

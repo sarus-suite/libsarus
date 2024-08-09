@@ -54,31 +54,31 @@ TEST_F(DeviceAccessTestGroup, valid_inputs) {
 
 TEST_F(DeviceAccessTestGroup, invalid_inputs) {
     // empty string
-    CHECK_THROWS(libsarus::Error, DeviceAccess(""));
+    EXPECT_THROW(DeviceAccess(""), libsarus::Error);
 
     //string longer than 3 characters
-    CHECK_THROWS(libsarus::Error, DeviceAccess("rwma"));
+    EXPECT_THROW(DeviceAccess("rwma"), libsarus::Error);
 
     // characters outside 'rwm'
-    CHECK_THROWS(libsarus::Error, DeviceAccess("rwa"));
-    CHECK_THROWS(libsarus::Error, DeviceAccess("zw"));
-    CHECK_THROWS(libsarus::Error, DeviceAccess("rpm"));
-    CHECK_THROWS(libsarus::Error, DeviceAccess("r&m"));
-    CHECK_THROWS(libsarus::Error, DeviceAccess("2w"));
+    EXPECT_THROW(DeviceAccess("rwa"), libsarus::Error);
+    EXPECT_THROW(DeviceAccess("zw"), libsarus::Error);
+    EXPECT_THROW(DeviceAccess("rpm"), libsarus::Error);
+    EXPECT_THROW(DeviceAccess("r&m"), libsarus::Error);
+    EXPECT_THROW(DeviceAccess("2w"), libsarus::Error);
 
     // repeated characters
-    CHECK_THROWS(libsarus::Error, DeviceAccess("rr"));
-    CHECK_THROWS(libsarus::Error, DeviceAccess("rrr"));
-    CHECK_THROWS(libsarus::Error, DeviceAccess("rww"));
-    CHECK_THROWS(libsarus::Error, DeviceAccess("rwr"));
-    CHECK_THROWS(libsarus::Error, DeviceAccess("wmm"));
+    EXPECT_THROW(DeviceAccess("rr"), libsarus::Error);
+    EXPECT_THROW(DeviceAccess("rrr"), libsarus::Error);
+    EXPECT_THROW(DeviceAccess("rww"), libsarus::Error);
+    EXPECT_THROW(DeviceAccess("rwr"), libsarus::Error);
+    EXPECT_THROW(DeviceAccess("wmm"), libsarus::Error);
 
     // capitals of valid characters
-    CHECK_THROWS(libsarus::Error, DeviceAccess("R"));
-    CHECK_THROWS(libsarus::Error, DeviceAccess("W"));
-    CHECK_THROWS(libsarus::Error, DeviceAccess("M"));
-    CHECK_THROWS(libsarus::Error, DeviceAccess("RW"));
-    CHECK_THROWS(libsarus::Error, DeviceAccess("RWM"));
+    EXPECT_THROW(DeviceAccess("R"), libsarus::Error);
+    EXPECT_THROW(DeviceAccess("W"), libsarus::Error);
+    EXPECT_THROW(DeviceAccess("M"), libsarus::Error);
+    EXPECT_THROW(DeviceAccess("RW"), libsarus::Error);
+    EXPECT_THROW(DeviceAccess("RWM"), libsarus::Error);
 }
 
 }}

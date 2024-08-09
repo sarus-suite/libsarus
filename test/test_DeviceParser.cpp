@@ -54,7 +54,7 @@ public:
         auto parser = libsarus::DeviceParser{rootfsDir, userIdentity};
 
         if(isParseErrorExpected) {
-            CHECK_THROWS(libsarus::Error, parser.parseDeviceRequest(deviceRequest));
+            EXPECT_THROW(parser.parseDeviceRequest(deviceRequest), libsarus::Error);
             return;
         }
 

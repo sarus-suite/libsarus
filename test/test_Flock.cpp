@@ -65,7 +65,7 @@ TEST_F(FlockTestGroup, move_constructor_moves_resources) {
     libsarus::Flock original{fileToLock, libsarus::Flock::Type::writeLock};
     {
         libsarus::Flock moveConstructed{std::move(original)};
-        CHECK_THROWS(libsarus::Error, libsarus::Flock(fileToLock, libsarus::Flock::Type::writeLock, 10_ms));
+        EXPECT_THROW(libsarus::Flock(fileToLock, libsarus::Flock::Type::writeLock, 10_ms), libsarus::Error);
     }
     // check that lock can be acquired (move-constructed lock went out of scope)
     EXPECT_TRUE(lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::writeLock));
@@ -76,7 +76,7 @@ TEST_F(FlockTestGroup, move_assignment_moves_resources) {
     {
         libsarus::Flock moveAssigned;
         moveAssigned = std::move(original);
-        CHECK_THROWS(libsarus::Error, libsarus::Flock(fileToLock, libsarus::Flock::Type::writeLock, 10_ms));
+        EXPECT_THROW(libsarus::Flock(fileToLock, libsarus::Flock::Type::writeLock, 10_ms), libsarus::Error);
     }
     // check that lock can be acquired (move-assigned lock went out of scope)
     EXPECT_TRUE(lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::writeLock));
@@ -85,11 +85,11 @@ TEST_F(FlockTestGroup, move_assignment_moves_resources) {
 TEST_F(FlockTestGroup, write_fails_if_resource_is_in_use) {
     {
         libsarus::Flock lock{fileToLock, libsarus::Flock::Type::writeLock};
-        CHECK_THROWS(libsarus::Error, libsarus::Flock(fileToLock, libsarus::Flock::Type::writeLock, 10_ms));
+        EXPECT_THROW(libsarus::Flock(fileToLock, libsarus::Flock::Type::writeLock, 10_ms), libsarus::Error);
     }
     {
         libsarus::Flock lock{fileToLock, libsarus::Flock::Type::readLock};
-        CHECK_THROWS(libsarus::Error, libsarus::Flock(fileToLock, libsarus::Flock::Type::writeLock, 10_ms));
+        EXPECT_THROW(libsarus::Flock(fileToLock, libsarus::Flock::Type::writeLock, 10_ms), libsarus::Error);
     }
 }
 
@@ -100,13 +100,13 @@ TEST_F(FlockTestGroup, concurrent_read_are_allowed) {
 
 TEST_F(FlockTestGroup, read_fails_if_resource_is_being_written) {
     libsarus::Flock lock{fileToLock, libsarus::Flock::Type::writeLock};
-    CHECK_THROWS(libsarus::Error, libsarus::Flock(fileToLock, libsarus::Flock::Type::readLock, 10_ms));
+    EXPECT_THROW(libsarus::Flock(fileToLock, libsarus::Flock::Type::readLock, 10_ms), libsarus::Error);
 }
 
 TEST_F(FlockTestGroup, convert_read_to_write) {
     libsarus::Flock lock{fileToLock, libsarus::Flock::Type::readLock};
     lock.convertToType(libsarus::Flock::Type::writeLock);
-    CHECK_THROWS(libsarus::Error, libsarus::Flock(fileToLock, libsarus::Flock::Type::readLock, 10_ms));
+    EXPECT_THROW(libsarus::Flock(fileToLock, libsarus::Flock::Type::readLock, 10_ms), libsarus::Error);
 }
 
 TEST_F(FlockTestGroup, convert_write_to_read) {

@@ -32,10 +32,10 @@ TEST_F(MountUtilitiesTestGroup, get_validated_mount_source_test) {
     std::string source_dir_2 = source_dir_2RAII.getPath().string();
 
     // Test invalid input arguments
-    CHECK_THROWS(libsarus::Error, libsarus::mount::getValidatedMountSource(""));
+    EXPECT_THROW(libsarus::mount::getValidatedMountSource(""), libsarus::Error);
 
     // Test non-existing directory
-    CHECK_THROWS(libsarus::Error, libsarus::mount::getValidatedMountSource(source_dir_1));
+    EXPECT_THROW(libsarus::mount::getValidatedMountSource(source_dir_1), libsarus::Error);
 
     // Test existing directory
     libsarus::filesystem::createFoldersIfNecessary(source_dir_2);
@@ -54,14 +54,14 @@ TEST_F(MountUtilitiesTestGroup, get_validated_mount_destination_test) {
     libsarus::filesystem::createFoldersIfNecessary(bundleDir / "overlay/rootfs-lower");
 
     // Test invalid input arguments
-    CHECK_THROWS(libsarus::Error, libsarus::mount::getValidatedMountDestination("", rootfsDir));
+    EXPECT_THROW(libsarus::mount::getValidatedMountDestination("", rootfsDir), libsarus::Error);
 
     // Test mount on other device
     auto otherDeviceDir = boost::filesystem::path{"/otherDevice"};
     libsarus::filesystem::createFoldersIfNecessary(rootfsDir / otherDeviceDir);
     auto imageSquashfs = boost::filesystem::path{__FILE__}.parent_path() / "test_image.squashfs";
     libsarus::mount::loopMountSquashfs(imageSquashfs, rootfsDir / otherDeviceDir);
-    CHECK_THROWS(libsarus::Error, libsarus::mount::getValidatedMountDestination(otherDeviceDir, rootfsDir));
+    EXPECT_THROW(libsarus::mount::getValidatedMountDestination(otherDeviceDir, rootfsDir), libsarus::Error);
     EXPECT_EQ(umount((rootfsDir / otherDeviceDir).c_str()), 0);
 
     // Test non-existing mount point
@@ -114,7 +114,7 @@ TEST_F(MountUtilitiesTestGroup, bindMountReadOnly) {
     EXPECT_TRUE(boost::filesystem::exists(toDir / "file"));
 
     // check that mounted directory is read-only
-    CHECK_THROWS(libsarus::Error, libsarus::filesystem::createFileIfNecessary(toDir / "file-failed-write-attempt"));
+    EXPECT_THROW(libsarus::filesystem::createFileIfNecessary(toDir / "file-failed-write-attempt"), libsarus::Error);
 
     // cleanup
     EXPECT_EQ(umount(toDir.c_str()), 0);

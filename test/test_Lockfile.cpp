@@ -45,9 +45,9 @@ TEST_F(LockfileTestGroup, lock_acquisition) {
     {
         libsarus::Lockfile lock{fileToLock};
         // check that lock cannot be acquired more than once
-        CHECK_THROWS(libsarus::Error, libsarus::Lockfile(fileToLock, 0));
+        EXPECT_THROW(libsarus::Lockfile(fileToLock, 0), libsarus::Error);
         // even if we try again...
-        CHECK_THROWS(libsarus::Error, libsarus::Lockfile(fileToLock, 0));
+        EXPECT_THROW(libsarus::Lockfile(fileToLock, 0), libsarus::Error);
     }
 }
 
@@ -56,7 +56,7 @@ TEST_F(LockfileTestGroup, move_constructor) {
     {
         libsarus::Lockfile moveConstructed{std::move(original)};
         // check that lock cannot be acquired more than once (move constructed lock is still active)
-        CHECK_THROWS(libsarus::Error, libsarus::Lockfile(fileToLock, 0));
+        EXPECT_THROW(libsarus::Lockfile(fileToLock, 0), libsarus::Error);
     }
     // check that lock can be acquired (move-constructed lock went out of scope)
     libsarus::Lockfile newlock{fileToLock};
@@ -68,7 +68,7 @@ TEST_F(LockfileTestGroup, move_assignment) {
         libsarus::Lockfile moveAssigned;
         moveAssigned = std::move(original);
         // check that lock cannot be acquired more than once (move assigned lock is still active)
-        CHECK_THROWS(libsarus::Error, libsarus::Lockfile(fileToLock, 0));
+        EXPECT_THROW(libsarus::Lockfile(fileToLock, 0), libsarus::Error);
     }
     // check that lock can be acquired (move-assigned lock went out of scope)
     libsarus::Lockfile newlock{fileToLock};
