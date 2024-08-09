@@ -31,3 +31,27 @@ function(_add_unit_test test_name test_src_file test_type link_libraries)
 
     add_test(${test_name} bash -c "${test_commands}")
 endfunction()
+
+# TODO: above should be removed eventually.
+
+include(GoogleTest)
+include_directories(${GTEST_INCLUDE_DIR})
+set(TEST_LINK_LIBS "")
+
+function(__gtest_add_unit_test TEST_NAME TEST_SRC_FILE EXEC_AS)
+    if(${EXEC_AS} STREQUAL "Root")
+        set(TEST_NAME ${TEST_NAME}_AsRoot)
+    endif()
+
+    set(TEST_BIN_FILE test_${TEST_NAME})
+    add_executable(${TEST_BIN_FILE} ${TEST_SRC_FILE})
+    target_link_libraries(${TEST_BIN_FILE} ${TEST_LINK_LIBS} GTest::gtest_main)
+
+    if(${EXEC_AS} STREQUAL "Root")
+        target_compile_definitions(${TEST_BIN_FILE} PUBLIC ASROOT)
+    endif()
+
+    set(TEST_CMD "cd ${CMAKE_CURRENT_BINARY_DIR} && ${CMAKE_CURRENT_BINARY_DIR}/${TEST_BIN_FILE}")
+    add_test(${TEST_NAME} bash -c "${TEST_CMD}")
+    #gtest_discover_tests(${TEST_NAME})
+endfunction()

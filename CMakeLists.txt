@@ -39,10 +39,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${CMAKE_SOURCE_DIR}/dep/rapidjson/include)
 
-if(${ENABLE_UNIT_TESTS})
-  include_directories(${CMAKE_SOURCE_DIR}/dep/googletest/googletest/include)
-endif(${ENABLE_UNIT_TESTS})
-
 # Print version
 execute_process(COMMAND ${GIT_PATH} describe --tags --dirty --always
                 WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
