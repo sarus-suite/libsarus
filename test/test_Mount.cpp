@@ -29,11 +29,7 @@ namespace test {
 TEST_GROUP(MountTestGroup) {
 };
 
-#ifdef ASROOT
 TEST(MountTestGroup, mount_test) {
-#else
-IGNORE_TEST(MountTestGroup, mount_test) {
-#endif
     libsarus::UserIdentity userIdentity;
 
     auto bundleDirRAII = libsarus::PathRAII{libsarus::filesystem::makeUniquePathWithRandomSuffix(boost::filesystem::absolute("test-bundle-dir"))};

@@ -102,11 +102,7 @@ TEST_GROUP(DeviceParserTestGroup) {
 
 };
 
-#ifdef ASROOT
 TEST(DeviceParserTestGroup, basic_checks) {
-#else
-IGNORE_TEST(DeviceParserTestGroup, basic_checks) {
-#endif
     // empty request
     DeviceParserChecker{""}.expectParseError();
 
@@ -115,11 +111,7 @@ IGNORE_TEST(DeviceParserTestGroup, basic_checks) {
     DeviceParserChecker{"/dev/sarusTestDevice0:/dev/device1:/dev/device2:/dev/device3:rw"}.expectParseError();
 }
 
-#ifdef ASROOT
 TEST(DeviceParserTestGroup, source_and_destination) {
-#else
-IGNORE_TEST(DeviceParserTestGroup, source_and_destination) {
-#endif
     // only source path provided
     DeviceParserChecker{"/dev/sarusTestDevice0"}
         .expectSource("/dev/sarusTestDevice0")
@@ -140,11 +132,7 @@ IGNORE_TEST(DeviceParserTestGroup, source_and_destination) {
     DeviceParserChecker{":"}.expectParseError();
 }
 
-#ifdef ASROOT
 TEST(DeviceParserTestGroup, access) {
-#else
-IGNORE_TEST(DeviceParserTestGroup, access) {
-#endif
     // only source path provided
     DeviceParserChecker{"/dev/sarusTestDevice0:rw"}
         .expectSource("/dev/sarusTestDevice0")

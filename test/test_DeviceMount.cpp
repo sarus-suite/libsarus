@@ -26,11 +26,7 @@ namespace test {
 TEST_GROUP(DeviceMountTestGroup) {
 };
 
-#ifdef ASROOT
 TEST(DeviceMountTestGroup, constructor) {
-#else
-IGNORE_TEST(DeviceMountTestGroup, constructor) {
-#endif
     auto testDir = libsarus::PathRAII(
         libsarus::filesystem::makeUniquePathWithRandomSuffix(boost::filesystem::current_path() / "deviceMount-test-constructor"));
     libsarus::filesystem::createFoldersIfNecessary(testDir.getPath());
@@ -62,11 +58,7 @@ IGNORE_TEST(DeviceMountTestGroup, constructor) {
     }
 }
 
-#ifdef ASROOT
 TEST(DeviceMountTestGroup, getters) {
-#else
-IGNORE_TEST(DeviceMountTestGroup, getters) {
-#endif
     auto testDir = libsarus::PathRAII(
         libsarus::filesystem::makeUniquePathWithRandomSuffix(boost::filesystem::current_path() / "deviceMount-test-getters"));
     libsarus::filesystem::createFoldersIfNecessary(testDir.getPath());
@@ -114,11 +106,7 @@ IGNORE_TEST(DeviceMountTestGroup, getters) {
     }
 }
 
-#ifdef ASROOT
 TEST(DeviceMountTestGroup, performMount) {
-#else
-IGNORE_TEST(DeviceMountTestGroup, performMount) {
-#endif
     auto testDir = libsarus::PathRAII(
         libsarus::filesystem::makeUniquePathWithRandomSuffix(boost::filesystem::current_path() / "deviceMount-test-performMount"));
     libsarus::filesystem::createFoldersIfNecessary(testDir.getPath());
