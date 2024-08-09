@@ -12,6 +12,7 @@
 #include <streambuf>
 
 #include <boost/filesystem.hpp>
+#include <gtest/gtest.h>
 
 #include "aux/unitTestMain.hpp"
 #include "PasswdDB.hpp"

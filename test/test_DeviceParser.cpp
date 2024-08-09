@@ -15,6 +15,8 @@
 #include "PathRAII.hpp"
 #include "Utility.hpp"
 
+#include <gtest/gtest.h>
+
 
 namespace libsarus {
 namespace test {

@@ -10,6 +10,8 @@
 
 #include <exception>
 
+#include <gtest/gtest.h>
+
 #include "aux/unitTestMain.hpp"
 #include "Error.hpp"
 

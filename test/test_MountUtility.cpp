@@ -8,12 +8,10 @@
  *
  */
 
-/**
- *  @brief Tests for mount utilities.
- */
-
 #include <string>
 #include <sys/mount.h>
+
+#include <gtest/gtest.h>
 
 #include "aux/filesystem.hpp"
 #include "aux/unitTestMain.hpp"

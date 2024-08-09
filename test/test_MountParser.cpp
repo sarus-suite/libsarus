@@ -8,6 +8,7 @@
  *
  */
 
+#include <gtest/gtest.h>
 #include <rapidjson/allocators.h>
 #include <rapidjson/document.h>
 

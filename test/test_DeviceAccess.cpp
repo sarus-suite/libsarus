@@ -11,6 +11,8 @@
 #include "aux/unitTestMain.hpp"
 #include "DeviceAccess.hpp"
 
+#include <gtest/gtest.h>
+
 
 namespace libsarus {
 namespace test {

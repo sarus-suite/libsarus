@@ -12,6 +12,8 @@
 #include <sys/mount.h>
 #include <sys/sysmacros.h>
 
+#include <gtest/gtest.h>
+
 #include "aux/filesystem.hpp"
 #include "aux/unitTestMain.hpp"
 #include "DeviceAccess.hpp"

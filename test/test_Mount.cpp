@@ -8,13 +8,11 @@
  *
  */
 
-/**
- *  @brief Tests for user-requested mounts
- */
-
 #include <string>
 #include <sys/mount.h>
 #include <sys/stat.h>
+
+#include <gtest/gtest.h>
 
 #include "aux/filesystem.hpp"
 #include "aux/unitTestMain.hpp"

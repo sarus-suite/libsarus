@@ -17,6 +17,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 #include <boost/regex.hpp>
+#include <gtest/gtest.h>
 
 #include "aux/misc.hpp"
 #include "aux/unitTestMain.hpp"

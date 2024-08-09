@@ -8,8 +8,6 @@
  *
  */
 
-// NOTE: Boost library must be included before CppUTest
-
 #include <sstream>
 
 #include <boost/filesystem.hpp>
@@ -23,6 +21,10 @@
 
 namespace libsarus {
 namespace test {
+
+class CLIArgumentsTestGroup : public testing:Test {
+protected:
+};
 
 TEST(CLIArgumentsTestGroup, serialize) {
     auto args = libsarus::CLIArguments{"command", "arg0", "arg1"};

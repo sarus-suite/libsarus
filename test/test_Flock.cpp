@@ -11,6 +11,7 @@
 #include <type_traits>
 
 #include <boost/filesystem.hpp>
+#include <gtest/gtest.h>
 
 #include "aux/unitTestMain.hpp"
 #include "Error.hpp"

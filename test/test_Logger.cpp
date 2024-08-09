@@ -15,6 +15,7 @@
 #include <vector>
 
 #include <boost/regex.hpp>
+#include <gtest/gtest.h>
 
 #include "aux/unitTestMain.hpp"
 #include "Logger.hpp"

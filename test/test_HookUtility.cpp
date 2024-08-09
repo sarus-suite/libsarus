@@ -16,6 +16,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 #include <boost/optional.hpp>
+#include <gtest/gtest.h>
 #include <rapidjson/document.h>
 
 #include "aux/hook.hpp"
