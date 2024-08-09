@@ -12,7 +12,6 @@
 #include <rapidjson/allocators.h>
 #include <rapidjson/document.h>
 
-#include "aux/unitTestMain.hpp"
 #include "Logger.hpp"
 #include "MountParser.hpp"
 #include "PathRAII.hpp"
@@ -191,4 +190,3 @@ TEST_F(MountParserTestGroup, site_flags_of_bind_mount) {
 
 }}
 
-SARUS_UNITTEST_MAIN_FUNCTION();

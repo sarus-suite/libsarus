@@ -14,7 +14,6 @@
 #include <gtest/gtest.h>
 
 #include "aux/filesystem.hpp"
-#include "aux/unitTestMain.hpp"
 #include "PathRAII.hpp"
 #include "Utility.hpp"
 
@@ -163,4 +162,3 @@ TEST_F(MountUtilitiesTestGroup, loopMountSquashfs) {
 
 }}
 
-SARUS_UNITTEST_MAIN_FUNCTION();

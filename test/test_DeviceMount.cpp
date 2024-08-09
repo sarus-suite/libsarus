@@ -15,7 +15,6 @@
 #include <gtest/gtest.h>
 
 #include "aux/filesystem.hpp"
-#include "aux/unitTestMain.hpp"
 #include "DeviceAccess.hpp"
 #include "DeviceMount.hpp"
 #include "PathRAII.hpp"
@@ -145,4 +144,3 @@ TEST_F(DeviceMountTestGroup, performMount) {
 
 }}
 
-SARUS_UNITTEST_MAIN_FUNCTION();

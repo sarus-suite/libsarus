@@ -17,7 +17,6 @@
 #include <boost/regex.hpp>
 #include <gtest/gtest.h>
 
-#include "aux/unitTestMain.hpp"
 #include "Logger.hpp"
 
 
@@ -136,4 +135,3 @@ TEST_F(LoggerTestGroup, logger) {
 
 }}
 
-SARUS_UNITTEST_MAIN_FUNCTION();

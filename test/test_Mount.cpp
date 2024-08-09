@@ -15,7 +15,6 @@
 #include <gtest/gtest.h>
 
 #include "aux/filesystem.hpp"
-#include "aux/unitTestMain.hpp"
 #include "Mount.hpp"
 #include "PathRAII.hpp"
 #include "Utility.hpp"
@@ -100,4 +99,3 @@ TEST_F(MountTestGroup, mount_test) {
 
 }}
 
-SARUS_UNITTEST_MAIN_FUNCTION();

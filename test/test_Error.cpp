@@ -12,7 +12,6 @@
 
 #include <gtest/gtest.h>
 
-#include "aux/unitTestMain.hpp"
 #include "Error.hpp"
 
 
@@ -128,4 +127,3 @@ TEST_F(ErrorTestGroup, twoStackTraceEntries_rethrowWithLogLevelDebug) {
 
 }}
 
-SARUS_UNITTEST_MAIN_FUNCTION();

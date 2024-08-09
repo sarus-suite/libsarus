@@ -8,7 +8,6 @@
  *
  */
 
-#include "aux/unitTestMain.hpp"
 #include "DeviceAccess.hpp"
 
 #include <gtest/gtest.h>
@@ -84,4 +83,3 @@ TEST_F(DeviceAccessTestGroup, invalid_inputs) {
 
 }}
 
-SARUS_UNITTEST_MAIN_FUNCTION();

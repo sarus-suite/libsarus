@@ -21,7 +21,6 @@
 
 #include "aux/hook.hpp"
 #include "aux/misc.hpp"
-#include "aux/unitTestMain.hpp"
 #include "PathRAII.hpp"
 #include "Utility.hpp"
 
@@ -428,4 +427,3 @@ TEST_F(HooksUtilityTestGroup, parseLibcVersionFromLddOutput) {
 
 }}
 
-SARUS_UNITTEST_MAIN_FUNCTION();

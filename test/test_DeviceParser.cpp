@@ -9,7 +9,6 @@
  */
 
 #include "aux/filesystem.hpp"
-#include "aux/unitTestMain.hpp"
 #include "DeviceParser.hpp"
 #include "Logger.hpp"
 #include "PathRAII.hpp"
@@ -165,4 +164,3 @@ TEST_F(DeviceParserTestGroup, access) {
 
 }}
 
-SARUS_UNITTEST_MAIN_FUNCTION();

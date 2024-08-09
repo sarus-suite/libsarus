@@ -14,7 +14,6 @@
 #include <boost/filesystem.hpp>
 #include <gtest/gtest.h>
 
-#include "aux/unitTestMain.hpp"
 #include "PasswdDB.hpp"
 #include "PathRAII.hpp"
 
@@ -120,4 +119,3 @@ TEST_F(PasswdDBTestGroup, testGetHomeDirectory) {
 
 }}
 
-SARUS_UNITTEST_MAIN_FUNCTION();

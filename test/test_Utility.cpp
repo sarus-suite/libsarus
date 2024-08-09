@@ -20,7 +20,6 @@
 #include <gtest/gtest.h>
 
 #include "aux/misc.hpp"
-#include "aux/unitTestMain.hpp"
 #include "PathRAII.hpp"
 #include "Utility.hpp"
 
@@ -54,7 +53,6 @@ TEST_F(UtilityTestGroup, parseEnvironmentVariables) {
 }
 
 TEST_F(UtilityTestGroup, getEnvironmentVariable) {
-    auto testKey = std::string{"SARUS_UNITTEST_GETVAR"};
     auto testValue = std::string{"dummy"};
 
     // test with variable unset
@@ -67,7 +65,6 @@ TEST_F(UtilityTestGroup, getEnvironmentVariable) {
 }
 
 TEST_F(UtilityTestGroup, setEnvironmentVariable) {
-    auto testKey = std::string{"SARUS_UNITTEST_SETVAR"};
     auto testValue = std::string{"dummy"};
 
     // test with variable not set
@@ -584,4 +581,3 @@ TEST_F(UtilityTestGroup, getCpuAffinity_setCpuAffinity) {
 
 }}
 
-SARUS_UNITTEST_MAIN_FUNCTION();
