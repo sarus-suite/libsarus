@@ -105,12 +105,12 @@ TEST_F(PasswdDBTestGroup, testWrite) {
     auto data = std::string(std::istreambuf_iterator<char>(is), std::istreambuf_iterator<char>());
     auto expectedData = std::string{"loginName0:x:1000:1001:UserNameOrCommentField0:/home/dir0:/optional/UserCommandInterpreter0\n"
                                     "loginName1:y:2000:2001:UserNameOrCommentField1:/home/dir1:\n"};
-    CHECK_EQUAL(data, expectedData);
+    EXPECT_EQ(data, expectedData);
 }
 
 TEST_F(PasswdDBTestGroup, testGetUsername) {
-    CHECK_EQUAL(passwd.getUsername(1000), std::string{"loginName0"});
-    CHECK_EQUAL(passwd.getUsername(2000), std::string{"loginName1"});
+    EXPECT_EQ(passwd.getUsername(1000), std::string{"loginName0"});
+    EXPECT_EQ(passwd.getUsername(2000), std::string{"loginName1"});
 }
 
 TEST_F(PasswdDBTestGroup, testGetHomeDirectory) {

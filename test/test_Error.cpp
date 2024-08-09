@@ -62,7 +62,7 @@ TEST_F(ErrorTestGroup, oneStackTraceEntry) {
     catch(const libsarus::Error& error) {
         auto expectedFirstEntry = libsarus::Error::ErrorTraceEntry{"first error message", "test_Error.cpp", 24, "functionThatThrows"};
 
-        CHECK_EQUAL(error.getErrorTrace().size(), 1);
+        EXPECT_EQ(error.getErrorTrace().size(), 1);
         CHECK(error.getErrorTrace()[0] == expectedFirstEntry);
         CHECK(error.getLogLevel() == libsarus::LogLevel::ERROR);
     }
@@ -76,7 +76,7 @@ TEST_F(ErrorTestGroup, twoStackTraceEntries) {
         auto expectedFirstEntry = libsarus::Error::ErrorTraceEntry{"first error message", "test_Error.cpp", 24, "functionThatThrows"};
         auto expectedSecondEntry = libsarus::Error::ErrorTraceEntry{"second error message", "test_Error.cpp", 32, "functionThatRethrows"};
 
-        CHECK_EQUAL(error.getErrorTrace().size(), 2);
+        EXPECT_EQ(error.getErrorTrace().size(), 2);
         CHECK(error.getErrorTrace()[0] == expectedFirstEntry);
         CHECK(error.getErrorTrace()[1] == expectedSecondEntry);
         CHECK(error.getLogLevel() == libsarus::LogLevel::ERROR);
@@ -91,7 +91,7 @@ TEST_F(ErrorTestGroup, fromStdException) {
         auto expectedFirstEntry = libsarus::Error::ErrorTraceEntry{"first error message", "unspecified location", -1, "runtime error"};
         auto expectedSecondEntry = libsarus::Error::ErrorTraceEntry{"second error message", "test_Error.cpp", 39, "functionThatThrowsFromStdException"};
 
-        CHECK_EQUAL(error.getErrorTrace().size(), 2);
+        EXPECT_EQ(error.getErrorTrace().size(), 2);
         CHECK(error.getErrorTrace()[0] == expectedFirstEntry);
         CHECK(error.getErrorTrace()[1] == expectedSecondEntry);
         CHECK(error.getLogLevel() == libsarus::LogLevel::ERROR);
@@ -105,7 +105,7 @@ TEST_F(ErrorTestGroup, oneStackTraceEntry_throwWithLogLevelDebug) {
     catch(const libsarus::Error& error) {
         auto expectedFirstEntry = libsarus::Error::ErrorTraceEntry{"first error message", "test_Error.cpp", 43, "functionThatThrowsWithLogLevelDebug"};
 
-        CHECK_EQUAL(error.getErrorTrace().size(), 1);
+        EXPECT_EQ(error.getErrorTrace().size(), 1);
         CHECK(error.getErrorTrace()[0] == expectedFirstEntry);
         CHECK(error.getLogLevel() == libsarus::LogLevel::DEBUG);
     }
@@ -119,7 +119,7 @@ TEST_F(ErrorTestGroup, twoStackTraceEntries_rethrowWithLogLevelDebug) {
         auto expectedFirstEntry = libsarus::Error::ErrorTraceEntry{"first error message", "test_Error.cpp", 24, "functionThatThrows"};
         auto expectedSecondEntry = libsarus::Error::ErrorTraceEntry{"second error message", "test_Error.cpp", 51, "functionThatRethrowsWithLogLevelDebug"};
 
-        CHECK_EQUAL(error.getErrorTrace().size(), 2);
+        EXPECT_EQ(error.getErrorTrace().size(), 2);
         CHECK(error.getErrorTrace()[0] == expectedFirstEntry);
         CHECK(error.getErrorTrace()[1] == expectedSecondEntry);
         CHECK(error.getLogLevel() == libsarus::LogLevel::DEBUG);

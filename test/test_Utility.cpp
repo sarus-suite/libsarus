@@ -63,7 +63,7 @@ TEST_F(UtilityTestGroup, getEnvironmentVariable) {
     // test with variable set
     libsarus::environment::setVariable(testKey, testValue);
     auto fallbackValue = std::string("fallback");
-    CHECK_EQUAL(libsarus::environment::getVariable(testKey), testValue);
+    EXPECT_EQ(libsarus::environment::getVariable(testKey), testValue);
 }
 
 TEST_F(UtilityTestGroup, setEnvironmentVariable) {
@@ -81,7 +81,7 @@ TEST_F(UtilityTestGroup, setEnvironmentVariable) {
         auto message = boost::format("Error getting the test variable from the environment");
         FAIL(message.str().c_str());
     }
-    CHECK_EQUAL(std::string(envValue), testValue);
+    EXPECT_EQ(std::string(envValue), testValue);
 
     // test overwrite with variable set
     testValue = std::string{"overwrite_dummy"};
@@ -91,28 +91,28 @@ TEST_F(UtilityTestGroup, setEnvironmentVariable) {
         auto message = boost::format("Error getting the test variable from the environment");
         FAIL(message.str().c_str());
     }
-    CHECK_EQUAL(std::string(envValue), testValue);
+    EXPECT_EQ(std::string(envValue), testValue);
 }
 
 TEST_F(UtilityTestGroup, parseKeyValuePair) {
     auto pair = libsarus::string::parseKeyValuePair("key=value");
-    CHECK_EQUAL(pair.first, std::string("key"));
-    CHECK_EQUAL(pair.second, std::string("value"));
+    EXPECT_EQ(pair.first, std::string("key"));
+    EXPECT_EQ(pair.second, std::string("value"));
 
     // key only
     pair = libsarus::string::parseKeyValuePair("key_only");
-    CHECK_EQUAL(pair.first, std::string("key_only"));
-    CHECK_EQUAL(pair.second, std::string(""));
+    EXPECT_EQ(pair.first, std::string("key_only"));
+    EXPECT_EQ(pair.second, std::string(""));
 
     // no value after separator
     pair = libsarus::string::parseKeyValuePair("key=");
-    CHECK_EQUAL(pair.first, std::string("key"));
-    CHECK_EQUAL(pair.second, std::string(""));
+    EXPECT_EQ(pair.first, std::string("key"));
+    EXPECT_EQ(pair.second, std::string(""));
 
     // non-default separator
     pair = libsarus::string::parseKeyValuePair("key:value", ':');
-    CHECK_EQUAL(pair.first, std::string("key"));
-    CHECK_EQUAL(pair.second, std::string("value"));
+    EXPECT_EQ(pair.first, std::string("key"));
+    EXPECT_EQ(pair.second, std::string("value"));
 
     // empty input
     CHECK_THROWS(libsarus::Error, libsarus::string::parseKeyValuePair(""));
@@ -134,8 +134,8 @@ TEST_F(UtilityTestGroup, switchIdentity) {
     libsarus::process::switchIdentity(unprivilegedIdentity);
 
     // Check identity change
-    CHECK_EQUAL(geteuid(), unprivilegedIdentity.uid);
-    CHECK_EQUAL(getegid(), unprivilegedIdentity.gid);
+    EXPECT_EQ(geteuid(), unprivilegedIdentity.uid);
+    EXPECT_EQ(getegid(), unprivilegedIdentity.gid);
 
     // Check it's not possible to read root-owned files or write in root-owned dirs
     CHECK_THROWS(std::exception, boost::filesystem::exists(testDirRAII.getPath() / "file"));
@@ -144,8 +144,8 @@ TEST_F(UtilityTestGroup, switchIdentity) {
     auto rootIdentity = libsarus::UserIdentity{};
     libsarus::process::switchIdentity(rootIdentity);
 
-    CHECK_EQUAL(geteuid(), 0);
-    CHECK_EQUAL(getegid(), 0);
+    EXPECT_EQ(geteuid(), 0);
+    EXPECT_EQ(getegid(), 0);
     CHECK(boost::filesystem::exists(testDirRAII.getPath() / "file"));
 }
 
@@ -160,26 +160,26 @@ TEST_F(UtilityTestGroup, setFilesystemUid) {
     libsarus::process::setFilesystemUid(unprivilegedIdentity);
 
     // check identity change
-    CHECK_EQUAL(getuid(), rootIdentity.uid);
-    CHECK_EQUAL(getgid(), rootIdentity.gid);
-    CHECK_EQUAL(geteuid(), rootIdentity.uid);
-    CHECK_EQUAL(getegid(), rootIdentity.gid);
-    CHECK_EQUAL((uid_t)setfsuid(-1), unprivilegedIdentity.uid);
+    EXPECT_EQ(getuid(), rootIdentity.uid);
+    EXPECT_EQ(getgid(), rootIdentity.gid);
+    EXPECT_EQ(geteuid(), rootIdentity.uid);
+    EXPECT_EQ(getegid(), rootIdentity.gid);
+    EXPECT_EQ((uid_t)setfsuid(-1), unprivilegedIdentity.uid);
 
     // switch back to privileged fsuid
     libsarus::process::setFilesystemUid(rootIdentity);
 
     // check identity change
-    CHECK_EQUAL(getuid(), rootIdentity.uid);
-    CHECK_EQUAL(getgid(), rootIdentity.gid);
-    CHECK_EQUAL(geteuid(), rootIdentity.uid);
-    CHECK_EQUAL(getegid(), rootIdentity.gid);
-    CHECK_EQUAL((uid_t)setfsuid(-1), rootIdentity.uid);
+    EXPECT_EQ(getuid(), rootIdentity.uid);
+    EXPECT_EQ(getgid(), rootIdentity.gid);
+    EXPECT_EQ(geteuid(), rootIdentity.uid);
+    EXPECT_EQ(getegid(), rootIdentity.gid);
+    EXPECT_EQ((uid_t)setfsuid(-1), rootIdentity.uid);
 }
 
 TEST_F(UtilityTestGroup, executeCommand) {
-    CHECK_EQUAL(libsarus::process::executeCommand("printf stdout"), std::string{"stdout"});
-    CHECK_EQUAL(libsarus::process::executeCommand("bash -c 'printf stderr >&2'"), std::string{"stderr"});
+    EXPECT_EQ(libsarus::process::executeCommand("printf stdout"), std::string{"stdout"});
+    EXPECT_EQ(libsarus::process::executeCommand("bash -c 'printf stderr >&2'"), std::string{"stderr"});
     CHECK_THROWS(libsarus::Error, libsarus::process::executeCommand("false"));
     CHECK_THROWS(libsarus::Error, libsarus::process::executeCommand("command-that-doesnt-exist-xyz"));
 }
@@ -273,11 +273,11 @@ TEST_F(UtilityTestGroup, countFilesInDirectory) {
         libsarus::filesystem::createFileIfNecessary(testDir / "file2");
         libsarus::filesystem::createFileIfNecessary(testDir / "file3");
         libsarus::filesystem::createFileIfNecessary(testDir / "file4");
-        CHECK_EQUAL(libsarus::filesystem::countFilesInDirectory(testDir), 4);
+        EXPECT_EQ(libsarus::filesystem::countFilesInDirectory(testDir), 4);
 
         boost::filesystem::remove(testDir / "file1");
         boost::filesystem::remove(testDir / "file4");
-        CHECK_EQUAL(libsarus::filesystem::countFilesInDirectory(testDir), 2);
+        EXPECT_EQ(libsarus::filesystem::countFilesInDirectory(testDir), 2);
 
         boost::filesystem::remove_all(testDir);
     }
@@ -303,42 +303,42 @@ TEST_F(UtilityTestGroup, parseMap) {
     {
         auto list = "key0=value0";
         auto map = libsarus::string::parseMap(list);
-        CHECK_EQUAL(map.size(), 1);
-        CHECK_EQUAL(map["key0"], std::string{"value0"});
+        EXPECT_EQ(map.size(), 1);
+        EXPECT_EQ(map["key0"], std::string{"value0"});
     }
     // two key-value pairs
     {
         auto list = "key0=value0,key1=value1";
         auto map = libsarus::string::parseMap(list);
-        CHECK_EQUAL(map.size(), 2);
-        CHECK_EQUAL(map["key0"], std::string{"value0"});
-        CHECK_EQUAL(map["key1"], std::string{"value1"});
+        EXPECT_EQ(map.size(), 2);
+        EXPECT_EQ(map["key0"], std::string{"value0"});
+        EXPECT_EQ(map["key1"], std::string{"value1"});
     }
     // key only (no value associated)
     {
         auto list = "key_only";
         auto map = libsarus::string::parseMap(list);
-        CHECK_EQUAL(map.size(), 1);
+        EXPECT_EQ(map.size(), 1);
         CHECK(map["key_only"] == "");
     }
     {
         auto list = "key_only_at_begin,key=value";
         auto map = libsarus::string::parseMap(list);
-        CHECK_EQUAL(map.size(), 2);
+        EXPECT_EQ(map.size(), 2);
         CHECK(map["key_only_at_begin"] == "");
         CHECK(map["key"] == "value");
     }
     {
         auto list = "key=value,key_only_at_end";
         auto map = libsarus::string::parseMap(list);
-        CHECK_EQUAL(map.size(), 2);
+        EXPECT_EQ(map.size(), 2);
         CHECK(map["key"] == "value");
         CHECK(map["key_only_at_end"] == "");
     }
     {
         auto list = "key_only0,key_only1";
         auto map = libsarus::string::parseMap(list);
-        CHECK_EQUAL(map.size(), 2);
+        EXPECT_EQ(map.size(), 2);
         CHECK(map["key_only0"] == "");
         CHECK(map["key_only1"] == "");
     }
@@ -382,39 +382,39 @@ TEST_F(UtilityTestGroup, realpathWithinRootfs) {
     CHECK(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/file") == "/dir0/dir1/file");
 
     // relative symlink
-    CHECK_EQUAL(symlink("../../dir0/dir1", (rootfs / "dir0/dir1/link_relative").string().c_str()), 0);
+    EXPECT_EQ(symlink("../../dir0/dir1", (rootfs / "dir0/dir1/link_relative").string().c_str()), 0);
     CHECK(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/link_relative") == "/dir0/dir1");
 
     // relative symlink that spills (out of rootfs)
-    CHECK_EQUAL(symlink("../../../../dir0/dir1", (rootfs / "dir0/dir1/link_relative_that_spills").string().c_str()), 0);
+    EXPECT_EQ(symlink("../../../../dir0/dir1", (rootfs / "dir0/dir1/link_relative_that_spills").string().c_str()), 0);
     CHECK(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/link_relative_that_spills") == "/dir0/dir1");
 
     // relative symlink recursive
-    CHECK_EQUAL(symlink("../../dir0/dir1/link_relative/dir2/dir3", (rootfs / "dir0/dir1/link_relative_recursive").string().c_str()), 0);
+    EXPECT_EQ(symlink("../../dir0/dir1/link_relative/dir2/dir3", (rootfs / "dir0/dir1/link_relative_recursive").string().c_str()), 0);
     CHECK(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/link_relative_recursive") == "/dir0/dir1/dir2/dir3");
 
     // relative symlink recursive that spills (out of rootfs)
-    CHECK_EQUAL(symlink("../../../dir0/dir1/link_relative_that_spills/dir2/dir3", (rootfs / "dir0/dir1/link_relative_recursive_that_spills").string().c_str()), 0);
+    EXPECT_EQ(symlink("../../../dir0/dir1/link_relative_that_spills/dir2/dir3", (rootfs / "dir0/dir1/link_relative_recursive_that_spills").string().c_str()), 0);
     CHECK(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/link_relative_recursive_that_spills") == "/dir0/dir1/dir2/dir3");
 
     // absolute symlink
-    CHECK_EQUAL(symlink("/dir0/dir1", (rootfs / "dir0/dir1/link_absolute").string().c_str()), 0);
+    EXPECT_EQ(symlink("/dir0/dir1", (rootfs / "dir0/dir1/link_absolute").string().c_str()), 0);
     CHECK(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/link_absolute") == "/dir0/dir1");
 
     // absolute symlink that spills (out of rootfs)
-    CHECK_EQUAL(symlink("/dir0/dir1/../../../../dir0/dir1", (rootfs / "dir0/dir1/link_absolute_that_spills").string().c_str()), 0);
+    EXPECT_EQ(symlink("/dir0/dir1/../../../../dir0/dir1", (rootfs / "dir0/dir1/link_absolute_that_spills").string().c_str()), 0);
     CHECK(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/link_absolute_that_spills") == "/dir0/dir1");
 
     // absolute symlink recursive
-    CHECK_EQUAL(symlink("/dir0/dir1/link_absolute/dir2/dir3", (rootfs / "dir0/dir1/link_absolute_recursive").string().c_str()), 0);
+    EXPECT_EQ(symlink("/dir0/dir1/link_absolute/dir2/dir3", (rootfs / "dir0/dir1/link_absolute_recursive").string().c_str()), 0);
     CHECK(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/link_absolute_recursive") == "/dir0/dir1/dir2/dir3");
 
     // absolute symlink recursive that spills (out of rootfs)
-    CHECK_EQUAL(symlink("/dir0/dir1/link_absolute_that_spills/dir2/dir3", (rootfs / "dir0/dir1/link_absolute_recursive_that_spills").string().c_str()), 0);
+    EXPECT_EQ(symlink("/dir0/dir1/link_absolute_that_spills/dir2/dir3", (rootfs / "dir0/dir1/link_absolute_recursive_that_spills").string().c_str()), 0);
     CHECK(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dir0/dir1/link_absolute_recursive_that_spills") == "/dir0/dir1/dir2/dir3");
 
     // absolute symlink sharing no part of the path with the target
-    CHECK_EQUAL(symlink("/dir0/dir1", (rootfs / "dirX/link_absolute_with_no_common_path").string().c_str()), 0);
+    EXPECT_EQ(symlink("/dir0/dir1", (rootfs / "dirX/link_absolute_with_no_common_path").string().c_str()), 0);
     CHECK(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dirX/link_absolute_with_no_common_path") == "/dir0/dir1");
 }
 
@@ -510,8 +510,8 @@ TEST_F(UtilityTestGroup, resolveSharedLibAbi) {
 TEST_F(UtilityTestGroup, getSharedLibSoname) {
     auto dummyLibsDir = boost::filesystem::path{__FILE__}
         .parent_path() / "dummy_libs";
-    CHECK_EQUAL(libsarus::sharedlibs::getSoname(dummyLibsDir / "libc.so.6-host", "readelf"), std::string("libc.so.6"));
-    CHECK_EQUAL(libsarus::sharedlibs::getSoname(dummyLibsDir / "ld-linux-x86-64.so.2-host", "readelf"), std::string("ld-linux-x86-64.so.2"));
+    EXPECT_EQ(libsarus::sharedlibs::getSoname(dummyLibsDir / "libc.so.6-host", "readelf"), std::string("libc.so.6"));
+    EXPECT_EQ(libsarus::sharedlibs::getSoname(dummyLibsDir / "ld-linux-x86-64.so.2-host", "readelf"), std::string("ld-linux-x86-64.so.2"));
     CHECK_THROWS(libsarus::Error, libsarus::sharedlibs::getSoname(dummyLibsDir / "lib_dummy_0.so", "readelf"));
 }
 
@@ -555,7 +555,7 @@ TEST_F(UtilityTestGroup, serializeJSON) {
     auto actual = libsarus::json::serialize(json);
     auto expected = std::string{"{\"string\":\"stringValue\",\"int\":11,\"array\":[0,1,2]}"};
 
-    CHECK_EQUAL(libsarus::string::removeWhitespaces(actual), expected);
+    EXPECT_EQ(libsarus::string::removeWhitespaces(actual), expected);
 }
 
 TEST_F(UtilityTestGroup, setCpuAffinity_invalid_argument) {

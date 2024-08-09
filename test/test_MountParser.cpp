@@ -97,7 +97,7 @@ public:
         }
 
         if(expectedFlags) {
-            CHECK_EQUAL(mountObject->getFlags(), *expectedFlags);
+            EXPECT_EQ(mountObject->getFlags(), *expectedFlags);
         }
     }
 

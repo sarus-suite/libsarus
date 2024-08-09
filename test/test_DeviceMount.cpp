@@ -101,7 +101,7 @@ TEST_F(DeviceMountTestGroup, getters) {
 
         auto devMount = DeviceMount(std::move(mountObject), devAccess);
         CHECK(devMount.getType() == 'b');
-        CHECK_EQUAL(devMount.getMajorID(),  majorID);
+        EXPECT_EQ(devMount.getMajorID(),  majorID);
         CHECK(devMount.getMinorID() == minorID);
         CHECK(devMount.getAccess().string() == std::string{"rw"});
 

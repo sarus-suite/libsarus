@@ -73,7 +73,7 @@ public:
             CHECK(mountObject->getAccess().string() == *expectedAccess);
         }
 
-        CHECK_EQUAL(mountObject->getFlags(), *expectedFlags);
+        EXPECT_EQ(mountObject->getFlags(), *expectedFlags);
     }
 
 private:

@@ -47,7 +47,7 @@ TEST_F(HooksUtilityTestGroup, parseStateOfContainerFromStdin) {
     auto containerState = parseStateOfContainerFromStdin();
 
     CHECK(containerState.bundle() == expectedBundleDir.getPath());
-    CHECK_EQUAL(containerState.pid(), expectedPid);
+    EXPECT_EQ(containerState.pid(), expectedPid);
 }
 
 TEST_F(HooksUtilityTestGroup, getEnvironmentVariableValueFromOCIBundle) {
@@ -163,7 +163,7 @@ TEST_F(HooksUtilityTestGroup, findSubsystemMountPaths) {
         boost::filesystem::path returnedMountRoot;
         boost::filesystem::path returnedMountPoint;
         std::tie(returnedMountRoot, returnedMountPoint) = findSubsystemMountPaths("devices", testDir.getPath(), 1);
-        CHECK_EQUAL(returnedMountRoot.string(), expectedMountRoot.string());
+        EXPECT_EQ(returnedMountRoot.string(), expectedMountRoot.string());
         CHECK(boost::filesystem::equivalent(returnedMountPoint, expectedMountPoint));
     }
     // line with no optional fields
@@ -260,7 +260,7 @@ TEST_F(HooksUtilityTestGroup, findCgroupPathInHierarchy) {
         auto procFileContent = boost::format("11:devices:%s") % expectedPath.string();
         libsarus::filesystem::writeTextFile(procFileContent.str(), procFilePath, openmode);
         auto returnedPath = findCgroupPathInHierarchy("devices", testDir.getPath(), subsystemMountRoot, 1);
-        CHECK_EQUAL(returnedPath.string(), expectedPath.string());
+        EXPECT_EQ(returnedPath.string(), expectedPath.string());
     }
     // multiple lines
     {
@@ -275,7 +275,7 @@ TEST_F(HooksUtilityTestGroup, findCgroupPathInHierarchy) {
             % expectedPath.string();
         libsarus::filesystem::writeTextFile(procFileContent.str(), procFilePath, openmode);
         auto returnedPath = findCgroupPathInHierarchy("devices", testDir.getPath(), subsystemMountRoot, 1);
-        CHECK_EQUAL(returnedPath.string(), expectedPath.string());
+        EXPECT_EQ(returnedPath.string(), expectedPath.string());
     }
     // subsystem mount root is not filesystem root but not a prefix of cgroup path
     {
@@ -290,7 +290,7 @@ TEST_F(HooksUtilityTestGroup, findCgroupPathInHierarchy) {
             % expectedPath.string();
         libsarus::filesystem::writeTextFile(procFileContent.str(), procFilePath, openmode);
         auto returnedPath = findCgroupPathInHierarchy("devices", testDir.getPath(), subsystemMountRoot, 1);
-        CHECK_EQUAL(returnedPath.string(), expectedPath.string());
+        EXPECT_EQ(returnedPath.string(), expectedPath.string());
     }
     // subsystem mount root is not filesystem root and a prefix of cgroup path
     {
@@ -306,7 +306,7 @@ TEST_F(HooksUtilityTestGroup, findCgroupPathInHierarchy) {
             % cgroupInProcFile.string();
         libsarus::filesystem::writeTextFile(procFileContent.str(), procFilePath, openmode);
         auto returnedPath = findCgroupPathInHierarchy("devices", testDir.getPath(), subsystemMountRoot, 1);
-        CHECK_EQUAL(returnedPath.string(), expectedPath.string());
+        EXPECT_EQ(returnedPath.string(), expectedPath.string());
     }
     // line with cgroup version 2 syntax
     // notice the line is put before the searched entry to test if the function correctly parses and skips over,
@@ -325,7 +325,7 @@ TEST_F(HooksUtilityTestGroup, findCgroupPathInHierarchy) {
             % expectedPath.string();
         libsarus::filesystem::writeTextFile(procFileContent.str(), procFilePath, openmode);
         auto returnedPath = findCgroupPathInHierarchy("devices", testDir.getPath(), subsystemMountRoot, 1);
-        CHECK_EQUAL(returnedPath.string(), expectedPath.string());
+        EXPECT_EQ(returnedPath.string(), expectedPath.string());
     }
     // path is part of a hierarchy rooted in another cgroup namespace
     {
@@ -406,7 +406,7 @@ TEST_F(HooksUtilityTestGroup, whitelistDeviceInCgroup) {
     auto expectedDeviceID = libsarus::filesystem::getDeviceID("/dev/null");
     auto expectedEntry = boost::format("c %u:%u rw") % major(expectedDeviceID) % minor(expectedDeviceID);
     auto writtenEntry = libsarus::filesystem::readFile(allowFile);
-    CHECK_EQUAL(writtenEntry, expectedEntry.str());
+    EXPECT_EQ(writtenEntry, expectedEntry.str());
 
     // deviceFile argument is not a device
     auto dummyFile = testDir.getPath() / "dummy";
