@@ -73,6 +73,6 @@ if [ -z "$(docker images -q $OS_IMAGE_NAME 2>/dev/null)" ]; then
   popd
 fi
 
-$CONTAINER_RT run --rm -it \
+$CONTAINER_RT run --rm -it --privileged \
   --mount type=bind,source=$CI_ROOT_PATH/..,target=/home/docker/libsarus \
   --workdir /home/docker/libsarus $OS_IMAGE_NAME
