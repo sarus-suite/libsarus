@@ -1,2 +1,0 @@
-#!/bin/bash
-find . -maxdepth 1 -name '*.cpp' | xargs -n1 sed 's/'"$1"'/'"$2"'/g' -i
