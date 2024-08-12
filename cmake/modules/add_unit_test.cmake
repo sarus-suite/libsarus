@@ -1,6 +1,3 @@
-include(GoogleTest)
-include_directories(${GTEST_INCLUDE_DIR})
-
 function(add_unit_test EXEC_AS TEST_NAME TARGET_LINK_LIBS)
     if(${EXEC_AS} STREQUAL "Root")
         set(TEST_NAME_PRINT ${TEST_NAME}_AsRoot)

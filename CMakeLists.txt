@@ -30,6 +30,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Check and set dependencies
 find_package(Boost REQUIRED COMPONENTS filesystem regex)
+find_package(GTest REQUIRED)
 find_program(GIT_PATH git)
 ### Workaround: issue in linking 'boost::filesystem::detail::copy_file'
 add_definitions(-DBOOST_NO_CXX11_SCOPED_ENUMS)
@@ -50,9 +51,7 @@ endif(NOT LATEST_GIT_TAG)
 message(STATUS "libsarus version: " ${LATEST_GIT_TAG})
 
 # Continue in subdirectories
-add_subdirectory(dep)
 add_subdirectory(src)
-
 if(${ENABLE_UNIT_TESTS})
   add_subdirectory(test)
 endif(${ENABLE_UNIT_TESTS})
