@@ -137,4 +137,3 @@ static_assert(std::is_move_constructible<libsarus::Flock>::value, "");
 static_assert(std::is_move_assignable<libsarus::Flock>::value, "");
 
 }}
-

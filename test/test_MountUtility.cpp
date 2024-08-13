@@ -48,7 +48,7 @@ TEST_F(MountUtilitiesTestGroup, get_validated_mount_source_test) {
 }
 
 TEST_F(MountUtilitiesTestGroup, get_validated_mount_destination_test) {
-    auto bundleDirRAII = libsarus::PathRAII{libsarus::filesystem::makeUniquePathWithRandomSuffix(boost::filesystem::absolute("test-bundle-dir"))}; 
+    auto bundleDirRAII = libsarus::PathRAII{libsarus::filesystem::makeUniquePathWithRandomSuffix(boost::filesystem::absolute("test-bundle-dir"))};
     const auto& bundleDir = bundleDirRAII.getPath();
     auto rootfsDir = bundleDir / "rootfs";
     libsarus::filesystem::createFoldersIfNecessary(bundleDir / "overlay/rootfs-lower");
@@ -161,4 +161,3 @@ TEST_F(MountUtilitiesTestGroup, loopMountSquashfs) {
 }
 
 }}
-

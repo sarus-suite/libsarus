@@ -134,4 +134,3 @@ TEST_F(LoggerTestGroup, logger) {
 }
 
 }}
-

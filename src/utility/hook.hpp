@@ -23,7 +23,7 @@
 #include "UserIdentity.hpp"
 
 /**
- * Utility functions for hooks 
+ * Utility functions for hooks
  */
 
 namespace libsarus {

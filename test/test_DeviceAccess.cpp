@@ -82,4 +82,3 @@ TEST_F(DeviceAccessTestGroup, invalid_inputs) {
 }
 
 }}
-

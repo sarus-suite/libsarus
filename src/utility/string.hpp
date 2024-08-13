@@ -17,7 +17,7 @@
 #include <sys/types.h>
 
 /**
- * Utility functions for string manipulation 
+ * Utility functions for string manipulation
  */
 
 namespace libsarus {

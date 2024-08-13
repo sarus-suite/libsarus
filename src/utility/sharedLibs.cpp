@@ -21,7 +21,7 @@
 #include "utility/process.hpp"
 
 /**
- * Utility functions for shared libraries 
+ * Utility functions for shared libraries
  */
 
 namespace libsarus {

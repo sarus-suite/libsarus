@@ -22,7 +22,7 @@
 #include "utility/logging.hpp"
 
 /**
- * Utility functions for string manipulation 
+ * Utility functions for string manipulation
  */
 
 namespace libsarus {

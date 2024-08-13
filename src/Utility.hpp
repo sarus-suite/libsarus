@@ -12,7 +12,7 @@
 #define libsarus_Utility_hpp
 
 /*
- * All utility headers. 
+ * All utility headers.
  * All source files including this header should be eventually updated to
  * include individual headers instead.
  */

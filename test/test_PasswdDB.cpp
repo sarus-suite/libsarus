@@ -118,4 +118,3 @@ TEST_F(PasswdDBTestGroup, testGetHomeDirectory) {
 }
 
 }}
-

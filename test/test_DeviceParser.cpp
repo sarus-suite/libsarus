@@ -163,4 +163,3 @@ TEST_F(DeviceParserTestGroup, access) {
 }
 
 }}
-

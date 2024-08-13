@@ -135,4 +135,3 @@ TEST_F(ErrorTestGroup, twoStackTraceEntries_rethrowWithLogLevelDebug) {
 }
 
 }}
-

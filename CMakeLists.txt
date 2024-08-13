@@ -8,7 +8,7 @@ set(CMAKE_VERBOSE_MAKEFILE OFF)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules)
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 ### Required for gcov (e.g., 'example.gcno' instead of 'example.cpp.gcno')
-set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE 1) 
+set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE 1)
 
 message(STATUS "Installation directory: " ${CMAKE_INSTALL_PREFIX})
 
@@ -24,7 +24,7 @@ endif(${BUILD_STATIC})
 # Define CMake variables
 set(ENABLE_UNIT_TESTS TRUE CACHE BOOL "Build unit tests. [TRUE]")
 
-# Set C++ standard 
+# Set C++ standard
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 

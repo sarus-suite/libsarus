@@ -10,7 +10,7 @@ stages:
 # Generic jobs
 #-----------------------------------------------------------------------------#
 
-.check_format-general:
+.check.format:
   image: jfrog.svc.cscs.ch/vcef/libsarus/formatting:latest 
   stage: check 
   script:
@@ -18,12 +18,12 @@ stages:
     - pre-commit run --all-files
 
 # NOTE: all images should pass the check if and only if any image passes it.
-.check_runner-general:
+.check.runner:
   stage: check
   script:
     - ci/check_host.sh --no-dep
 
-.build-general:
+.build:
   image: jfrog.svc.cscs.ch/vcef/libsarus/${IMAGE_NAME} 
   stage: build
   before_script:
@@ -36,7 +36,7 @@ stages:
     paths:
       - "build-${IMAGE_NAME//:/_}"
 
-.test-general:
+.test:
   image: jfrog.svc.cscs.ch/vcef/libsarus/${IMAGE_NAME} 
   stage: test
   script:
@@ -48,41 +48,47 @@ stages:
 # Specialized jobs 
 #-----------------------------------------------------------------------------#
       
-check_format:
-  extends: .check_format-general
+check.format:
+  extends: .check.format
   rules:
     - if: $CI_COMMIT_REF_PROTECTED == 'false'
       allow_failure: true
 
-check_runner:
-  extends: .check_runner-general
+check.runner:
+  extends: .check.runner
 
-build-ubuntu_22.04:
-  extends: .build-general
+build.ubuntu_22.04:
+  extends: .build
   variables:
     IMAGE_NAME: ubuntu:22.04
 
-build-rockylinux_9:
-  extends: .build-general
+build.rockylinux_9:
+  extends: .build
   variables:
     IMAGE_NAME: rockylinux:9 
 
-build-opensuseleap_15:
-  extends: .build-general
+build.opensuseleap_15:
+  extends: .build
   variables:
     IMAGE_NAME: opensuseleap:15
 
-test-ubuntu_22.04:
-  extends: .test-general
+test.ubuntu_22.04:
+  extends: .test
   variables:
     IMAGE_NAME: ubuntu:22.04
+  dependencies:
+    - build.ubuntu_22.04
 
-test-rockylinux_9:
-  extends: .test-general
+test.rockylinux_9:
+  extends: .test
   variables:
     IMAGE_NAME: rockylinux:9 
+  dependencies:
+    - build.rockylinux_9
 
-test-opensuseleap_15:
-  extends: .test-general
+test.opensuseleap_15:
+  extends: .test
   variables:
     IMAGE_NAME: opensuseleap:15
+  dependencies:
+    - build.opensuseleap_15
