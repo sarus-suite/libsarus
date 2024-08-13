@@ -13,4 +13,15 @@ else
   exit 1
 fi
 
+if ! which pre-commit; then
+  echo "error: pre-commit not installed."
+  echo "error: pre-commit may be installed with pip."
+  exit 1
+fi
+
+if ! which clang-format; then
+  echo "error: clang-format not installed."
+  exit 1
+fi
+
 pre-commit run $OPT_FILES
