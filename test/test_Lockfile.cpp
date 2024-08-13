@@ -80,4 +80,3 @@ static_assert(std::is_move_constructible<libsarus::Lockfile>::value, "");
 static_assert(std::is_move_assignable<libsarus::Lockfile>::value, "");
 
 }}
-

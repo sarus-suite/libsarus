@@ -44,7 +44,7 @@ std::string makeColonSeparatedListOfPaths(const std::vector<boost::filesystem::p
 boost::filesystem::path appendPathsWithinRootfs( const boost::filesystem::path& rootfs,
                                                  const boost::filesystem::path& path0,
                                                  const boost::filesystem::path& path1,
-                                                 std::vector<boost::filesystem::path>* traversedSymlinks = nullptr); 
+                                                 std::vector<boost::filesystem::path>* traversedSymlinks = nullptr);
 boost::filesystem::path realpathWithinRootfs(const boost::filesystem::path& rootfs, const boost::filesystem::path& path);
 dev_t getDeviceID(const boost::filesystem::path& path);
 char getDeviceType(const boost::filesystem::path& path);

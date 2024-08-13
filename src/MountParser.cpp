@@ -29,7 +29,7 @@ MountParser::MountParser(const boost::filesystem::path& rootfsDir, const libsaru
     validationSettings.destinationDisallowedExact = {};
 }
 
-void MountParser::setMountDestinationRestrictions(const rapidjson::Value& destinationRestrictions) 
+void MountParser::setMountDestinationRestrictions(const rapidjson::Value& destinationRestrictions)
 {
     // Retrieve settings from Config struct
     for (const auto& value : destinationRestrictions["notAllowedPrefixesOfPath"].GetArray()) {

@@ -582,4 +582,3 @@ TEST_F(UtilityTest, getCpuAffinity_setCpuAffinity) {
 }
 
 }}
-

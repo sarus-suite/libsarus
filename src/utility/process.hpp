@@ -21,7 +21,7 @@
 #include "UserIdentity.hpp"
 
 /**
- * Utility functions for system operations 
+ * Utility functions for system operations
  */
 
 namespace libsarus {

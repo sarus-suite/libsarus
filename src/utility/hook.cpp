@@ -30,7 +30,7 @@
 #include "utility/json.hpp"
 
 /**
- * Utility functions for hooks 
+ * Utility functions for hooks
  */
 
 namespace rj = rapidjson;
@@ -128,7 +128,7 @@ boost::optional<std::string> getEnvironmentVariableValueFromOCIBundle(const std:
 }
 
 static void enterNamespace(const boost::filesystem::path& namespaceFile) {
-    // get namespace's fd   
+    // get namespace's fd
     auto fd = open(namespaceFile.c_str(), O_RDONLY);
     if (fd == -1) {
         auto message = boost::format("Failed to open namespace file %s: %s") % namespaceFile % strerror(errno);

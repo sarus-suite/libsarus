@@ -37,7 +37,7 @@ std::tuple<uid_t, gid_t> getNonRootUserIds() {
             return std::tuple<uid_t, gid_t>{entry.uid, entry.gid};
         }
     }
-    
+
     SARUS_THROW_ERROR("Failed to find non-root user ids");
 }
 
