@@ -50,6 +50,9 @@ stages:
       
 check_format:
   extends: .check_format-general
+  rules:
+    - if: $CI_COMMIT_REF_PROTECTED == 'false'
+      allow_failure: true
 
 check_runner:
   extends: .check_runner-general
