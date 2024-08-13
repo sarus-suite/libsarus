@@ -426,4 +426,3 @@ TEST_F(HooksUtilityTest, parseLibcVersionFromLddOutput) {
 }
 
 }}
-

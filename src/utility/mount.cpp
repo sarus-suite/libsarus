@@ -24,7 +24,7 @@
 #include "CLIArguments.hpp"
 
 /**
- * Utility functions for mounting 
+ * Utility functions for mounting
  */
 
 namespace libsarus {

@@ -18,7 +18,7 @@
 #include "Logger.hpp"
 
 /**
- * Utility functions for output controls 
+ * Utility functions for output controls
  */
 
 namespace libsarus {

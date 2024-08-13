@@ -161,4 +161,3 @@ TEST_F(MountUtilitiesTest, loopMountSquashfs) {
 }
 
 }}
-

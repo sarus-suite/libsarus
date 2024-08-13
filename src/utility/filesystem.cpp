@@ -22,7 +22,7 @@
 #include "utility/string.hpp"
 
 /**
- * Utility functions for filesystem manipulation 
+ * Utility functions for filesystem manipulation
  */
 
 namespace libsarus {
@@ -265,8 +265,8 @@ static boost::filesystem::path getSymlinkTarget(const boost::filesystem::path& p
     At the end of the function execution, the optional output parameter 'traversedSymlinks'
     contains the various symlinks that were traversed during the path resolution process.
 
-    NOTE: (from lee) This function was exported via a header file because while 
-    its operation falls in the "path" category (Path.hpp), the function itself 
+    NOTE: (from lee) This function was exported via a header file because while
+    its operation falls in the "path" category (Path.hpp), the function itself
     was also used by the "shared library" category (SharedLibs.hpp).
 */
 boost::filesystem::path appendPathsWithinRootfs( const boost::filesystem::path& rootfs,

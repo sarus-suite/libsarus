@@ -25,13 +25,13 @@ namespace libsarus {
 
 /**
  * This class encapsulates error trace information to be propagated as an exception.
- * 
+ *
  * An error trace entry encapsulates information about file, line and function name
  * where the error trace entry was created.
- * 
+ *
  * The first error trace entry is created by the macro SARUS_THROW_ERROR.
  * Additional error trace entries are created by the macro SARUS_RETHROW_ERROR.
- * 
+ *
  * Note: this class should be instantiated and thrown through the SARUS_THROW_ERROR macro.
  * Caught instances of this class should be rethrown through the SARUS_RETHROW_ERROR macro.
  * The user is not supposed to instantiate and throw this class "manually".

@@ -24,7 +24,7 @@ namespace aux {
 namespace hook {
 
 void writeOCIContainerStateToStdin(const boost::filesystem::path& bundleDir);
-rapidjson::Document createOCIBaseConfigJSON(const boost::filesystem::path& rootfsDir, 
+rapidjson::Document createOCIBaseConfigJSON(const boost::filesystem::path& rootfsDir,
                                             const std::tuple<uid_t, gid_t>& idsOfUser);
 
 }}}}

@@ -15,7 +15,7 @@ parse_options() {
         echo $SUPPORTED_OS
         exit 0
         ;;
-      *)      
+      *)
         TARGET_OS="$1"
         shift
         ;;
@@ -93,10 +93,10 @@ replace_placeholders() {
 add_supported_os "ubuntu:22.04"
 add_supported_os "opensuseleap:15"
 add_supported_os "rockylinux:9"
-  
+
 TARGET_OS=""
 parse_options "$@"
-prepare_containerize "$TARGET_OS" 
+prepare_containerize "$TARGET_OS"
 
 add_inline_placeholder "FINAL_OS_IMAGE"
 add_inline_placeholder "OS_PKG_MANAGER"
