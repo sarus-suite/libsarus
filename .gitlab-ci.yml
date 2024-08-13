@@ -49,10 +49,10 @@ stages:
 #-----------------------------------------------------------------------------#
       
 check_format:
-  extends: .format-general
+  extends: .check_format-general
 
 check_runner:
-  extends: .check-general
+  extends: .check_runner-general
 
 build-ubuntu_22.04:
   extends: .build-general
