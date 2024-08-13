@@ -2,13 +2,21 @@ variables:
   GIT_SUBMODULE_STRATEGY: recursive
 
 stages:
-  - check
-  - build
-  - test
+  - format    # Check code formatting
+  - check     # Check runners
+  - build     # Build libsarus
+  - test      # Run tests
 
 #-----------------------------------------------------------------------------#
 # Generic jobs
 #-----------------------------------------------------------------------------#
+
+.format-general:
+  image: jfrog.svc.cscs.ch/vcef/libsarus/formatting:latest 
+  stage: format
+  script:
+    - pre-commit install
+    - pre-commit run --all-files
 
 .check-general:
   stage: check
@@ -39,6 +47,9 @@ stages:
 #-----------------------------------------------------------------------------#
 # Specialized jobs 
 #-----------------------------------------------------------------------------#
+      
+format:
+  extends: .format-general
 
 # NOTE: all images should pass the check if and only if any image passes it.
 check-unified:
