@@ -11,8 +11,8 @@
 #ifndef libsarus_utility_sharedLibs_hpp
 #define libsarus_utility_sharedLibs_hpp
 
-#include <vector>
 #include <string>
+#include <vector>
 
 #include <boost/filesystem.hpp>
 
@@ -28,11 +28,15 @@ std::vector<boost::filesystem::path> getListFromDynamicLinker(
     const boost::filesystem::path& ldconfigPath,
     const boost::filesystem::path& rootDir);
 std::vector<std::string> parseAbi(const boost::filesystem::path& lib);
-std::vector<std::string> resolveAbi(const boost::filesystem::path& lib,
-                                    const boost::filesystem::path& rootDir = "/");
-std::string getSoname(const boost::filesystem::path& path, const boost::filesystem::path& readelfPath);
-bool is64bitSharedLib(const boost::filesystem::path& path, const boost::filesystem::path& readelfPath);
+std::vector<std::string> resolveAbi(
+    const boost::filesystem::path& lib,
+    const boost::filesystem::path& rootDir = "/");
+std::string getSoname(const boost::filesystem::path& path,
+                      const boost::filesystem::path& readelfPath);
+bool is64bitSharedLib(const boost::filesystem::path& path,
+                      const boost::filesystem::path& readelfPath);
 
-}}
+}  // namespace sharedlibs
+}  // namespace libsarus
 
 #endif

@@ -9,8 +9,8 @@
  */
 
 #include <tuple>
-#include <sys/types.h>
 
+#include <sys/types.h>
 
 namespace libsarus {
 namespace test {
@@ -19,4 +19,7 @@ namespace misc {
 
 std::tuple<uid_t, gid_t> getNonRootUserIds();
 
-}}}}
+}
+}  // namespace aux
+}  // namespace test
+}  // namespace libsarus

@@ -18,17 +18,18 @@
 
 namespace libsarus {
 
-DeviceParser::DeviceParser(const boost::filesystem::path& rootfsDir, const libsarus::UserIdentity& userIdentity)
-    : rootfsDir{rootfsDir}
-    , userIdentity{userIdentity}
-{}
+DeviceParser::DeviceParser(const boost::filesystem::path& rootfsDir,
+                           const libsarus::UserIdentity& userIdentity)
+    : rootfsDir{rootfsDir}, userIdentity{userIdentity} {}
 
-std::unique_ptr<libsarus::DeviceMount> DeviceParser::parseDeviceRequest(const std::string& requestString) const {
+std::unique_ptr<libsarus::DeviceMount> DeviceParser::parseDeviceRequest(
+    const std::string& requestString) const {
     auto message = boost::format("Parsing device request '%s'") % requestString;
     logMessage(message, libsarus::LogLevel::DEBUG);
 
     if (requestString.empty()) {
-        auto message = boost::format("Invalid device request: no values provided");
+        auto message =
+            boost::format("Invalid device request: no values provided");
         logMessage(message, libsarus::LogLevel::GENERAL, std::cerr);
         SARUS_THROW_ERROR(message.str(), libsarus::LogLevel::INFO);
     }
@@ -37,9 +38,12 @@ std::unique_ptr<libsarus::DeviceMount> DeviceParser::parseDeviceRequest(const st
     boost::split(requestVector, requestString, boost::is_any_of(":"));
 
     if (requestVector.size() > 3) {
-        auto message = boost::format("Invalid device request '%s': too many tokens provided. "
-            "The format of the option value must be at most '<host device>:<container device>:<access>'")
-            % requestString;
+        auto message =
+            boost::format(
+                "Invalid device request '%s': too many tokens provided. "
+                "The format of the option value must be at most '<host "
+                "device>:<container device>:<access>'") %
+            requestString;
         logMessage(message, libsarus::LogLevel::GENERAL, std::cerr);
         SARUS_THROW_ERROR(message.str(), libsarus::LogLevel::INFO);
     }
@@ -51,12 +55,10 @@ std::unique_ptr<libsarus::DeviceMount> DeviceParser::parseDeviceRequest(const st
     if (requestVector.size() == 3) {
         destination = requestVector[1];
         accessString = requestVector[2];
-    }
-    else if (requestVector.size() == 2) {
+    } else if (requestVector.size() == 2) {
         if (boost::filesystem::path{requestVector[1]}.is_relative()) {
             accessString = requestVector[1];
-        }
-        else {
+        } else {
             destination = requestVector[1];
         }
     }
@@ -69,39 +71,45 @@ std::unique_ptr<libsarus::DeviceMount> DeviceParser::parseDeviceRequest(const st
         validateMountPath(source, "host");
         validateMountPath(destination, "container");
         auto deviceAccess = createDeviceAccess(accessString);
-        auto baseMount = libsarus::Mount{source, destination, flags, rootfsDir, userIdentity};
-        return std::unique_ptr<libsarus::DeviceMount>{new libsarus::DeviceMount{std::move(baseMount), deviceAccess}};
-    }
-    catch (const libsarus::Error& e) {
-        auto message = boost::format("Invalid device request '%s': %s") % requestString %  e.getErrorTrace().back().errorMessage;
+        auto baseMount = libsarus::Mount{source, destination, flags, rootfsDir,
+                                         userIdentity};
+        return std::unique_ptr<libsarus::DeviceMount>{
+            new libsarus::DeviceMount{std::move(baseMount), deviceAccess}};
+    } catch (const libsarus::Error& e) {
+        auto message = boost::format("Invalid device request '%s': %s") %
+                       requestString % e.getErrorTrace().back().errorMessage;
         logMessage(message, libsarus::LogLevel::GENERAL, std::cerr);
         SARUS_RETHROW_ERROR(e, message.str(), libsarus::LogLevel::INFO);
     }
 }
 
-libsarus::DeviceAccess DeviceParser::createDeviceAccess(const std::string& accessString) const {
+libsarus::DeviceAccess DeviceParser::createDeviceAccess(
+    const std::string& accessString) const {
     try {
         auto deviceAccess = libsarus::DeviceAccess{accessString};
         return deviceAccess;
-    }
-    catch (const libsarus::Error& e) {
-        auto message = boost::format("%s. "
-            "Device access must be entered as a combination of 'rwm' characters, with no repetitions")
-            %  e.what();
+    } catch (const libsarus::Error& e) {
+        auto message = boost::format(
+                           "%s. "
+                           "Device access must be entered as a combination of "
+                           "'rwm' characters, with no repetitions") %
+                       e.what();
         SARUS_RETHROW_ERROR(e, message.str(), libsarus::LogLevel::INFO);
     }
 }
 
-void DeviceParser::validateMountPath(const boost::filesystem::path& path, const std::string& context) const {
+void DeviceParser::validateMountPath(const boost::filesystem::path& path,
+                                     const std::string& context) const {
     if (path.empty()) {
         auto message = boost::format("detected empty %s device path") % context;
         SARUS_THROW_ERROR(message.str(), libsarus::LogLevel::INFO);
     }
 
     if (path.is_relative()) {
-        auto message = boost::format("%s device path '%s' must be absolute") % context % path.string();
+        auto message = boost::format("%s device path '%s' must be absolute") %
+                       context % path.string();
         SARUS_THROW_ERROR(message.str(), libsarus::LogLevel::INFO);
     }
 }
 
-}
+}  // namespace libsarus

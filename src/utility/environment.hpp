@@ -28,6 +28,7 @@ std::string getVariable(const std::string& key);
 void setVariable(const std::string& key, const std::string& value);
 void clearVariables();
 
-}}
+}  // namespace environment
+}  // namespace libsarus
 
 #endif

@@ -4,15 +4,15 @@ variables:
 stages:
   - check
   - build
-  - test 
+  - test
 
 #-----------------------------------------------------------------------------#
 # Generic jobs
 #-----------------------------------------------------------------------------#
 
 .check.format:
-  image: jfrog.svc.cscs.ch/vcef/libsarus/formatting:latest 
-  stage: check 
+  image: jfrog.svc.cscs.ch/vcef/libsarus/formatting:latest
+  stage: check
   script:
     - pre-commit install
     - pre-commit run --all-files
@@ -28,10 +28,10 @@ stages:
     - when: on_success
 
 .build:
-  image: jfrog.svc.cscs.ch/vcef/libsarus/${IMAGE_NAME} 
+  image: jfrog.svc.cscs.ch/vcef/libsarus/${IMAGE_NAME}
   stage: build
   before_script:
-    - git config --global --add safe.directory $PWD 
+    - git config --global --add safe.directory $PWD
   script:
     - ./build.sh -DBUILD_DIR=$PWD/build-${IMAGE_NAME//:/_}
   artifacts:
@@ -43,19 +43,19 @@ stages:
     - when: on_success
 
 .test:
-  image: jfrog.svc.cscs.ch/vcef/libsarus/${IMAGE_NAME} 
+  image: jfrog.svc.cscs.ch/vcef/libsarus/${IMAGE_NAME}
   stage: test
   script:
-    - cd "build-${IMAGE_NAME//:/_}" 
+    - cd "build-${IMAGE_NAME//:/_}"
     - ASAN_OPTIONS=detect_leaks=1 ctest --exclude-regex AsRoot
     - sudo env "PATH=$PATH" ASAN_OPTIONS=detect_leaks=1 ctest --tests-regex AsRoot
   rules:
     - when: on_success
 
 #-----------------------------------------------------------------------------#
-# Specialized jobs 
+# Specialized jobs
 #-----------------------------------------------------------------------------#
-      
+
 check.format:
   extends: .check.format
   rules:
@@ -73,7 +73,7 @@ build.ubuntu_22.04:
 build.rockylinux_9:
   extends: .build
   variables:
-    IMAGE_NAME: rockylinux:9 
+    IMAGE_NAME: rockylinux:9
 
 build.opensuseleap_15:
   extends: .build
@@ -90,7 +90,7 @@ test.ubuntu_22.04:
 test.rockylinux_9:
   extends: .test
   variables:
-    IMAGE_NAME: rockylinux:9 
+    IMAGE_NAME: rockylinux:9
   dependencies:
     - build.rockylinux_9
 

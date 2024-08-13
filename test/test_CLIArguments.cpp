@@ -18,12 +18,11 @@
 #include "Logger.hpp"
 #include "Utility.hpp"
 
-
 namespace libsarus {
 namespace test {
 
 class CLIArgumentsTestGroup : public testing::Test {
-protected:
+  protected:
 };
 
 TEST_F(CLIArgumentsTestGroup, serialize) {
@@ -55,4 +54,5 @@ TEST_F(CLIArgumentsTestGroup, string) {
     EXPECT_EQ(args.string(), expected);
 };
 
-}}
+}  // namespace test
+}  // namespace libsarus

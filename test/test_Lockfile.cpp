@@ -17,13 +17,14 @@
 #include "Lockfile.hpp"
 #include "Utility.hpp"
 
-
 namespace libsarus {
 namespace test {
 
 class LockfileTestGroup : public testing::Test {
-protected:
-    boost::filesystem::path fileToLock = libsarus::filesystem::makeUniquePathWithRandomSuffix("/tmp/file-to-lock");
+  protected:
+    boost::filesystem::path fileToLock =
+        libsarus::filesystem::makeUniquePathWithRandomSuffix(
+            "/tmp/file-to-lock");
     boost::filesystem::path lockfile = fileToLock.string() + ".lock";
 };
 
@@ -34,9 +35,7 @@ TEST_F(LockfileTestGroup, creation_of_physical_lockfile) {
 }
 
 TEST_F(LockfileTestGroup, lock_acquisition) {
-    {
-        libsarus::Lockfile lock{fileToLock};
-    }
+    { libsarus::Lockfile lock{fileToLock}; }
     {
         // check that we can reacquire the lock
         // (previous lock was released when went out of scope)
@@ -55,7 +54,8 @@ TEST_F(LockfileTestGroup, move_constructor) {
     libsarus::Lockfile original{fileToLock};
     {
         libsarus::Lockfile moveConstructed{std::move(original)};
-        // check that lock cannot be acquired more than once (move constructed lock is still active)
+        // check that lock cannot be acquired more than once (move constructed
+        // lock is still active)
         EXPECT_THROW(libsarus::Lockfile(fileToLock, 0), libsarus::Error);
     }
     // check that lock can be acquired (move-constructed lock went out of scope)
@@ -67,7 +67,8 @@ TEST_F(LockfileTestGroup, move_assignment) {
     {
         libsarus::Lockfile moveAssigned;
         moveAssigned = std::move(original);
-        // check that lock cannot be acquired more than once (move assigned lock is still active)
+        // check that lock cannot be acquired more than once (move assigned lock
+        // is still active)
         EXPECT_THROW(libsarus::Lockfile(fileToLock, 0), libsarus::Error);
     }
     // check that lock can be acquired (move-assigned lock went out of scope)
@@ -79,4 +80,5 @@ static_assert(!std::is_copy_assignable<libsarus::Lockfile>::value, "");
 static_assert(std::is_move_constructible<libsarus::Lockfile>::value, "");
 static_assert(std::is_move_assignable<libsarus::Lockfile>::value, "");
 
-}}
+}  // namespace test
+}  // namespace libsarus

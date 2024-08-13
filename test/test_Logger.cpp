@@ -19,17 +19,17 @@
 
 #include "Logger.hpp"
 
-
 namespace libsarus {
 namespace test {
 
 class LoggerTestGroup : public testing::Test {
-protected:
+  protected:
 };
 
 class LoggerChecker {
-public:
-    LoggerChecker& log(libsarus::LogLevel logLevel, const std::string& message) {
+  public:
+    LoggerChecker& log(libsarus::LogLevel logLevel,
+                       const std::string& message) {
         auto& logger = libsarus::Logger::getInstance();
         logger.log(message, "subsystem", logLevel, stdoutStream, stderrStream);
         return *this;
@@ -41,11 +41,13 @@ public:
         return *this;
     }
 
-    LoggerChecker& expectMessageInStdout(const std::string& logLevel, const std::string& message) {
+    LoggerChecker& expectMessageInStdout(const std::string& logLevel,
+                                         const std::string& message) {
         return expectMessage(logLevel, message, expectedPatternInStdout);
     }
 
-    LoggerChecker& expectMessageInStderr(const std::string& logLevel, const std::string& message) {
+    LoggerChecker& expectMessageInStderr(const std::string& logLevel,
+                                         const std::string& message) {
         return expectMessage(logLevel, message, expectedPatternInStderr);
     }
 
@@ -54,20 +56,24 @@ public:
         check(stderrStream, expectedPatternInStderr);
     }
 
-private:
-    LoggerChecker& expectMessage(const std::string& logLevel, const std::string& message, std::string& expectedPattern) {
-        auto messagePattern = "\\[.*\\..*\\] \\[.*\\] \\[subsystem\\] \\[" + logLevel + "\\] " + message + "\n";
+  private:
+    LoggerChecker& expectMessage(const std::string& logLevel,
+                                 const std::string& message,
+                                 std::string& expectedPattern) {
+        auto messagePattern = "\\[.*\\..*\\] \\[.*\\] \\[subsystem\\] \\[" +
+                              logLevel + "\\] " + message + "\n";
         expectedPattern += messagePattern;
         return *this;
     }
 
-    void check(const std::ostringstream& stream, const std::string& expectedPattern) const {
+    void check(const std::ostringstream& stream,
+               const std::string& expectedPattern) const {
         auto regex = boost::regex(expectedPattern);
         boost::cmatch matches;
         EXPECT_TRUE(boost::regex_match(stream.str().c_str(), matches, regex));
     }
 
-private:
+  private:
     std::ostringstream stdoutStream;
     std::ostringstream stderrStream;
 
@@ -133,4 +139,5 @@ TEST_F(LoggerTestGroup, logger) {
         .expectMessageInStderr("ERROR", errorMessage);
 }
 
-}}
+}  // namespace test
+}  // namespace libsarus

@@ -14,25 +14,29 @@
 #include <string>
 #include <vector>
 
-#include "UserIdentity.hpp"
 #include "DeviceMount.hpp"
+#include "UserIdentity.hpp"
 
 namespace libsarus {
 
 class DeviceParser {
-public:
-    DeviceParser(const boost::filesystem::path& rootfsDir, const libsarus::UserIdentity& userIdentity);
-    std::unique_ptr<libsarus::DeviceMount> parseDeviceRequest(const std::string& requestString) const;
+  public:
+    DeviceParser(const boost::filesystem::path& rootfsDir,
+                 const libsarus::UserIdentity& userIdentity);
+    std::unique_ptr<libsarus::DeviceMount> parseDeviceRequest(
+        const std::string& requestString) const;
 
-private:
-    libsarus::DeviceAccess createDeviceAccess(const std::string& accessString) const;
-    void validateMountPath(const boost::filesystem::path& path, const std::string& context) const;
+  private:
+    libsarus::DeviceAccess createDeviceAccess(
+        const std::string& accessString) const;
+    void validateMountPath(const boost::filesystem::path& path,
+                           const std::string& context) const;
 
-private:
+  private:
     boost::filesystem::path rootfsDir;
     libsarus::UserIdentity userIdentity;
 };
 
-}
+}  // namespace libsarus
 
 #endif

@@ -8,30 +8,29 @@
  *
  */
 
-#include "aux/filesystem.hpp"
+#include <gtest/gtest.h>
+
 #include "DeviceParser.hpp"
 #include "Logger.hpp"
 #include "PathRAII.hpp"
 #include "Utility.hpp"
-
-#include <gtest/gtest.h>
-
+#include "aux/filesystem.hpp"
 
 namespace libsarus {
 namespace test {
 
 class DeviceParserChecker {
-public:
+  public:
     DeviceParserChecker(const std::string& deviceRequest)
-        : deviceRequest(deviceRequest)
-    {}
+        : deviceRequest(deviceRequest) {}
 
     DeviceParserChecker& expectSource(const std::string& expectedSource) {
         this->expectedSource = expectedSource;
         return *this;
     }
 
-    DeviceParserChecker& expectDestination(const std::string& expectedDestination) {
+    DeviceParserChecker& expectDestination(
+        const std::string& expectedDestination) {
         this->expectedDestination = expectedDestination;
         return *this;
     }
@@ -48,34 +47,37 @@ public:
 
     ~DeviceParserChecker() {
         libsarus::UserIdentity userIdentity;
-        auto bundleDirRAII = libsarus::PathRAII{libsarus::filesystem::makeUniquePathWithRandomSuffix(boost::filesystem::absolute("test-bundle-dir"))};
+        auto bundleDirRAII = libsarus::PathRAII{
+            libsarus::filesystem::makeUniquePathWithRandomSuffix(
+                boost::filesystem::absolute("test-bundle-dir"))};
         auto rootfsDir = bundleDirRAII.getPath() / "rootfs";
 
         auto parser = libsarus::DeviceParser{rootfsDir, userIdentity};
 
-        if(isParseErrorExpected) {
-            EXPECT_THROW(parser.parseDeviceRequest(deviceRequest), libsarus::Error);
+        if (isParseErrorExpected) {
+            EXPECT_THROW(parser.parseDeviceRequest(deviceRequest),
+                         libsarus::Error);
             return;
         }
 
         auto mountObject = parser.parseDeviceRequest(deviceRequest);
 
-        if(expectedSource) {
+        if (expectedSource) {
             EXPECT_EQ(mountObject->getSource(), *expectedSource);
         }
 
-        if(expectedDestination) {
+        if (expectedDestination) {
             EXPECT_EQ(mountObject->getDestination(), *expectedDestination);
         }
 
-        if(expectedAccess) {
+        if (expectedAccess) {
             EXPECT_EQ(mountObject->getAccess().string(), *expectedAccess);
         }
 
         EXPECT_EQ(mountObject->getFlags(), *expectedFlags);
     }
 
-private:
+  private:
     std::string deviceRequest;
     boost::optional<std::string> expectedSource{};
     boost::optional<std::string> expectedDestination{};
@@ -86,7 +88,7 @@ private:
 };
 
 class DeviceParserTestGroup : public testing::Test {
-protected:
+  protected:
     DeviceParserTestGroup() {
         auto testDevice = boost::filesystem::path("/dev/sarusTestDevice0");
         auto testDeviceMajorID = 511u;
@@ -94,14 +96,14 @@ protected:
         if (boost::filesystem::exists(testDevice)) {
             boost::filesystem::remove(testDevice);
         }
-        aux::filesystem::createCharacterDeviceFile(testDevice, testDeviceMajorID, testDeviceMinorID);
+        aux::filesystem::createCharacterDeviceFile(
+            testDevice, testDeviceMajorID, testDeviceMinorID);
     }
 
     ~DeviceParserTestGroup() override {
         auto testDevice = boost::filesystem::path("/dev/sarusTestDevice0");
         boost::filesystem::remove(testDevice);
     }
-
 };
 
 TEST_F(DeviceParserTestGroup, basic_checks) {
@@ -109,8 +111,11 @@ TEST_F(DeviceParserTestGroup, basic_checks) {
     DeviceParserChecker{""}.expectParseError();
 
     // too many tokens
-    DeviceParserChecker{"/dev/sarusTestDevice0:/dev/device1:/dev/device2:rw"}.expectParseError();
-    DeviceParserChecker{"/dev/sarusTestDevice0:/dev/device1:/dev/device2:/dev/device3:rw"}.expectParseError();
+    DeviceParserChecker{"/dev/sarusTestDevice0:/dev/device1:/dev/device2:rw"}
+        .expectParseError();
+    DeviceParserChecker{
+        "/dev/sarusTestDevice0:/dev/device1:/dev/device2:/dev/device3:rw"}
+        .expectParseError();
 }
 
 TEST_F(DeviceParserTestGroup, source_and_destination) {
@@ -125,8 +130,10 @@ TEST_F(DeviceParserTestGroup, source_and_destination) {
         .expectDestination("/dev/container-Device");
 
     // only absolute paths allowed
-    DeviceParserChecker{"dev/sarusTestDevice0:/dev/containerDevice"}.expectParseError();
-    DeviceParserChecker{"/dev/sarusTestDevice0:dev/containerDevice"}.expectParseError();
+    DeviceParserChecker{"dev/sarusTestDevice0:/dev/containerDevice"}
+        .expectParseError();
+    DeviceParserChecker{"/dev/sarusTestDevice0:dev/containerDevice"}
+        .expectParseError();
 
     // empty source or destination
     DeviceParserChecker{"/dev/sarusTestDevice0:"}.expectParseError();
@@ -152,14 +159,19 @@ TEST_F(DeviceParserTestGroup, access) {
         .expectAccess("rm");
 
     // wrong access flags
-    DeviceParserChecker{"/dev/sarusTestDevice0:/dev/containerDevice:raw"}.expectParseError();
-    DeviceParserChecker{"/dev/sarusTestDevice0:/dev/containerDevice:rww"}.expectParseError();
-    DeviceParserChecker{"/dev/sarusTestDevice0:/dev/containerDevice:rwmw"}.expectParseError();
+    DeviceParserChecker{"/dev/sarusTestDevice0:/dev/containerDevice:raw"}
+        .expectParseError();
+    DeviceParserChecker{"/dev/sarusTestDevice0:/dev/containerDevice:rww"}
+        .expectParseError();
+    DeviceParserChecker{"/dev/sarusTestDevice0:/dev/containerDevice:rwmw"}
+        .expectParseError();
 
     // empty fields
     DeviceParserChecker{":/dev/sarusTestDevice0:rw"}.expectParseError();
     DeviceParserChecker{"/dev/sarusTestDevice0::rw"}.expectParseError();
-    DeviceParserChecker{"/dev/sarusTestDevice0:/dev/containerDevice:"}.expectParseError();
+    DeviceParserChecker{"/dev/sarusTestDevice0:/dev/containerDevice:"}
+        .expectParseError();
 }
 
-}}
+}  // namespace test
+}  // namespace libsarus

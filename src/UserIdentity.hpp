@@ -12,6 +12,7 @@
 #define libsarus_UserIdentity_hpp
 
 #include <vector>
+
 #include <sys/types.h>
 
 namespace libsarus {
@@ -24,6 +25,6 @@ struct UserIdentity {
     std::vector<gid_t> supplementaryGids;
 };
 
-}
+}  // namespace libsarus
 
 #endif

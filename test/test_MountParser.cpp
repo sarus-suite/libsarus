@@ -17,15 +17,13 @@
 #include "PathRAII.hpp"
 #include "Utility.hpp"
 
-
 namespace libsarus {
 namespace test {
 
 class MountParserChecker {
-public:
+  public:
     MountParserChecker(const std::string& mountRequest)
-        : mountRequest(mountRequest)
-    {}
+        : mountRequest(mountRequest) {}
 
     MountParserChecker& parseAsSiteMount() {
         this->isSiteMount = true;
@@ -37,7 +35,8 @@ public:
         return *this;
     }
 
-    MountParserChecker& expectDestination(const std::string& expectedDestination) {
+    MountParserChecker& expectDestination(
+        const std::string& expectedDestination) {
         this->expectedDestination = expectedDestination;
         return *this;
     }
@@ -54,53 +53,59 @@ public:
 
     ~MountParserChecker() {
         libsarus::UserIdentity userIdentity;
-        auto bundleDirRAII = libsarus::PathRAII{libsarus::filesystem::makeUniquePathWithRandomSuffix(boost::filesystem::absolute("test-bundle-dir"))};
+        auto bundleDirRAII = libsarus::PathRAII{
+            libsarus::filesystem::makeUniquePathWithRandomSuffix(
+                boost::filesystem::absolute("test-bundle-dir"))};
         auto rootfsDir = bundleDirRAII.getPath() / "rootfs";
 
-        libsarus::MountParser parser = libsarus::MountParser{rootfsDir, userIdentity};
+        libsarus::MountParser parser =
+            libsarus::MountParser{rootfsDir, userIdentity};
 
         if (!isSiteMount) {
-          // Populate "userMount", originally done by "ConfigRAII" in Sarus 1.6.4.
-          rapidjson::MemoryPoolAllocator<> allocator;
-          rapidjson::Value userMountsValue(rapidjson::kObjectType);
+            // Populate "userMount", originally done by "ConfigRAII" in
+            // Sarus 1.6.4.
+            rapidjson::MemoryPoolAllocator<> allocator;
+            rapidjson::Value userMountsValue(rapidjson::kObjectType);
 
-          rapidjson::Value disallowWithPrefixValue(rapidjson::kArrayType);
-          disallowWithPrefixValue.PushBack("/etc", allocator);
-          disallowWithPrefixValue.PushBack("/var", allocator);
-          disallowWithPrefixValue.PushBack("/opt/sarus", allocator);
-          userMountsValue.AddMember("notAllowedPrefixesOfPath", disallowWithPrefixValue, allocator);
+            rapidjson::Value disallowWithPrefixValue(rapidjson::kArrayType);
+            disallowWithPrefixValue.PushBack("/etc", allocator);
+            disallowWithPrefixValue.PushBack("/var", allocator);
+            disallowWithPrefixValue.PushBack("/opt/sarus", allocator);
+            userMountsValue.AddMember("notAllowedPrefixesOfPath",
+                                      disallowWithPrefixValue, allocator);
 
-          rapidjson::Value disallowExactValue(rapidjson::kArrayType);
-          disallowExactValue.PushBack("/opt", allocator);
-          userMountsValue.AddMember("notAllowedPaths", disallowExactValue, allocator);
+            rapidjson::Value disallowExactValue(rapidjson::kArrayType);
+            disallowExactValue.PushBack("/opt", allocator);
+            userMountsValue.AddMember("notAllowedPaths", disallowExactValue,
+                                      allocator);
 
-          // Inject "userMount".
-          parser.setMountDestinationRestrictions(userMountsValue);
+            // Inject "userMount".
+            parser.setMountDestinationRestrictions(userMountsValue);
         }
 
         auto map = libsarus::string::parseMap(mountRequest);
 
-        if(isParseErrorExpected) {
+        if (isParseErrorExpected) {
             EXPECT_THROW(parser.parseMountRequest(map), libsarus::Error);
             return;
         }
 
         auto mountObject = parser.parseMountRequest(map);
 
-        if(expectedSource) {
+        if (expectedSource) {
             EXPECT_EQ(mountObject->getSource(), *expectedSource);
         }
 
-        if(expectedDestination) {
+        if (expectedDestination) {
             EXPECT_EQ(mountObject->getDestination(), *expectedDestination);
         }
 
-        if(expectedFlags) {
+        if (expectedFlags) {
             EXPECT_EQ(mountObject->getFlags(), *expectedFlags);
         }
     }
 
-private:
+  private:
     std::string mountRequest;
     bool isSiteMount = false;
     boost::optional<std::string> expectedSource = {};
@@ -111,7 +116,7 @@ private:
 };
 
 class MountParserTestGroup : public testing::Test {
-protected:
+  protected:
 };
 
 TEST_F(MountParserTestGroup, mount_type) {
@@ -119,11 +124,14 @@ TEST_F(MountParserTestGroup, mount_type) {
     MountParserChecker{"type=bind,source=/src,destination=/dest"};
 
     // invalid mount type
-    MountParserChecker{"type=invalid,source=/src,destination=/dest"}.expectParseError();
+    MountParserChecker{"type=invalid,source=/src,destination=/dest"}
+        .expectParseError();
 
     // invalid mount keys
-    MountParserChecker{"type=invalid,spicysouce=/src,destination=/dest"}.expectParseError();
-    MountParserChecker{"type=invalid,source=/src,nation=/dest"}.expectParseError();
+    MountParserChecker{"type=invalid,spicysouce=/src,destination=/dest"}
+        .expectParseError();
+    MountParserChecker{"type=invalid,source=/src,nation=/dest"}
+        .expectParseError();
 }
 
 TEST_F(MountParserTestGroup, source_and_destination_of_bind_mount) {
@@ -145,8 +153,10 @@ TEST_F(MountParserTestGroup, source_and_destination_of_bind_mount) {
         .expectDestination("/dest");
 
     // only absolute paths allowed
-    MountParserChecker{"type=bind,source=src,destination=/dest"}.expectParseError();
-    MountParserChecker{"type=bind,source=/src,destination=dest"}.expectParseError();
+    MountParserChecker{"type=bind,source=src,destination=/dest"}
+        .expectParseError();
+    MountParserChecker{"type=bind,source=/src,destination=dest"}
+        .expectParseError();
 
     // missing type
     MountParserChecker{"source=src, destination=/dest"}.expectParseError();
@@ -156,36 +166,47 @@ TEST_F(MountParserTestGroup, source_and_destination_of_bind_mount) {
     MountParserChecker{"type=bind,destination=/dest"}.expectParseError();
 
     // disallowed prefixes of destination
-    MountParserChecker{"type=bind,source=/src,destination=/etc"}.expectParseError();
-    MountParserChecker{"type=bind,source=/src,destination=/var"}.expectParseError();
-    MountParserChecker{"type=bind,source=/src,destination=/opt"}.expectParseError();
+    MountParserChecker{"type=bind,source=/src,destination=/etc"}
+        .expectParseError();
+    MountParserChecker{"type=bind,source=/src,destination=/var"}
+        .expectParseError();
+    MountParserChecker{"type=bind,source=/src,destination=/opt"}
+        .expectParseError();
 
     // disallowed destinations
-    MountParserChecker{"type=bind,source=/src,destination=/opt/sarus"}.expectParseError();
+    MountParserChecker{"type=bind,source=/src,destination=/opt/sarus"}
+        .expectParseError();
 }
 
 TEST_F(MountParserTestGroup, user_flags_of_bind_mount) {
     // no flags: defaults to recursive, private, read/write mount
-    MountParserChecker{"type=bind,source=/src,destination=/dest"}
-        .expectFlags(MS_REC | MS_PRIVATE);
+    MountParserChecker{"type=bind,source=/src,destination=/dest"}.expectFlags(
+        MS_REC | MS_PRIVATE);
 
     // readonly mount
     MountParserChecker{"type=bind,source=/src,destination=/dest,readonly"}
         .expectFlags(MS_REC | MS_RDONLY | MS_PRIVATE);
 
     // Since Sarus 1.4.0, bind-propagation is no longer a valid option
-    MountParserChecker{"type=bind,source=/src,destination=dest,bind-propagation=slave"}.expectParseError();
-    MountParserChecker{"type=bind,source=/src,destination=dest,bind-propagation=recursive"}.expectParseError();
+    MountParserChecker{
+        "type=bind,source=/src,destination=dest,bind-propagation=slave"}
+        .expectParseError();
+    MountParserChecker{
+        "type=bind,source=/src,destination=dest,bind-propagation=recursive"}
+        .expectParseError();
 }
 
 TEST_F(MountParserTestGroup, site_flags_of_bind_mount) {
     // no flags: defaults to recursive, private, read/write mount
     MountParserChecker{"type=bind,source=/src,destination=/dest"}
-        .parseAsSiteMount().expectFlags(MS_REC | MS_PRIVATE);
+        .parseAsSiteMount()
+        .expectFlags(MS_REC | MS_PRIVATE);
 
     // readonly mount
     MountParserChecker{"type=bind,source=/src,destination=/dest,readonly"}
-        .parseAsSiteMount().expectFlags(MS_REC | MS_RDONLY | MS_PRIVATE);
+        .parseAsSiteMount()
+        .expectFlags(MS_REC | MS_RDONLY | MS_PRIVATE);
 }
 
-}}
+}  // namespace test
+}  // namespace libsarus

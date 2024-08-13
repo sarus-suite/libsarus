@@ -11,43 +11,49 @@
 #ifndef libsarus_Logger_hpp
 #define libsarus_Logger_hpp
 
-#include <string>
 #include <iostream>
+#include <string>
 
 #include <boost/format.hpp>
 
-#include "LogLevel.hpp"
 #include "Error.hpp"
+#include "LogLevel.hpp"
 
 namespace libsarus {
 
 class Logger {
-public:
+  public:
     static Logger& getInstance();
 
-    void log(const std::string& message, const std::string& sysName, const libsarus::LogLevel& logLevel,
-    		std::ostream& out_stream = std::cout, std::ostream& err_stream = std::cerr);
-    void log(const boost::format& message, const std::string& sysName, const libsarus::LogLevel& logLevel,
-    		std::ostream& out_stream = std::cout, std::ostream& err_stream = std::cerr);
-    void logErrorTrace(const libsarus::Error& error, const std::string& sysName, std::ostream& errStream = std::cerr);
+    void log(const std::string& message, const std::string& sysName,
+             const libsarus::LogLevel& logLevel,
+             std::ostream& out_stream = std::cout,
+             std::ostream& err_stream = std::cerr);
+    void log(const boost::format& message, const std::string& sysName,
+             const libsarus::LogLevel& logLevel,
+             std::ostream& out_stream = std::cout,
+             std::ostream& err_stream = std::cerr);
+    void logErrorTrace(const libsarus::Error& error, const std::string& sysName,
+                       std::ostream& errStream = std::cerr);
     void setLevel(libsarus::LogLevel logLevel) { level = logLevel; };
     libsarus::LogLevel getLevel() { return level; };
 
-private:
+  private:
     Logger();
     Logger(const Logger&) = delete;
     Logger(Logger&&) = delete;
 
     std::string makeSubmessageWithTimestamp(libsarus::LogLevel logLevel) const;
-    std::string makeSubmessageWithSarusInstanceID(libsarus::LogLevel logLevel) const;
-    std::string makeSubmessageWithSystemName(   libsarus::LogLevel logLevel,
-                                                const std::string& systemName) const;
+    std::string makeSubmessageWithSarusInstanceID(
+        libsarus::LogLevel logLevel) const;
+    std::string makeSubmessageWithSystemName(
+        libsarus::LogLevel logLevel, const std::string& systemName) const;
     std::string makeSubmessageWithLogLevel(libsarus::LogLevel logLevel) const;
 
-private:
+  private:
     libsarus::LogLevel level;
 };
 
-}
+}  // namespace libsarus
 
 #endif

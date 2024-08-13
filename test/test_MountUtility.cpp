@@ -9,20 +9,20 @@
  */
 
 #include <string>
+
 #include <sys/mount.h>
 
 #include <gtest/gtest.h>
 
-#include "aux/filesystem.hpp"
 #include "PathRAII.hpp"
 #include "Utility.hpp"
-
+#include "aux/filesystem.hpp"
 
 namespace libsarus {
 namespace test {
 
 class MountUtilitiesTestGroup : public testing::Test {
-protected:
+  protected:
 };
 
 TEST_F(MountUtilitiesTestGroup, get_validated_mount_source_test) {
@@ -35,12 +35,14 @@ TEST_F(MountUtilitiesTestGroup, get_validated_mount_source_test) {
     EXPECT_THROW(libsarus::mount::getValidatedMountSource(""), libsarus::Error);
 
     // Test non-existing directory
-    EXPECT_THROW(libsarus::mount::getValidatedMountSource(source_dir_1), libsarus::Error);
+    EXPECT_THROW(libsarus::mount::getValidatedMountSource(source_dir_1),
+                 libsarus::Error);
 
     // Test existing directory
     libsarus::filesystem::createFoldersIfNecessary(source_dir_2);
     auto* expected = realpath(source_dir_2.c_str(), NULL);
-    EXPECT_EQ(libsarus::mount::getValidatedMountSource(source_dir_2), boost::filesystem::path(expected));
+    EXPECT_EQ(libsarus::mount::getValidatedMountSource(source_dir_2),
+              boost::filesystem::path(expected));
 
     // Cleanup
     free(expected);
@@ -48,36 +50,50 @@ TEST_F(MountUtilitiesTestGroup, get_validated_mount_source_test) {
 }
 
 TEST_F(MountUtilitiesTestGroup, get_validated_mount_destination_test) {
-    auto bundleDirRAII = libsarus::PathRAII{libsarus::filesystem::makeUniquePathWithRandomSuffix(boost::filesystem::absolute("test-bundle-dir"))};
+    auto bundleDirRAII =
+        libsarus::PathRAII{libsarus::filesystem::makeUniquePathWithRandomSuffix(
+            boost::filesystem::absolute("test-bundle-dir"))};
     const auto& bundleDir = bundleDirRAII.getPath();
     auto rootfsDir = bundleDir / "rootfs";
-    libsarus::filesystem::createFoldersIfNecessary(bundleDir / "overlay/rootfs-lower");
+    libsarus::filesystem::createFoldersIfNecessary(bundleDir /
+                                                   "overlay/rootfs-lower");
 
     // Test invalid input arguments
-    EXPECT_THROW(libsarus::mount::getValidatedMountDestination("", rootfsDir), libsarus::Error);
+    EXPECT_THROW(libsarus::mount::getValidatedMountDestination("", rootfsDir),
+                 libsarus::Error);
 
     // Test mount on other device
     auto otherDeviceDir = boost::filesystem::path{"/otherDevice"};
     libsarus::filesystem::createFoldersIfNecessary(rootfsDir / otherDeviceDir);
-    auto imageSquashfs = boost::filesystem::path{__FILE__}.parent_path() / "test_image.squashfs";
-    libsarus::mount::loopMountSquashfs(imageSquashfs, rootfsDir / otherDeviceDir);
-    EXPECT_THROW(libsarus::mount::getValidatedMountDestination(otherDeviceDir, rootfsDir), libsarus::Error);
+    auto imageSquashfs =
+        boost::filesystem::path{__FILE__}.parent_path() / "test_image.squashfs";
+    libsarus::mount::loopMountSquashfs(imageSquashfs,
+                                       rootfsDir / otherDeviceDir);
+    EXPECT_THROW(libsarus::mount::getValidatedMountDestination(otherDeviceDir,
+                                                               rootfsDir),
+                 libsarus::Error);
     EXPECT_EQ(umount((rootfsDir / otherDeviceDir).c_str()), 0);
 
     // Test non-existing mount point
     auto nonExistingDir = boost::filesystem::path{"/nonExistingMountPoint"};
     auto expected = rootfsDir / nonExistingDir;
-    EXPECT_EQ(libsarus::mount::getValidatedMountDestination(nonExistingDir, rootfsDir), expected);
+    EXPECT_EQ(libsarus::mount::getValidatedMountDestination(nonExistingDir,
+                                                            rootfsDir),
+              expected);
 
     // Test existing mount point
     auto existingDir = boost::filesystem::path{"/file_in_squashfs_image"};
     expected = rootfsDir / existingDir;
     libsarus::filesystem::createFoldersIfNecessary(expected);
-    EXPECT_EQ(libsarus::mount::getValidatedMountDestination(existingDir, rootfsDir), expected);
+    EXPECT_EQ(
+        libsarus::mount::getValidatedMountDestination(existingDir, rootfsDir),
+        expected);
 }
 
 TEST_F(MountUtilitiesTestGroup, bindMount) {
-    auto tempDirRAII = libsarus::PathRAII{libsarus::filesystem::makeUniquePathWithRandomSuffix("/tmp/sarus-test-common-bindmount")};
+    auto tempDirRAII =
+        libsarus::PathRAII{libsarus::filesystem::makeUniquePathWithRandomSuffix(
+            "/tmp/sarus-test-common-bindmount")};
     const auto& tempDir = tempDirRAII.getPath();
     auto fromDir = tempDir / "from";
     auto toDir = tempDir / "to";
@@ -92,14 +108,17 @@ TEST_F(MountUtilitiesTestGroup, bindMount) {
     EXPECT_TRUE(boost::filesystem::exists(toDir / "file"));
 
     // check that mounted directory is writable
-    libsarus::filesystem::createFileIfNecessary(toDir / "file-successfull-write-attempt");
+    libsarus::filesystem::createFileIfNecessary(
+        toDir / "file-successfull-write-attempt");
 
     // cleanup
     EXPECT_EQ(umount(toDir.c_str()), 0);
 }
 
 TEST_F(MountUtilitiesTestGroup, bindMountReadOnly) {
-    auto tempDirRAII = libsarus::PathRAII{libsarus::filesystem::makeUniquePathWithRandomSuffix("/tmp/sarus-test-common-bindmount")};
+    auto tempDirRAII =
+        libsarus::PathRAII{libsarus::filesystem::makeUniquePathWithRandomSuffix(
+            "/tmp/sarus-test-common-bindmount")};
     const auto& tempDir = tempDirRAII.getPath();
     auto fromDir = tempDir / "from";
     auto toDir = tempDir / "to";
@@ -114,14 +133,18 @@ TEST_F(MountUtilitiesTestGroup, bindMountReadOnly) {
     EXPECT_TRUE(boost::filesystem::exists(toDir / "file"));
 
     // check that mounted directory is read-only
-    EXPECT_THROW(libsarus::filesystem::createFileIfNecessary(toDir / "file-failed-write-attempt"), libsarus::Error);
+    EXPECT_THROW(libsarus::filesystem::createFileIfNecessary(
+                     toDir / "file-failed-write-attempt"),
+                 libsarus::Error);
 
     // cleanup
     EXPECT_EQ(umount(toDir.c_str()), 0);
 }
 
 TEST_F(MountUtilitiesTestGroup, bindMountRecursive) {
-    auto tempDirRAII = libsarus::PathRAII{libsarus::filesystem::makeUniquePathWithRandomSuffix("/tmp/sarus-test-common-bindmount")};
+    auto tempDirRAII =
+        libsarus::PathRAII{libsarus::filesystem::makeUniquePathWithRandomSuffix(
+            "/tmp/sarus-test-common-bindmount")};
     const auto& tempDir = tempDirRAII.getPath();
 
     auto a = tempDir / "a";
@@ -149,15 +172,20 @@ TEST_F(MountUtilitiesTestGroup, bindMountRecursive) {
 }
 
 TEST_F(MountUtilitiesTestGroup, loopMountSquashfs) {
-    auto mountPointRAII = libsarus::PathRAII{libsarus::filesystem::makeUniquePathWithRandomSuffix("/tmp/sarus-test-common-loopMountSquashfs")};
+    auto mountPointRAII =
+        libsarus::PathRAII{libsarus::filesystem::makeUniquePathWithRandomSuffix(
+            "/tmp/sarus-test-common-loopMountSquashfs")};
     const auto& mountPoint = mountPointRAII.getPath();
     libsarus::filesystem::createFoldersIfNecessary(mountPoint);
 
-    auto imageSquashfs = boost::filesystem::path{__FILE__}.parent_path() / "test_image.squashfs";
+    auto imageSquashfs =
+        boost::filesystem::path{__FILE__}.parent_path() / "test_image.squashfs";
     libsarus::mount::loopMountSquashfs(imageSquashfs, mountPoint);
-    EXPECT_TRUE(boost::filesystem::exists(mountPoint / "file_in_squashfs_image"));
+    EXPECT_TRUE(
+        boost::filesystem::exists(mountPoint / "file_in_squashfs_image"));
 
     EXPECT_EQ(umount(mountPoint.string().c_str()), 0);
 }
 
-}}
+}  // namespace test
+}  // namespace libsarus

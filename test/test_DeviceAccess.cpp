@@ -8,16 +8,15 @@
  *
  */
 
-#include "DeviceAccess.hpp"
-
 #include <gtest/gtest.h>
 
+#include "DeviceAccess.hpp"
 
 namespace libsarus {
 namespace test {
 
 class DeviceAccessTestGroup : public testing::Test {
-protected:
+  protected:
 };
 
 TEST_F(DeviceAccessTestGroup, valid_inputs) {
@@ -56,7 +55,7 @@ TEST_F(DeviceAccessTestGroup, invalid_inputs) {
     // empty string
     EXPECT_THROW(DeviceAccess(""), libsarus::Error);
 
-    //string longer than 3 characters
+    // string longer than 3 characters
     EXPECT_THROW(DeviceAccess("rwma"), libsarus::Error);
 
     // characters outside 'rwm'
@@ -81,4 +80,5 @@ TEST_F(DeviceAccessTestGroup, invalid_inputs) {
     EXPECT_THROW(DeviceAccess("RWM"), libsarus::Error);
 }
 
-}}
+}  // namespace test
+}  // namespace libsarus
