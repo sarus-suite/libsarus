@@ -27,7 +27,7 @@ You can develop, build, and test `libsarus` directly on your host machine.
 Use `ci/check_host.sh --no-dep` to check build requirements (except for Spack dependencies).
 
 <details>
-  <summary>Procedure below</summary>
+  <summary>Click here for procedure</summary>
 
 #### Clone
 
@@ -87,7 +87,7 @@ Alternatively, you can build and test `libsarus` in a container image while doin
 Use `ci/check_host.sh --no-dep` to check build requirements (except for Docker).
 
 <details>
-  <summary>Procedure below</summary>
+  <summary>Click here for procedure</summary>
 
 #### Clone
 
