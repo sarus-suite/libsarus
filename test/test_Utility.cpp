@@ -66,7 +66,7 @@ TEST_F(UtilityTestSuite, getEnvironmentVariable) {
 }
 
 TEST_F(UtilityTestSuite, setEnvironmentVariable) {
-    auto testKey = std::string{"SARUS_UNITTEST_GETVAR"};
+    auto testKey = std::string{"SARUS_UNITTEST_SETVAR"};
     auto testValue = std::string{"dummy"};
 
     // test with variable not set
