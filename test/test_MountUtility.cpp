@@ -21,11 +21,11 @@
 namespace libsarus {
 namespace test {
 
-class MountUtilitiesTestGroup : public testing::Test {
+class MountUtilitiesTestSuite : public testing::Test {
 protected:
 };
 
-TEST_F(MountUtilitiesTestGroup, get_validated_mount_source_test) {
+TEST_F(MountUtilitiesTestSuite, get_validated_mount_source_test) {
     std::string mount_point("./MUMountPoint");
     std::string source_dir_1("./mount_utilities_source_1");
     libsarus::PathRAII source_dir_2RAII("./mount_utilities_source_2");
@@ -47,7 +47,7 @@ TEST_F(MountUtilitiesTestGroup, get_validated_mount_source_test) {
     boost::filesystem::remove_all(source_dir_2);
 }
 
-TEST_F(MountUtilitiesTestGroup, get_validated_mount_destination_test) {
+TEST_F(MountUtilitiesTestSuite, get_validated_mount_destination_test) {
     auto bundleDirRAII = libsarus::PathRAII{libsarus::filesystem::makeUniquePathWithRandomSuffix(boost::filesystem::absolute("test-bundle-dir"))}; 
     const auto& bundleDir = bundleDirRAII.getPath();
     auto rootfsDir = bundleDir / "rootfs";
@@ -76,7 +76,7 @@ TEST_F(MountUtilitiesTestGroup, get_validated_mount_destination_test) {
     EXPECT_EQ(libsarus::mount::getValidatedMountDestination(existingDir, rootfsDir), expected);
 }
 
-TEST_F(MountUtilitiesTestGroup, bindMount) {
+TEST_F(MountUtilitiesTestSuite, bindMount) {
     auto tempDirRAII = libsarus::PathRAII{libsarus::filesystem::makeUniquePathWithRandomSuffix("/tmp/sarus-test-common-bindmount")};
     const auto& tempDir = tempDirRAII.getPath();
     auto fromDir = tempDir / "from";
@@ -98,7 +98,7 @@ TEST_F(MountUtilitiesTestGroup, bindMount) {
     EXPECT_EQ(umount(toDir.c_str()), 0);
 }
 
-TEST_F(MountUtilitiesTestGroup, bindMountReadOnly) {
+TEST_F(MountUtilitiesTestSuite, bindMountReadOnly) {
     auto tempDirRAII = libsarus::PathRAII{libsarus::filesystem::makeUniquePathWithRandomSuffix("/tmp/sarus-test-common-bindmount")};
     const auto& tempDir = tempDirRAII.getPath();
     auto fromDir = tempDir / "from";
@@ -120,7 +120,7 @@ TEST_F(MountUtilitiesTestGroup, bindMountReadOnly) {
     EXPECT_EQ(umount(toDir.c_str()), 0);
 }
 
-TEST_F(MountUtilitiesTestGroup, bindMountRecursive) {
+TEST_F(MountUtilitiesTestSuite, bindMountRecursive) {
     auto tempDirRAII = libsarus::PathRAII{libsarus::filesystem::makeUniquePathWithRandomSuffix("/tmp/sarus-test-common-bindmount")};
     const auto& tempDir = tempDirRAII.getPath();
 
@@ -148,7 +148,7 @@ TEST_F(MountUtilitiesTestGroup, bindMountRecursive) {
     EXPECT_EQ(umount(a.c_str()), 0);
 }
 
-TEST_F(MountUtilitiesTestGroup, loopMountSquashfs) {
+TEST_F(MountUtilitiesTestSuite, loopMountSquashfs) {
     auto mountPointRAII = libsarus::PathRAII{libsarus::filesystem::makeUniquePathWithRandomSuffix("/tmp/sarus-test-common-loopMountSquashfs")};
     const auto& mountPoint = mountPointRAII.getPath();
     libsarus::filesystem::createFoldersIfNecessary(mountPoint);

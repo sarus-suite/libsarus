@@ -22,11 +22,11 @@
 namespace libsarus {
 namespace test {
 
-class CLIArgumentsTestGroup : public testing::Test {
+class CLIArgumentsTestSuite : public testing::Test {
 protected:
 };
 
-TEST_F(CLIArgumentsTestGroup, serialize) {
+TEST_F(CLIArgumentsTestSuite, serialize) {
     auto args = libsarus::CLIArguments{"command", "arg0", "arg1"};
 
     std::stringstream os;
@@ -35,7 +35,7 @@ TEST_F(CLIArgumentsTestGroup, serialize) {
     EXPECT_EQ(os.str(), std::string{"[\"command\", \"arg0\", \"arg1\"]"});
 };
 
-TEST_F(CLIArgumentsTestGroup, deserialize) {
+TEST_F(CLIArgumentsTestSuite, deserialize) {
     std::stringstream is("[\"command\", \"arg0\", \"arg1\"]");
 
     libsarus::CLIArguments args;
@@ -45,7 +45,7 @@ TEST_F(CLIArgumentsTestGroup, deserialize) {
     EXPECT_EQ(args, expected);
 };
 
-TEST_F(CLIArgumentsTestGroup, string) {
+TEST_F(CLIArgumentsTestSuite, string) {
     std::stringstream is("[\"command\", \"arg0\", \"arg1\"]");
 
     libsarus::CLIArguments args;

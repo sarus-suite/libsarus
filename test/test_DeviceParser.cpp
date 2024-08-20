@@ -85,9 +85,9 @@ private:
     bool isParseErrorExpected = false;
 };
 
-class DeviceParserTestGroup : public testing::Test {
+class DeviceParserTestSuite : public testing::Test {
 protected:
-    DeviceParserTestGroup() {
+    DeviceParserTestSuite() {
         auto testDevice = boost::filesystem::path("/dev/sarusTestDevice0");
         auto testDeviceMajorID = 511u;
         auto testDeviceMinorID = 511u;
@@ -97,14 +97,14 @@ protected:
         aux::filesystem::createCharacterDeviceFile(testDevice, testDeviceMajorID, testDeviceMinorID);
     }
 
-    ~DeviceParserTestGroup() override {
+    ~DeviceParserTestSuite() override {
         auto testDevice = boost::filesystem::path("/dev/sarusTestDevice0");
         boost::filesystem::remove(testDevice);
     }
 
 };
 
-TEST_F(DeviceParserTestGroup, basic_checks) {
+TEST_F(DeviceParserTestSuite, basic_checks) {
     // empty request
     DeviceParserChecker{""}.expectParseError();
 
@@ -113,7 +113,7 @@ TEST_F(DeviceParserTestGroup, basic_checks) {
     DeviceParserChecker{"/dev/sarusTestDevice0:/dev/device1:/dev/device2:/dev/device3:rw"}.expectParseError();
 }
 
-TEST_F(DeviceParserTestGroup, source_and_destination) {
+TEST_F(DeviceParserTestSuite, source_and_destination) {
     // only source path provided
     DeviceParserChecker{"/dev/sarusTestDevice0"}
         .expectSource("/dev/sarusTestDevice0")
@@ -134,7 +134,7 @@ TEST_F(DeviceParserTestGroup, source_and_destination) {
     DeviceParserChecker{":"}.expectParseError();
 }
 
-TEST_F(DeviceParserTestGroup, access) {
+TEST_F(DeviceParserTestSuite, access) {
     // only source path provided
     DeviceParserChecker{"/dev/sarusTestDevice0:rw"}
         .expectSource("/dev/sarusTestDevice0")
