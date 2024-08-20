@@ -21,11 +21,11 @@
 namespace libsarus {
 namespace test {
 
-class PasswdDBTestGroup : public testing::Test {
+class PasswdDBTest : public testing::Test {
 protected:
     PasswdDB passwd{};
 
-    PasswdDBTestGroup() {
+    PasswdDBTest() {
         // create entry
         auto entry0 = PasswdDB::Entry{
             "loginName0",
@@ -49,7 +49,7 @@ protected:
     }
 };
 
-TEST_F(PasswdDBTestGroup, testRead) {
+TEST_F(PasswdDBTest, testRead) {
     // create file
     auto path = libsarus::PathRAII{boost::filesystem::path{"/tmp/test-passwd-file"}};
     const auto& file = path.getPath();
@@ -92,7 +92,7 @@ TEST_F(PasswdDBTestGroup, testRead) {
     EXPECT_FALSE(entries[2].userCommandInterpreter);
 }
 
-TEST_F(PasswdDBTestGroup, testWrite) {
+TEST_F(PasswdDBTest, testWrite) {
     auto path = libsarus::PathRAII{boost::filesystem::path{"/tmp/test-passwd-file"}};
     const auto& file = path.getPath();
 
@@ -107,12 +107,12 @@ TEST_F(PasswdDBTestGroup, testWrite) {
     EXPECT_EQ(data, expectedData);
 }
 
-TEST_F(PasswdDBTestGroup, testGetUsername) {
+TEST_F(PasswdDBTest, testGetUsername) {
     EXPECT_EQ(passwd.getUsername(1000), std::string{"loginName0"});
     EXPECT_EQ(passwd.getUsername(2000), std::string{"loginName1"});
 }
 
-TEST_F(PasswdDBTestGroup, testGetHomeDirectory) {
+TEST_F(PasswdDBTest, testGetHomeDirectory) {
     EXPECT_EQ(passwd.getHomeDirectory(1000), boost::filesystem::path{"/home/dir0"});
     EXPECT_EQ(passwd.getHomeDirectory(2000), boost::filesystem::path{"/home/dir1"});
 }

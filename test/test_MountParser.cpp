@@ -110,11 +110,11 @@ private:
     bool isParseErrorExpected = false;
 };
 
-class MountParserTestGroup : public testing::Test {
+class MountParserTest : public testing::Test {
 protected:
 };
 
-TEST_F(MountParserTestGroup, mount_type) {
+TEST_F(MountParserTest, mount_type) {
     // bind
     MountParserChecker{"type=bind,source=/src,destination=/dest"};
 
@@ -126,7 +126,7 @@ TEST_F(MountParserTestGroup, mount_type) {
     MountParserChecker{"type=invalid,source=/src,nation=/dest"}.expectParseError();
 }
 
-TEST_F(MountParserTestGroup, source_and_destination_of_bind_mount) {
+TEST_F(MountParserTest, source_and_destination_of_bind_mount) {
     MountParserChecker{"type=bind,source=/src,destination=/dest"}
         .expectSource("/src")
         .expectDestination("/dest");
@@ -164,7 +164,7 @@ TEST_F(MountParserTestGroup, source_and_destination_of_bind_mount) {
     MountParserChecker{"type=bind,source=/src,destination=/opt/sarus"}.expectParseError();
 }
 
-TEST_F(MountParserTestGroup, user_flags_of_bind_mount) {
+TEST_F(MountParserTest, user_flags_of_bind_mount) {
     // no flags: defaults to recursive, private, read/write mount
     MountParserChecker{"type=bind,source=/src,destination=/dest"}
         .expectFlags(MS_REC | MS_PRIVATE);
@@ -178,7 +178,7 @@ TEST_F(MountParserTestGroup, user_flags_of_bind_mount) {
     MountParserChecker{"type=bind,source=/src,destination=dest,bind-propagation=recursive"}.expectParseError();
 }
 
-TEST_F(MountParserTestGroup, site_flags_of_bind_mount) {
+TEST_F(MountParserTest, site_flags_of_bind_mount) {
     // no flags: defaults to recursive, private, read/write mount
     MountParserChecker{"type=bind,source=/src,destination=/dest"}
         .parseAsSiteMount().expectFlags(MS_REC | MS_PRIVATE);
