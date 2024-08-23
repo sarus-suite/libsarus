@@ -27,11 +27,11 @@
 namespace libsarus {
 namespace test {
 
-class UtilityTestSuite : public testing::Test {
+class UtilityTest : public testing::Test {
 protected:
 };
 
-TEST_F(UtilityTestSuite, parseEnvironmentVariables) {
+TEST_F(UtilityTest, parseEnvironmentVariables) {
     // empty environment
     {
         auto env = std::array<char*, 1>{nullptr};
@@ -52,7 +52,7 @@ TEST_F(UtilityTestSuite, parseEnvironmentVariables) {
     }
 }
 
-TEST_F(UtilityTestSuite, getEnvironmentVariable) {
+TEST_F(UtilityTest, getEnvironmentVariable) {
     auto testKey = std::string{"SARUS_UNITTEST_GETVAR"};
     auto testValue = std::string{"dummy"};
 
@@ -65,7 +65,7 @@ TEST_F(UtilityTestSuite, getEnvironmentVariable) {
     EXPECT_EQ(libsarus::environment::getVariable(testKey), testValue);
 }
 
-TEST_F(UtilityTestSuite, setEnvironmentVariable) {
+TEST_F(UtilityTest, setEnvironmentVariable) {
     auto testKey = std::string{"SARUS_UNITTEST_SETVAR"};
     auto testValue = std::string{"dummy"};
 
@@ -93,7 +93,7 @@ TEST_F(UtilityTestSuite, setEnvironmentVariable) {
     EXPECT_EQ(std::string(envValue), testValue);
 }
 
-TEST_F(UtilityTestSuite, parseKeyValuePair) {
+TEST_F(UtilityTest, parseKeyValuePair) {
     auto pair = libsarus::string::parseKeyValuePair("key=value");
     EXPECT_EQ(pair.first, std::string("key"));
     EXPECT_EQ(pair.second, std::string("value"));
@@ -120,7 +120,7 @@ TEST_F(UtilityTestSuite, parseKeyValuePair) {
     EXPECT_THROW(libsarus::string::parseKeyValuePair("=value"), libsarus::Error);
 }
 
-TEST_F(UtilityTestSuite, switchIdentity) {
+TEST_F(UtilityTest, switchIdentity) {
     auto testDirRAII = libsarus::PathRAII{ "./sarus-test-switchIdentity" };
     libsarus::filesystem::createFileIfNecessary(testDirRAII.getPath() / "file", 0, 0);
     boost::filesystem::permissions(testDirRAII.getPath(), boost::filesystem::owner_all);
@@ -148,7 +148,7 @@ TEST_F(UtilityTestSuite, switchIdentity) {
     EXPECT_TRUE(boost::filesystem::exists(testDirRAII.getPath() / "file"));
 }
 
-TEST_F(UtilityTestSuite, setFilesystemUid) {
+TEST_F(UtilityTest, setFilesystemUid) {
     // switch to unprivileged user
     uid_t unprivilegedUid;
     gid_t unprivilegedGid;
@@ -176,14 +176,14 @@ TEST_F(UtilityTestSuite, setFilesystemUid) {
     EXPECT_EQ((uid_t)setfsuid(-1), rootIdentity.uid);
 }
 
-TEST_F(UtilityTestSuite, executeCommand) {
+TEST_F(UtilityTest, executeCommand) {
     EXPECT_EQ(libsarus::process::executeCommand("printf stdout"), std::string{"stdout"});
     EXPECT_EQ(libsarus::process::executeCommand("bash -c 'printf stderr >&2'"), std::string{"stderr"});
     EXPECT_THROW(libsarus::process::executeCommand("false"), libsarus::Error);
     EXPECT_THROW(libsarus::process::executeCommand("command-that-doesnt-exist-xyz"), libsarus::Error);
 }
 
-TEST_F(UtilityTestSuite, makeUniquePathWithRandomSuffix) {
+TEST_F(UtilityTest, makeUniquePathWithRandomSuffix) {
     auto path = boost::filesystem::path{"/tmp/file"};
     auto uniquePath = libsarus::filesystem::makeUniquePathWithRandomSuffix(path);
 
@@ -192,7 +192,7 @@ TEST_F(UtilityTestSuite, makeUniquePathWithRandomSuffix) {
     EXPECT_TRUE(boost::regex_match(uniquePath.string().c_str(), matches, expectedRegex));
 }
 
-TEST_F(UtilityTestSuite, createFoldersIfNecessary) {
+TEST_F(UtilityTest, createFoldersIfNecessary) {
     if (boost::filesystem::exists("/tmp/grandparent"))
         boost::filesystem::remove_all("/tmp/grandparent");
 
@@ -207,7 +207,7 @@ TEST_F(UtilityTestSuite, createFoldersIfNecessary) {
     boost::filesystem::remove_all("/tmp/grandparent");
 }
 
-TEST_F(UtilityTestSuite, createFileIfNecessary) {
+TEST_F(UtilityTest, createFileIfNecessary) {
     if (boost::filesystem::exists("/tmp/testFile"))
         boost::filesystem::remove_all("/tmp/testFile");
 
@@ -220,7 +220,7 @@ TEST_F(UtilityTestSuite, createFileIfNecessary) {
     boost::filesystem::remove_all("/tmp/testFile");
 }
 
-TEST_F(UtilityTestSuite, copyFile) {
+TEST_F(UtilityTest, copyFile) {
     auto testDirRAII = libsarus::PathRAII{ "./sarus-test-copyFile" };
     const auto& testDir = testDirRAII.getPath();
     libsarus::filesystem::createFileIfNecessary(testDir / "src");
@@ -241,7 +241,7 @@ TEST_F(UtilityTestSuite, copyFile) {
     boost::filesystem::remove_all(testDir);
 }
 
-TEST_F(UtilityTestSuite, copyFolder) {
+TEST_F(UtilityTest, copyFolder) {
     if (boost::filesystem::exists("/tmp/src-folder"))
         boost::filesystem::remove_all("/tmp/src-folder");
     if (boost::filesystem::exists("/tmp/dst-folder"))
@@ -263,7 +263,7 @@ TEST_F(UtilityTestSuite, copyFolder) {
     boost::filesystem::remove_all("/tmp/src-folder");
 }
 
-TEST_F(UtilityTestSuite, countFilesInDirectory) {
+TEST_F(UtilityTest, countFilesInDirectory) {
     // nominal usage
     {
         auto testDir = boost::filesystem::path("/tmp/file-count-test");
@@ -292,7 +292,7 @@ TEST_F(UtilityTestSuite, countFilesInDirectory) {
     }
 }
 
-TEST_F(UtilityTestSuite, parseMap) {
+TEST_F(UtilityTest, parseMap) {
     // empty list
     {
         auto map = libsarus::string::parseMap("");
@@ -366,7 +366,7 @@ TEST_F(UtilityTestSuite, parseMap) {
     }
 }
 
-TEST_F(UtilityTestSuite, realpathWithinRootfs) {
+TEST_F(UtilityTest, realpathWithinRootfs) {
     auto path = libsarus::PathRAII{libsarus::filesystem::makeUniquePathWithRandomSuffix("/tmp/sarus-rootfs")};
     const auto& rootfs = path.getPath();
 
@@ -417,7 +417,7 @@ TEST_F(UtilityTestSuite, realpathWithinRootfs) {
     EXPECT_EQ(libsarus::filesystem::realpathWithinRootfs(rootfs, "/dirX/link_absolute_with_no_common_path"), "/dir0/dir1");
 }
 
-TEST_F(UtilityTestSuite, getSharedLibLinkerName) {
+TEST_F(UtilityTest, getSharedLibLinkerName) {
     EXPECT_EQ(libsarus::sharedlibs::getLinkerName("file.so"), "file.so");
     EXPECT_EQ(libsarus::sharedlibs::getLinkerName("file.so.1"), "file.so");
     EXPECT_EQ(libsarus::sharedlibs::getLinkerName("file.so.1.0"), "file.so");
@@ -427,7 +427,7 @@ TEST_F(UtilityTestSuite, getSharedLibLinkerName) {
     EXPECT_THROW(libsarus::sharedlibs::getLinkerName("not-a-shared-lib.soa"), libsarus::Error);
 }
 
-TEST_F(UtilityTestSuite, isSharedLib) {
+TEST_F(UtilityTest, isSharedLib) {
     EXPECT_EQ(libsarus::filesystem::isSharedLib("/dir/libc.so"), true);
     EXPECT_EQ(libsarus::filesystem::isSharedLib("libc.so"), true);
     EXPECT_EQ(libsarus::filesystem::isSharedLib("libc.so.1"), true);
@@ -439,7 +439,7 @@ TEST_F(UtilityTestSuite, isSharedLib) {
     EXPECT_EQ(libsarus::filesystem::isSharedLib("ld.so.cache"), false);
 }
 
-TEST_F(UtilityTestSuite, parseSharedLibAbi) {
+TEST_F(UtilityTest, parseSharedLibAbi) {
     EXPECT_THROW(libsarus::sharedlibs::parseAbi("invalid"), libsarus::Error);
     EXPECT_EQ(libsarus::sharedlibs::parseAbi("libc.so"), (std::vector<std::string>{}));
     EXPECT_EQ(libsarus::sharedlibs::parseAbi("libc.so.1"), (std::vector<std::string>{"1"}));
@@ -450,7 +450,7 @@ TEST_F(UtilityTestSuite, parseSharedLibAbi) {
     EXPECT_EQ(libsarus::sharedlibs::parseAbi("libfoo.so.0"), (std::vector<std::string>{"0"}));
 }
 
-TEST_F(UtilityTestSuite, resolveSharedLibAbi) {
+TEST_F(UtilityTest, resolveSharedLibAbi) {
     auto testDirRaii = libsarus::PathRAII{
         libsarus::filesystem::makeUniquePathWithRandomSuffix("/tmp/sarus-test-utility-resolveSharedLibAbi")
     };
@@ -506,7 +506,7 @@ TEST_F(UtilityTestSuite, resolveSharedLibAbi) {
     EXPECT_EQ(libsarus::sharedlibs::resolveAbi(testDir / "subdir" / "libtest.so.234"), (std::vector<std::string>{"234"}));
 }
 
-TEST_F(UtilityTestSuite, getSharedLibSoname) {
+TEST_F(UtilityTest, getSharedLibSoname) {
     auto dummyLibsDir = boost::filesystem::path{__FILE__}
         .parent_path() / "dummy_libs";
     EXPECT_EQ(libsarus::sharedlibs::getSoname(dummyLibsDir / "libc.so.6-host", "readelf"), std::string("libc.so.6"));
@@ -514,7 +514,7 @@ TEST_F(UtilityTestSuite, getSharedLibSoname) {
     EXPECT_THROW(libsarus::sharedlibs::getSoname(dummyLibsDir / "lib_dummy_0.so", "readelf"), libsarus::Error);
 }
 
-TEST_F(UtilityTestSuite, isLibc) {
+TEST_F(UtilityTest, isLibc) {
     // libc
     EXPECT_TRUE(libsarus::filesystem::isLibc("libc.so"));
     EXPECT_TRUE(libsarus::filesystem::isLibc("libc.so.6"));
@@ -531,7 +531,7 @@ TEST_F(UtilityTestSuite, isLibc) {
     EXPECT_FALSE(libsarus::filesystem::isLibc("libc_bogus.so"));
 }
 
-TEST_F(UtilityTestSuite, is64bitSharedLib) {
+TEST_F(UtilityTest, is64bitSharedLib) {
     auto dummyLibsDir = boost::filesystem::path{__FILE__}
         .parent_path() / "dummy_libs";
     EXPECT_TRUE(libsarus::sharedlibs::is64bitSharedLib(dummyLibsDir / "libc.so.6-host", "readelf"));
@@ -539,7 +539,7 @@ TEST_F(UtilityTestSuite, is64bitSharedLib) {
     EXPECT_FALSE(libsarus::sharedlibs::is64bitSharedLib(dummyLibsDir / "libc.so.6-32bit-container", "readelf"));
 }
 
-TEST_F(UtilityTestSuite, serializeJSON) {
+TEST_F(UtilityTest, serializeJSON) {
     namespace rj = rapidjson;
     auto json = rj::Document{rj::kObjectType};
     auto& allocator = json.GetAllocator();
@@ -557,11 +557,11 @@ TEST_F(UtilityTestSuite, serializeJSON) {
     EXPECT_EQ(libsarus::string::removeWhitespaces(actual), expected);
 }
 
-TEST_F(UtilityTestSuite, setCpuAffinity_invalid_argument) {
+TEST_F(UtilityTest, setCpuAffinity_invalid_argument) {
     EXPECT_THROW(libsarus::process::setCpuAffinity({}), libsarus::Error); // no CPUs
 }
 
-TEST_F(UtilityTestSuite, getCpuAffinity_setCpuAffinity) {
+TEST_F(UtilityTest, getCpuAffinity_setCpuAffinity) {
     auto initialCpus = libsarus::process::getCpuAffinity();
 
     if(initialCpus.size() <= 1) {

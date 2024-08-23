@@ -21,19 +21,19 @@
 namespace libsarus {
 namespace test {
 
-class LockfileTestSuite : public testing::Test {
+class LockfileTest : public testing::Test {
 protected:
     boost::filesystem::path fileToLock = libsarus::filesystem::makeUniquePathWithRandomSuffix("/tmp/file-to-lock");
     boost::filesystem::path lockfile = fileToLock.string() + ".lock";
 };
 
-TEST_F(LockfileTestSuite, creation_of_physical_lockfile) {
+TEST_F(LockfileTest, creation_of_physical_lockfile) {
     EXPECT_FALSE(boost::filesystem::exists(lockfile));
     libsarus::Lockfile lock{fileToLock};
     EXPECT_TRUE(boost::filesystem::exists(lockfile));
 }
 
-TEST_F(LockfileTestSuite, lock_acquisition) {
+TEST_F(LockfileTest, lock_acquisition) {
     {
         libsarus::Lockfile lock{fileToLock};
     }
@@ -51,7 +51,7 @@ TEST_F(LockfileTestSuite, lock_acquisition) {
     }
 }
 
-TEST_F(LockfileTestSuite, move_constructor) {
+TEST_F(LockfileTest, move_constructor) {
     libsarus::Lockfile original{fileToLock};
     {
         libsarus::Lockfile moveConstructed{std::move(original)};
@@ -62,7 +62,7 @@ TEST_F(LockfileTestSuite, move_constructor) {
     libsarus::Lockfile newlock{fileToLock};
 }
 
-TEST_F(LockfileTestSuite, move_assignment) {
+TEST_F(LockfileTest, move_assignment) {
     libsarus::Lockfile original{fileToLock};
     {
         libsarus::Lockfile moveAssigned;

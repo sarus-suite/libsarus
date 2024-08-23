@@ -34,21 +34,21 @@ static bool lockAcquisitionDoesntThrow(const boost::filesystem::path &fileToLock
     return true;
 }
 
-class FlockTestSuite : public testing::Test {
+class FlockTest : public testing::Test {
 protected:
     boost::filesystem::path fileToLock = libsarus::filesystem::makeUniquePathWithRandomSuffix("/tmp/file-to-lock");
     boost::filesystem::path lockfile = fileToLock.string() + ".lock";
 
-    FlockTestSuite() {
+    FlockTest() {
         libsarus::filesystem::createFileIfNecessary(fileToLock);
     }
 
-    ~FlockTestSuite() override {
+    ~FlockTest() override {
         boost::filesystem::remove(fileToLock);
     }
 };
 
-TEST_F(FlockTestSuite, lock_is_released_when_the_object_is_destroyed) {
+TEST_F(FlockTest, lock_is_released_when_the_object_is_destroyed) {
     {
         libsarus::Logger::getInstance().setLevel(libsarus::LogLevel::DEBUG);
         libsarus::Flock lock{fileToLock, libsarus::Flock::Type::writeLock};
@@ -61,7 +61,7 @@ TEST_F(FlockTestSuite, lock_is_released_when_the_object_is_destroyed) {
     }
 }
 
-TEST_F(FlockTestSuite, move_constructor_moves_resources) {
+TEST_F(FlockTest, move_constructor_moves_resources) {
     libsarus::Flock original{fileToLock, libsarus::Flock::Type::writeLock};
     {
         libsarus::Flock moveConstructed{std::move(original)};
@@ -71,7 +71,7 @@ TEST_F(FlockTestSuite, move_constructor_moves_resources) {
     EXPECT_TRUE(lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::writeLock));
 }
 
-TEST_F(FlockTestSuite, move_assignment_moves_resources) {
+TEST_F(FlockTest, move_assignment_moves_resources) {
     libsarus::Flock original{fileToLock, libsarus::Flock::Type::writeLock};
     {
         libsarus::Flock moveAssigned;
@@ -82,7 +82,7 @@ TEST_F(FlockTestSuite, move_assignment_moves_resources) {
     EXPECT_TRUE(lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::writeLock));
 }
 
-TEST_F(FlockTestSuite, write_fails_if_resource_is_in_use) {
+TEST_F(FlockTest, write_fails_if_resource_is_in_use) {
     {
         libsarus::Flock lock{fileToLock, libsarus::Flock::Type::writeLock};
         EXPECT_THROW(libsarus::Flock(fileToLock, libsarus::Flock::Type::writeLock, 10_ms), libsarus::Error);
@@ -93,29 +93,29 @@ TEST_F(FlockTestSuite, write_fails_if_resource_is_in_use) {
     }
 }
 
-TEST_F(FlockTestSuite, concurrent_read_are_allowed) {
+TEST_F(FlockTest, concurrent_read_are_allowed) {
     libsarus::Flock lock{fileToLock, libsarus::Flock::Type::readLock};
     EXPECT_TRUE(lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::readLock));
 }
 
-TEST_F(FlockTestSuite, read_fails_if_resource_is_being_written) {
+TEST_F(FlockTest, read_fails_if_resource_is_being_written) {
     libsarus::Flock lock{fileToLock, libsarus::Flock::Type::writeLock};
     EXPECT_THROW(libsarus::Flock(fileToLock, libsarus::Flock::Type::readLock, 10_ms), libsarus::Error);
 }
 
-TEST_F(FlockTestSuite, convert_read_to_write) {
+TEST_F(FlockTest, convert_read_to_write) {
     libsarus::Flock lock{fileToLock, libsarus::Flock::Type::readLock};
     lock.convertToType(libsarus::Flock::Type::writeLock);
     EXPECT_THROW(libsarus::Flock(fileToLock, libsarus::Flock::Type::readLock, 10_ms), libsarus::Error);
 }
 
-TEST_F(FlockTestSuite, convert_write_to_read) {
+TEST_F(FlockTest, convert_write_to_read) {
     libsarus::Flock lock{fileToLock, libsarus::Flock::Type::writeLock};
     lock.convertToType(libsarus::Flock::Type::readLock);
     EXPECT_TRUE(lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::readLock));
 }
 
-TEST_F(FlockTestSuite, timeout_time_is_respected) {
+TEST_F(FlockTest, timeout_time_is_respected) {
     libsarus::Flock lock{fileToLock, libsarus::Flock::Type::writeLock};
 
     for (auto &timeout : {100, 500, 1000, 2000}) {

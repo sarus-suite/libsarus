@@ -23,7 +23,7 @@
 namespace libsarus {
 namespace test {
 
-class LoggerTestSuite : public testing::Test {
+class LoggerTest : public testing::Test {
 protected:
 };
 
@@ -75,7 +75,7 @@ private:
     std::string expectedPatternInStderr;
 };
 
-TEST_F(LoggerTestSuite, logger) {
+TEST_F(LoggerTest, logger) {
     const std::string generalMessage = "GENERAL message";
     const std::string debugMessage = "DEBUG message";
     const std::string infoMessage = "INFO message";

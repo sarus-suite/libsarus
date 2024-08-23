@@ -22,7 +22,7 @@
 namespace libsarus {
 namespace test {
 
-class ErrorTestSuite : public testing::Test {
+class ErrorTest : public testing::Test {
 protected:
     _DECLARE(FTT)
     _DECLARE(FTR)
@@ -63,7 +63,7 @@ protected:
     }
 };
 
-TEST_F(ErrorTestSuite, oneStackTraceEntry) {
+TEST_F(ErrorTest, oneStackTraceEntry) {
     try {
         functionThatThrows();
     }
@@ -76,7 +76,7 @@ TEST_F(ErrorTestSuite, oneStackTraceEntry) {
     }
 }
 
-TEST_F(ErrorTestSuite, twoStackTraceEntries) {
+TEST_F(ErrorTest, twoStackTraceEntries) {
     try {
         functionThatRethrows();
     }
@@ -91,7 +91,7 @@ TEST_F(ErrorTestSuite, twoStackTraceEntries) {
     }
 }
 
-TEST_F(ErrorTestSuite, fromStdException) {
+TEST_F(ErrorTest, fromStdException) {
     try {
         functionThatThrowsFromStdException();
     }
@@ -106,7 +106,7 @@ TEST_F(ErrorTestSuite, fromStdException) {
     }
 }
 
-TEST_F(ErrorTestSuite, oneStackTraceEntry_throwWithLogLevelDebug) {
+TEST_F(ErrorTest, oneStackTraceEntry_throwWithLogLevelDebug) {
     try {
         functionThatThrowsWithLogLevelDebug();
     }
@@ -119,7 +119,7 @@ TEST_F(ErrorTestSuite, oneStackTraceEntry_throwWithLogLevelDebug) {
     }
 }
 
-TEST_F(ErrorTestSuite, twoStackTraceEntries_rethrowWithLogLevelDebug) {
+TEST_F(ErrorTest, twoStackTraceEntries_rethrowWithLogLevelDebug) {
     try {
         functionThatRethrowsWithLogLevelDebug();
     }

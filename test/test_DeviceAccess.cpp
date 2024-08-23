@@ -16,11 +16,11 @@
 namespace libsarus {
 namespace test {
 
-class DeviceAccessTestSuite : public testing::Test {
+class DeviceAccessTest : public testing::Test {
 protected:
 };
 
-TEST_F(DeviceAccessTestSuite, valid_inputs) {
+TEST_F(DeviceAccessTest, valid_inputs) {
     auto access = DeviceAccess("rwm");
     EXPECT_EQ(access.string(), "rwm");
 
@@ -52,7 +52,7 @@ TEST_F(DeviceAccessTestSuite, valid_inputs) {
     EXPECT_EQ(access.string(), "wm");
 }
 
-TEST_F(DeviceAccessTestSuite, invalid_inputs) {
+TEST_F(DeviceAccessTest, invalid_inputs) {
     // empty string
     EXPECT_THROW(DeviceAccess(""), libsarus::Error);
 
