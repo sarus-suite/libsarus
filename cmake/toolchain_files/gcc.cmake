@@ -1,4 +1,4 @@
-SET(CMAKE_CXX_FLAGS "-Wall -std=c++11 -fPIC -fstack-protector-strong -fdata-sections -ffunction-sections -Wl,--gc-sections" CACHE STRING "Common flags for C++ compiler")
+SET(CMAKE_CXX_FLAGS "-Wall -std=c++20 -fPIC -fstack-protector-strong -fdata-sections -ffunction-sections -Wl,--gc-sections" CACHE STRING "Common flags for C++ compiler")
 SET(CMAKE_CXX_FLAGS_DEBUG "-g -O0" CACHE STRING "Debug flags for C++ compiler")
 SET(CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG -O3" CACHE STRING "Release flags for C++ compiler")
 SET(CMAKE_CXX_FLAGS_MINSIZEREL "-DNDEBUG -Os" CACHE STRING "Minimum size release flags for C++ compiler")

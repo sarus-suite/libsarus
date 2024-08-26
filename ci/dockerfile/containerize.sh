@@ -92,7 +92,7 @@ replace_placeholders() {
 
 add_supported_os "ubuntu:22.04"
 add_supported_os "opensuseleap:15"
-add_supported_os "rocky:9"
+add_supported_os "rockylinux:9"
   
 TARGET_OS=""
 parse_options "$@"
@@ -128,7 +128,7 @@ case $TARGET_OS in
       python3-pycparser shared-mime-info tar unzip which xz \
       curl libcurl-devel glibc-utils"
     ;;
-  "rocky:9")
+  "rockylinux:9")
     FINAL_OS_IMAGE="rockylinux:9"
     OS_PKG_MANAGER="dnf"
     # TODO: installing absolutely everything possibly required. Need to cut.

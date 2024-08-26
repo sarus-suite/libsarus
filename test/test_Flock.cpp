@@ -11,8 +11,8 @@
 #include <type_traits>
 
 #include <boost/filesystem.hpp>
+#include <gtest/gtest.h>
 
-#include "aux/unitTestMain.hpp"
 #include "Error.hpp"
 #include "Flock.hpp"
 #include "Utility.hpp"
@@ -34,87 +34,88 @@ static bool lockAcquisitionDoesntThrow(const boost::filesystem::path &fileToLock
     return true;
 }
 
-TEST_GROUP(FlockTestGroup) {
+class FlockTest : public testing::Test {
+protected:
     boost::filesystem::path fileToLock = libsarus::filesystem::makeUniquePathWithRandomSuffix("/tmp/file-to-lock");
     boost::filesystem::path lockfile = fileToLock.string() + ".lock";
 
-    void setup() {
+    FlockTest() {
         libsarus::filesystem::createFileIfNecessary(fileToLock);
     }
 
-    void teardown() {
+    ~FlockTest() override {
         boost::filesystem::remove(fileToLock);
     }
 };
 
-TEST(FlockTestGroup, lock_is_released_when_the_object_is_destroyed) {
+TEST_F(FlockTest, lock_is_released_when_the_object_is_destroyed) {
     {
         libsarus::Logger::getInstance().setLevel(libsarus::LogLevel::DEBUG);
         libsarus::Flock lock{fileToLock, libsarus::Flock::Type::writeLock};
     }
     {
-        CHECK(lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::writeLock));
+        EXPECT_TRUE(lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::writeLock));
     }
     {
-        CHECK(lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::writeLock));
+        EXPECT_TRUE(lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::writeLock));
     }
 }
 
-TEST(FlockTestGroup, move_constructor_moves_resources) {
+TEST_F(FlockTest, move_constructor_moves_resources) {
     libsarus::Flock original{fileToLock, libsarus::Flock::Type::writeLock};
     {
         libsarus::Flock moveConstructed{std::move(original)};
-        CHECK_THROWS(libsarus::Error, libsarus::Flock(fileToLock, libsarus::Flock::Type::writeLock, 10_ms));
+        EXPECT_THROW(libsarus::Flock(fileToLock, libsarus::Flock::Type::writeLock, 10_ms), libsarus::Error);
     }
     // check that lock can be acquired (move-constructed lock went out of scope)
-    CHECK(lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::writeLock));
+    EXPECT_TRUE(lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::writeLock));
 }
 
-TEST(FlockTestGroup, move_assignment_moves_resources) {
+TEST_F(FlockTest, move_assignment_moves_resources) {
     libsarus::Flock original{fileToLock, libsarus::Flock::Type::writeLock};
     {
         libsarus::Flock moveAssigned;
         moveAssigned = std::move(original);
-        CHECK_THROWS(libsarus::Error, libsarus::Flock(fileToLock, libsarus::Flock::Type::writeLock, 10_ms));
+        EXPECT_THROW(libsarus::Flock(fileToLock, libsarus::Flock::Type::writeLock, 10_ms), libsarus::Error);
     }
     // check that lock can be acquired (move-assigned lock went out of scope)
-    CHECK(lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::writeLock));
+    EXPECT_TRUE(lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::writeLock));
 }
 
-TEST(FlockTestGroup, write_fails_if_resource_is_in_use) {
+TEST_F(FlockTest, write_fails_if_resource_is_in_use) {
     {
         libsarus::Flock lock{fileToLock, libsarus::Flock::Type::writeLock};
-        CHECK_THROWS(libsarus::Error, libsarus::Flock(fileToLock, libsarus::Flock::Type::writeLock, 10_ms));
+        EXPECT_THROW(libsarus::Flock(fileToLock, libsarus::Flock::Type::writeLock, 10_ms), libsarus::Error);
     }
     {
         libsarus::Flock lock{fileToLock, libsarus::Flock::Type::readLock};
-        CHECK_THROWS(libsarus::Error, libsarus::Flock(fileToLock, libsarus::Flock::Type::writeLock, 10_ms));
+        EXPECT_THROW(libsarus::Flock(fileToLock, libsarus::Flock::Type::writeLock, 10_ms), libsarus::Error);
     }
 }
 
-TEST(FlockTestGroup, concurrent_read_are_allowed) {
+TEST_F(FlockTest, concurrent_read_are_allowed) {
     libsarus::Flock lock{fileToLock, libsarus::Flock::Type::readLock};
-    CHECK(lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::readLock));
+    EXPECT_TRUE(lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::readLock));
 }
 
-TEST(FlockTestGroup, read_fails_if_resource_is_being_written) {
+TEST_F(FlockTest, read_fails_if_resource_is_being_written) {
     libsarus::Flock lock{fileToLock, libsarus::Flock::Type::writeLock};
-    CHECK_THROWS(libsarus::Error, libsarus::Flock(fileToLock, libsarus::Flock::Type::readLock, 10_ms));
+    EXPECT_THROW(libsarus::Flock(fileToLock, libsarus::Flock::Type::readLock, 10_ms), libsarus::Error);
 }
 
-TEST(FlockTestGroup, convert_read_to_write) {
+TEST_F(FlockTest, convert_read_to_write) {
     libsarus::Flock lock{fileToLock, libsarus::Flock::Type::readLock};
     lock.convertToType(libsarus::Flock::Type::writeLock);
-    CHECK_THROWS(libsarus::Error, libsarus::Flock(fileToLock, libsarus::Flock::Type::readLock, 10_ms));
+    EXPECT_THROW(libsarus::Flock(fileToLock, libsarus::Flock::Type::readLock, 10_ms), libsarus::Error);
 }
 
-TEST(FlockTestGroup, convert_write_to_read) {
+TEST_F(FlockTest, convert_write_to_read) {
     libsarus::Flock lock{fileToLock, libsarus::Flock::Type::writeLock};
     lock.convertToType(libsarus::Flock::Type::readLock);
-    CHECK(lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::readLock));
+    EXPECT_TRUE(lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::readLock));
 }
 
-TEST(FlockTestGroup, timeout_time_is_respected) {
+TEST_F(FlockTest, timeout_time_is_respected) {
     libsarus::Flock lock{fileToLock, libsarus::Flock::Type::writeLock};
 
     for (auto &timeout : {100, 500, 1000, 2000}) {
@@ -125,8 +126,8 @@ TEST(FlockTestGroup, timeout_time_is_respected) {
         }
         auto end = std::chrono::system_clock::now();
         std::chrono::duration<double, std::milli> elapsed = end - start;
-        CHECK(timeout <= elapsed.count());
-        CHECK(elapsed.count() <= 2 * timeout);
+        EXPECT_LE(timeout, elapsed.count());
+        EXPECT_LE(elapsed.count(), 2 * timeout);
     }
 }
 
@@ -137,4 +138,3 @@ static_assert(std::is_move_assignable<libsarus::Flock>::value, "");
 
 }}
 
-SARUS_UNITTEST_MAIN_FUNCTION();

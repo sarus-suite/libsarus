@@ -8,77 +8,78 @@
  *
  */
 
-#include "aux/unitTestMain.hpp"
 #include "DeviceAccess.hpp"
+
+#include <gtest/gtest.h>
 
 
 namespace libsarus {
 namespace test {
 
-TEST_GROUP(DeviceAccessTestGroup) {
+class DeviceAccessTest : public testing::Test {
+protected:
 };
 
-TEST(DeviceAccessTestGroup, valid_inputs) {
+TEST_F(DeviceAccessTest, valid_inputs) {
     auto access = DeviceAccess("rwm");
-    CHECK(access.string() == "rwm");
+    EXPECT_EQ(access.string(), "rwm");
 
     access = DeviceAccess("wmr");
-    CHECK(access.string() == "rwm");
+    EXPECT_EQ(access.string(), "rwm");
 
     access = DeviceAccess("r");
-    CHECK(access.string() == "r");
+    EXPECT_EQ(access.string(), "r");
 
     access = DeviceAccess("w");
-    CHECK(access.string() == "w");
+    EXPECT_EQ(access.string(), "w");
 
     access = DeviceAccess("m");
-    CHECK(access.string() == "m");
+    EXPECT_EQ(access.string(), "m");
 
     access = DeviceAccess("rw");
-    CHECK(access.string() == "rw");
+    EXPECT_EQ(access.string(), "rw");
 
     access = DeviceAccess("wr");
-    CHECK(access.string() == "rw");
+    EXPECT_EQ(access.string(), "rw");
 
     access = DeviceAccess("mr");
-    CHECK(access.string() == "rw");
+    EXPECT_EQ(access.string(), "rw");
 
     access = DeviceAccess("wm");
-    CHECK(access.string() == "wm");
+    EXPECT_EQ(access.string(), "wm");
 
     access = DeviceAccess("mw");
-    CHECK(access.string() == "wm");
+    EXPECT_EQ(access.string(), "wm");
 }
 
-TEST(DeviceAccessTestGroup, invalid_inputs) {
+TEST_F(DeviceAccessTest, invalid_inputs) {
     // empty string
-    CHECK_THROWS(libsarus::Error, DeviceAccess(""));
+    EXPECT_THROW(DeviceAccess(""), libsarus::Error);
 
     //string longer than 3 characters
-    CHECK_THROWS(libsarus::Error, DeviceAccess("rwma"));
+    EXPECT_THROW(DeviceAccess("rwma"), libsarus::Error);
 
     // characters outside 'rwm'
-    CHECK_THROWS(libsarus::Error, DeviceAccess("rwa"));
-    CHECK_THROWS(libsarus::Error, DeviceAccess("zw"));
-    CHECK_THROWS(libsarus::Error, DeviceAccess("rpm"));
-    CHECK_THROWS(libsarus::Error, DeviceAccess("r&m"));
-    CHECK_THROWS(libsarus::Error, DeviceAccess("2w"));
+    EXPECT_THROW(DeviceAccess("rwa"), libsarus::Error);
+    EXPECT_THROW(DeviceAccess("zw"), libsarus::Error);
+    EXPECT_THROW(DeviceAccess("rpm"), libsarus::Error);
+    EXPECT_THROW(DeviceAccess("r&m"), libsarus::Error);
+    EXPECT_THROW(DeviceAccess("2w"), libsarus::Error);
 
     // repeated characters
-    CHECK_THROWS(libsarus::Error, DeviceAccess("rr"));
-    CHECK_THROWS(libsarus::Error, DeviceAccess("rrr"));
-    CHECK_THROWS(libsarus::Error, DeviceAccess("rww"));
-    CHECK_THROWS(libsarus::Error, DeviceAccess("rwr"));
-    CHECK_THROWS(libsarus::Error, DeviceAccess("wmm"));
+    EXPECT_THROW(DeviceAccess("rr"), libsarus::Error);
+    EXPECT_THROW(DeviceAccess("rrr"), libsarus::Error);
+    EXPECT_THROW(DeviceAccess("rww"), libsarus::Error);
+    EXPECT_THROW(DeviceAccess("rwr"), libsarus::Error);
+    EXPECT_THROW(DeviceAccess("wmm"), libsarus::Error);
 
     // capitals of valid characters
-    CHECK_THROWS(libsarus::Error, DeviceAccess("R"));
-    CHECK_THROWS(libsarus::Error, DeviceAccess("W"));
-    CHECK_THROWS(libsarus::Error, DeviceAccess("M"));
-    CHECK_THROWS(libsarus::Error, DeviceAccess("RW"));
-    CHECK_THROWS(libsarus::Error, DeviceAccess("RWM"));
+    EXPECT_THROW(DeviceAccess("R"), libsarus::Error);
+    EXPECT_THROW(DeviceAccess("W"), libsarus::Error);
+    EXPECT_THROW(DeviceAccess("M"), libsarus::Error);
+    EXPECT_THROW(DeviceAccess("RW"), libsarus::Error);
+    EXPECT_THROW(DeviceAccess("RWM"), libsarus::Error);
 }
 
 }}
 
-SARUS_UNITTEST_MAIN_FUNCTION();

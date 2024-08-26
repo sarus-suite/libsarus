@@ -12,8 +12,8 @@
 #include <streambuf>
 
 #include <boost/filesystem.hpp>
+#include <gtest/gtest.h>
 
-#include "aux/unitTestMain.hpp"
 #include "PasswdDB.hpp"
 #include "PathRAII.hpp"
 
@@ -21,12 +21,11 @@
 namespace libsarus {
 namespace test {
 
-TEST_GROUP(PasswdDBTestGroup) {
-
+class PasswdDBTest : public testing::Test {
+protected:
     PasswdDB passwd{};
 
-    void setup()
-    {
+    PasswdDBTest() {
         // create entry
         auto entry0 = PasswdDB::Entry{
             "loginName0",
@@ -50,7 +49,7 @@ TEST_GROUP(PasswdDBTestGroup) {
     }
 };
 
-TEST(PasswdDBTestGroup, testRead) {
+TEST_F(PasswdDBTest, testRead) {
     // create file
     auto path = libsarus::PathRAII{boost::filesystem::path{"/tmp/test-passwd-file"}};
     const auto& file = path.getPath();
@@ -66,34 +65,34 @@ TEST(PasswdDBTestGroup, testRead) {
     passwd = PasswdDB{file};
     const auto& entries = passwd.getEntries();
 
-    CHECK(entries.size() == 3);
+    EXPECT_EQ(entries.size(), 3);
 
-    CHECK(entries[0].loginName == "loginName0");
-    CHECK(entries[0].encryptedPassword == "x");
-    CHECK(entries[0].uid == 1000);
-    CHECK(entries[0].gid == 1001);
-    CHECK(entries[0].userNameOrCommentField == "UserNameOrCommentField0");
-    CHECK(entries[0].userHomeDirectory == "/home/dir0");
-    CHECK(!entries[0].userCommandInterpreter);
+    EXPECT_EQ(entries[0].loginName, "loginName0");
+    EXPECT_EQ(entries[0].encryptedPassword, "x");
+    EXPECT_EQ(entries[0].uid, 1000);
+    EXPECT_EQ(entries[0].gid, 1001);
+    EXPECT_EQ(entries[0].userNameOrCommentField, "UserNameOrCommentField0");
+    EXPECT_EQ(entries[0].userHomeDirectory, "/home/dir0");
+    EXPECT_FALSE(entries[0].userCommandInterpreter);
 
-    CHECK(entries[1].loginName == "loginName1");
-    CHECK(entries[1].encryptedPassword == "encryptedPass1");
-    CHECK(entries[1].uid == 4294967294UL);
-    CHECK(entries[1].gid == 4294967294UL);
-    CHECK(entries[1].userNameOrCommentField == "UserNameOrCommentField1");
-    CHECK(entries[1].userHomeDirectory == "/home/dir1");
-    CHECK(*entries[1].userCommandInterpreter == "/optional/UserCommandInterpreter1");
+    EXPECT_EQ(entries[1].loginName, "loginName1");
+    EXPECT_EQ(entries[1].encryptedPassword, "encryptedPass1");
+    EXPECT_EQ(entries[1].uid, 4294967294UL);
+    EXPECT_EQ(entries[1].gid, 4294967294UL);
+    EXPECT_EQ(entries[1].userNameOrCommentField, "UserNameOrCommentField1");
+    EXPECT_EQ(entries[1].userHomeDirectory, "/home/dir1");
+    EXPECT_EQ(*entries[1].userCommandInterpreter, "/optional/UserCommandInterpreter1");
 
-    CHECK(entries[2].loginName == "loginName2");
-    CHECK(entries[2].encryptedPassword == "x");
-    CHECK(entries[2].uid == 1000);
-    CHECK(entries[2].gid == 1001);
-    CHECK(entries[2].userNameOrCommentField == "UserNameOrCommentField2");
-    CHECK(entries[2].userHomeDirectory == "/home/dir2");
-    CHECK(!entries[2].userCommandInterpreter);
+    EXPECT_EQ(entries[2].loginName, "loginName2");
+    EXPECT_EQ(entries[2].encryptedPassword, "x");
+    EXPECT_EQ(entries[2].uid, 1000);
+    EXPECT_EQ(entries[2].gid, 1001);
+    EXPECT_EQ(entries[2].userNameOrCommentField, "UserNameOrCommentField2");
+    EXPECT_EQ(entries[2].userHomeDirectory, "/home/dir2");
+    EXPECT_FALSE(entries[2].userCommandInterpreter);
 }
 
-TEST(PasswdDBTestGroup, testWrite) {
+TEST_F(PasswdDBTest, testWrite) {
     auto path = libsarus::PathRAII{boost::filesystem::path{"/tmp/test-passwd-file"}};
     const auto& file = path.getPath();
 
@@ -105,19 +104,18 @@ TEST(PasswdDBTestGroup, testWrite) {
     auto data = std::string(std::istreambuf_iterator<char>(is), std::istreambuf_iterator<char>());
     auto expectedData = std::string{"loginName0:x:1000:1001:UserNameOrCommentField0:/home/dir0:/optional/UserCommandInterpreter0\n"
                                     "loginName1:y:2000:2001:UserNameOrCommentField1:/home/dir1:\n"};
-    CHECK_EQUAL(data, expectedData);
+    EXPECT_EQ(data, expectedData);
 }
 
-TEST(PasswdDBTestGroup, testGetUsername) {
-    CHECK_EQUAL(passwd.getUsername(1000), std::string{"loginName0"});
-    CHECK_EQUAL(passwd.getUsername(2000), std::string{"loginName1"});
+TEST_F(PasswdDBTest, testGetUsername) {
+    EXPECT_EQ(passwd.getUsername(1000), std::string{"loginName0"});
+    EXPECT_EQ(passwd.getUsername(2000), std::string{"loginName1"});
 }
 
-TEST(PasswdDBTestGroup, testGetHomeDirectory) {
-    CHECK(passwd.getHomeDirectory(1000) == boost::filesystem::path{"/home/dir0"});
-    CHECK(passwd.getHomeDirectory(2000) == boost::filesystem::path{"/home/dir1"});
+TEST_F(PasswdDBTest, testGetHomeDirectory) {
+    EXPECT_EQ(passwd.getHomeDirectory(1000), boost::filesystem::path{"/home/dir0"});
+    EXPECT_EQ(passwd.getHomeDirectory(2000), boost::filesystem::path{"/home/dir1"});
 }
 
 }}
 
-SARUS_UNITTEST_MAIN_FUNCTION();

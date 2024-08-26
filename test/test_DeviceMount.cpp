@@ -12,8 +12,9 @@
 #include <sys/mount.h>
 #include <sys/sysmacros.h>
 
+#include <gtest/gtest.h>
+
 #include "aux/filesystem.hpp"
-#include "aux/unitTestMain.hpp"
 #include "DeviceAccess.hpp"
 #include "DeviceMount.hpp"
 #include "PathRAII.hpp"
@@ -23,14 +24,11 @@
 namespace libsarus {
 namespace test {
 
-TEST_GROUP(DeviceMountTestGroup) {
+class DeviceMountTest : public testing::Test {
+protected:
 };
 
-#ifdef ASROOT
-TEST(DeviceMountTestGroup, constructor) {
-#else
-IGNORE_TEST(DeviceMountTestGroup, constructor) {
-#endif
+TEST_F(DeviceMountTest, constructor) {
     auto testDir = libsarus::PathRAII(
         libsarus::filesystem::makeUniquePathWithRandomSuffix(boost::filesystem::current_path() / "deviceMount-test-constructor"));
     libsarus::filesystem::createFoldersIfNecessary(testDir.getPath());
@@ -58,15 +56,11 @@ IGNORE_TEST(DeviceMountTestGroup, constructor) {
         libsarus::filesystem::createFileIfNecessary(noDeviceFile);
         auto mountObject = libsarus::Mount{noDeviceFile, noDeviceFile, mount_flags, rootfsDir, userIdentity};
 
-        CHECK_THROWS(libsarus::Error, DeviceMount(std::move(mountObject), devAccess));
+        EXPECT_THROW(DeviceMount(std::move(mountObject), devAccess), libsarus::Error);
     }
 }
 
-#ifdef ASROOT
-TEST(DeviceMountTestGroup, getters) {
-#else
-IGNORE_TEST(DeviceMountTestGroup, getters) {
-#endif
+TEST_F(DeviceMountTest, getters) {
     auto testDir = libsarus::PathRAII(
         libsarus::filesystem::makeUniquePathWithRandomSuffix(boost::filesystem::current_path() / "deviceMount-test-getters"));
     libsarus::filesystem::createFoldersIfNecessary(testDir.getPath());
@@ -88,10 +82,10 @@ IGNORE_TEST(DeviceMountTestGroup, getters) {
         auto devAccess = libsarus::DeviceAccess("rwm");
 
         auto devMount = DeviceMount(std::move(mountObject), devAccess);
-        CHECK(devMount.getType() == 'c');
-        CHECK(devMount.getMajorID() == majorID);
-        CHECK(devMount.getMinorID() == minorID);
-        CHECK(devMount.getAccess().string() == std::string{"rwm"});
+        EXPECT_EQ(devMount.getType(), 'c');
+        EXPECT_EQ(devMount.getMajorID(), majorID);
+        EXPECT_EQ(devMount.getMinorID(), minorID);
+        EXPECT_EQ(devMount.getAccess().string(), std::string{"rwm"});
 
         boost::filesystem::remove(testDeviceFile);
     }
@@ -105,20 +99,16 @@ IGNORE_TEST(DeviceMountTestGroup, getters) {
         auto devAccess = libsarus::DeviceAccess("rw");
 
         auto devMount = DeviceMount(std::move(mountObject), devAccess);
-        CHECK(devMount.getType() == 'b');
-        CHECK_EQUAL(devMount.getMajorID(),  majorID);
-        CHECK(devMount.getMinorID() == minorID);
-        CHECK(devMount.getAccess().string() == std::string{"rw"});
+        EXPECT_EQ(devMount.getType(), 'b');
+        EXPECT_EQ(devMount.getMajorID(),  majorID);
+        EXPECT_EQ(devMount.getMinorID(), minorID);
+        EXPECT_EQ(devMount.getAccess().string(), std::string{"rw"});
 
         boost::filesystem::remove(testDeviceFile);
     }
 }
 
-#ifdef ASROOT
-TEST(DeviceMountTestGroup, performMount) {
-#else
-IGNORE_TEST(DeviceMountTestGroup, performMount) {
-#endif
+TEST_F(DeviceMountTest, performMount) {
     auto testDir = libsarus::PathRAII(
         libsarus::filesystem::makeUniquePathWithRandomSuffix(boost::filesystem::current_path() / "deviceMount-test-performMount"));
     libsarus::filesystem::createFoldersIfNecessary(testDir.getPath());
@@ -143,15 +133,14 @@ IGNORE_TEST(DeviceMountTestGroup, performMount) {
 
     // perform the mount
     libsarus::DeviceMount{std::move(mountObject), devAccess}.performMount();
-    CHECK(aux::filesystem::isSameBindMountedFile(sourceFile, rootfsDir / destinationFile));
-    CHECK(libsarus::filesystem::getDeviceID(rootfsDir / destinationFile) == makedev(majorID, minorID));
-    CHECK(libsarus::filesystem::getDeviceType(rootfsDir / destinationFile) == 'c');
+    EXPECT_TRUE(aux::filesystem::isSameBindMountedFile(sourceFile, rootfsDir / destinationFile));
+    EXPECT_EQ(libsarus::filesystem::getDeviceID(rootfsDir / destinationFile), makedev(majorID, minorID));
+    EXPECT_EQ(libsarus::filesystem::getDeviceType(rootfsDir / destinationFile), 'c');
 
     // cleanup
-    CHECK(umount((rootfsDir / destinationFile).c_str()) == 0);
+    EXPECT_EQ(umount((rootfsDir / destinationFile).c_str()), 0);
     boost::filesystem::remove(sourceFile);
 }
 
 }}
 
-SARUS_UNITTEST_MAIN_FUNCTION();

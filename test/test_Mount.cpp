@@ -8,16 +8,13 @@
  *
  */
 
-/**
- *  @brief Tests for user-requested mounts
- */
-
 #include <string>
 #include <sys/mount.h>
 #include <sys/stat.h>
 
+#include <gtest/gtest.h>
+
 #include "aux/filesystem.hpp"
-#include "aux/unitTestMain.hpp"
 #include "Mount.hpp"
 #include "PathRAII.hpp"
 #include "Utility.hpp"
@@ -26,14 +23,11 @@
 namespace libsarus {
 namespace test {
 
-TEST_GROUP(MountTestGroup) {
+class MountTest : public testing::Test {
+protected:
 };
 
-#ifdef ASROOT
-TEST(MountTestGroup, mount_test) {
-#else
-IGNORE_TEST(MountTestGroup, mount_test) {
-#endif
+TEST_F(MountTest, mount_test) {
     libsarus::UserIdentity userIdentity;
 
     auto bundleDirRAII = libsarus::PathRAII{libsarus::filesystem::makeUniquePathWithRandomSuffix(boost::filesystem::absolute("test-bundle-dir"))};
@@ -55,54 +49,53 @@ IGNORE_TEST(MountTestGroup, mount_test) {
     libsarus::filesystem::createFileIfNecessary(sourceFile.getPath());
     auto command = "echo \"test data\" >" + sourceFile.getPath().string();
     auto ret = std::system(command.c_str());
-    CHECK(WIFEXITED(ret) != 0 && WEXITSTATUS(ret) == 0);
+    EXPECT_EQ(WIFEXITED(ret) != 0 && WEXITSTATUS(ret), 0);
 
     // test mount of non-existing destination directory
     {
         libsarus::Mount{sourceDir, destinationDir, mount_flags, rootfsDir, userIdentity}.performMount();
-        CHECK(aux::filesystem::areDirectoriesEqual(sourceDir.string(), (rootfsDir / destinationDir).string(), 1));
+        EXPECT_TRUE(aux::filesystem::areDirectoriesEqual(sourceDir.string(), (rootfsDir / destinationDir).string(), 1));
 
         // cleanup
-        CHECK(umount((rootfsDir / destinationDir).c_str()) == 0);
+        EXPECT_EQ(umount((rootfsDir / destinationDir).c_str()), 0);
         boost::filesystem::remove_all(rootfsDir / destinationDir);
     }
     // test mount of existing destination directory
     {
         libsarus::filesystem::createFoldersIfNecessary(rootfsDir / destinationDir);
         libsarus::Mount{sourceDir, destinationDir.c_str(), mount_flags, rootfsDir, userIdentity}.performMount();
-        CHECK(aux::filesystem::areDirectoriesEqual(sourceDir.string(), (rootfsDir / destinationDir).string(), 1));
+        EXPECT_TRUE(aux::filesystem::areDirectoriesEqual(sourceDir.string(), (rootfsDir / destinationDir).string(), 1));
 
         // cleanup
-        CHECK(umount((rootfsDir / destinationDir).c_str()) == 0);
+        EXPECT_EQ(umount((rootfsDir / destinationDir).c_str()), 0);
         boost::filesystem::remove_all(rootfsDir / destinationDir);
     }
     // test mount of individual file
     {
         libsarus::Mount{sourceFile.getPath(), destinationFile.getPath(), mount_flags, rootfsDir, userIdentity}.performMount();
-        CHECK(aux::filesystem::isSameBindMountedFile(sourceFile.getPath(), rootfsDir / destinationFile.getPath()));
+        EXPECT_TRUE(aux::filesystem::isSameBindMountedFile(sourceFile.getPath(), rootfsDir / destinationFile.getPath()));
 
         // cleanup
-        CHECK(umount((rootfsDir / destinationFile.getPath()).c_str()) == 0);
+        EXPECT_EQ(umount((rootfsDir / destinationFile.getPath()).c_str()), 0);
     }
     // test ctor with 5 arguments
     {
         libsarus::Mount{sourceFile.getPath(), destinationFile.getPath(), mount_flags, rootfsDir, userIdentity}.performMount();
-        CHECK(aux::filesystem::isSameBindMountedFile(sourceFile.getPath(), rootfsDir / destinationFile.getPath()));
+        EXPECT_TRUE(aux::filesystem::isSameBindMountedFile(sourceFile.getPath(), rootfsDir / destinationFile.getPath()));
 
         // cleanup
-        CHECK(umount((rootfsDir / destinationFile.getPath()).c_str()) == 0);
+        EXPECT_EQ(umount((rootfsDir / destinationFile.getPath()).c_str()), 0);
     }
     // test default move ctor
     {
         auto mountObject = libsarus::Mount{sourceFile.getPath(), destinationFile.getPath(), mount_flags, rootfsDir, userIdentity};
         libsarus::Mount{std::move(mountObject)}.performMount();
-        CHECK(aux::filesystem::isSameBindMountedFile(sourceFile.getPath(), rootfsDir / destinationFile.getPath()));
+        EXPECT_TRUE(aux::filesystem::isSameBindMountedFile(sourceFile.getPath(), rootfsDir / destinationFile.getPath()));
 
         // cleanup
-        CHECK(umount((rootfsDir / destinationFile.getPath()).c_str()) == 0);
+        EXPECT_EQ(umount((rootfsDir / destinationFile.getPath()).c_str()), 0);
     }
 }
 
 }}
 
-SARUS_UNITTEST_MAIN_FUNCTION();
