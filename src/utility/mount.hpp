@@ -28,6 +28,7 @@
 namespace libsarus {
 namespace mount {
 
+<<<<<<< Updated upstream
 boost::filesystem::path getValidatedMountSource(const boost::filesystem::path&);
 boost::filesystem::path getValidatedMountDestination(const boost::filesystem::path& destination,
                                                      const boost::filesystem::path& rootfsDir);
@@ -46,5 +47,35 @@ void mountOverlayfs(const boost::filesystem::path& lowerDir,
                     const boost::filesystem::path& mountPoint);
 
 }}
+=======
+boost::filesystem::path
+getValidatedMountSource(const boost::filesystem::path &,
+                        UserIdentity asIdentity = UserIdentity{}); 
+boost::filesystem::path
+getValidatedMountDestination(const boost::filesystem::path &destination,
+                             const boost::filesystem::path &rootfsDir,
+                             UserIdentity asIdentity = UserIdentity{}); 
+bool isPathOnAllowedDevice(const boost::filesystem::path &path,
+                           const boost::filesystem::path &rootfsDir);
+dev_t getDevice(const boost::filesystem::path &path);
+void validatedBindMount(const boost::filesystem::path &source,
+                        const boost::filesystem::path &destination,
+                        const UserIdentity &userIdentity,
+                        const boost::filesystem::path &rootfsDir,
+                        const unsigned long flags = 0,
+                        bool privileged=true);
+void bindMount(const boost::filesystem::path &from,
+               const boost::filesystem::path &to, unsigned long flags = 0,
+               UserIdentity asIdentity = UserIdentity{}); 
+void loopMountSquashfs(const boost::filesystem::path &image,
+                       const boost::filesystem::path &mountPoint);
+void mountOverlayfs(const boost::filesystem::path &lowerDir,
+                    const boost::filesystem::path &upperDir,
+                    const boost::filesystem::path &workDir,
+                    const boost::filesystem::path &mountPoint);
+
+} // namespace mount
+} // namespace libsarus
+>>>>>>> Stashed changes
 
 #endif

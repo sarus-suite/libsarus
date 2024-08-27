@@ -30,6 +30,7 @@
 namespace libsarus {
 namespace mount {
 
+<<<<<<< Updated upstream
 boost::filesystem::path getValidatedMountSource(const boost::filesystem::path& source) {
     logMessage(boost::format("Validating mount source: %s") % source, LogLevel::DEBUG);
     auto* realPtr = realpath(source.c_str(), NULL);
@@ -44,6 +45,76 @@ boost::filesystem::path getValidatedMountSource(const boost::filesystem::path& s
     if (!boost::filesystem::exists(sourceReal)) {
         auto message = boost::format("Real path of mount source does not exist: %s") % sourceReal;
         SARUS_THROW_ERROR(message.str());
+=======
+boost::filesystem::path
+getValidatedMountSource(const boost::filesystem::path &source, UserIdentity asIdentity) {
+  auto orgIdentity = UserIdentity{};
+  process::switchIdentity(asIdentity);
+
+  logMessage(boost::format("Validating mount source: %s") % source,
+             LogLevel::DEBUG);
+  auto *realPtr = realpath(source.c_str(), NULL);
+  if (realPtr == nullptr) {
+    auto message =
+        boost::format("Failed to find real path for mount source: %s") %
+        strerror(errno);
+    process::switchIdentity(orgIdentity);
+    SARUS_THROW_ERROR(message.str());
+  }
+
+  auto sourceReal = boost::filesystem::path(realPtr);
+  free(realPtr);
+
+  if (!boost::filesystem::exists(sourceReal)) {
+    auto message =
+        boost::format("Real path of mount source does not exist: %s") %
+        sourceReal;
+    process::switchIdentity(orgIdentity);
+    SARUS_THROW_ERROR(message.str());
+  }
+  logMessage(
+      boost::format("Returning successfully validated mount source: %s") %
+          sourceReal,
+      LogLevel::DEBUG);
+
+  process::switchIdentity(orgIdentity);
+  return sourceReal;
+}
+
+boost::filesystem::path
+getValidatedMountDestination(const boost::filesystem::path &destination,
+                             const boost::filesystem::path &rootfsDir, UserIdentity asIdentity) {
+  auto orgIdentity = UserIdentity{};
+  process::switchIdentity(asIdentity);
+
+  logMessage(boost::format("Validating mount destination: %s") % destination,
+             LogLevel::DEBUG);
+
+  if (destination.is_relative()) {
+    process::switchIdentity(orgIdentity);
+    SARUS_THROW_ERROR("Internal error: destination is not an absolute path");
+  }
+  if (rootfsDir.is_relative()) {
+    process::switchIdentity(orgIdentity);
+    SARUS_THROW_ERROR("Internal error: rootfsDir is not an absolute path");
+  }
+  auto destinationReal =
+      rootfsDir / filesystem::realpathWithinRootfs(rootfsDir, destination);
+
+  /* If the destination does not exist, check its parents */
+  if (!boost::filesystem::exists(destinationReal)) {
+    /* Search the first existing parent folder and check that it is on the
+       device where we are authorized to create stuff */
+    boost::optional<boost::filesystem::path> deepestExistingFolder;
+    auto current = boost::filesystem::path("");
+    for (const auto &component : destinationReal) {
+      current /= component;
+      if (boost::filesystem::exists(current)) {
+        deepestExistingFolder = current;
+      } else {
+        break;
+      }
+>>>>>>> Stashed changes
     }
     logMessage(boost::format("Returning successfully validated mount source: %s") % sourceReal,
                         LogLevel::DEBUG);
@@ -51,6 +122,7 @@ boost::filesystem::path getValidatedMountSource(const boost::filesystem::path& s
 }
 
 
+<<<<<<< Updated upstream
 boost::filesystem::path getValidatedMountDestination(const boost::filesystem::path& destination,
                                                      const boost::filesystem::path& rootfsDir) {
     logMessage(boost::format("Validating mount destination: %s") % destination, LogLevel::DEBUG);
@@ -60,6 +132,27 @@ boost::filesystem::path getValidatedMountDestination(const boost::filesystem::pa
     }
     if (rootfsDir.is_relative()) {
         SARUS_THROW_ERROR("Internal error: rootfsDir is not an absolute path");
+=======
+    if (!deepestExistingFolder) {
+      auto message =
+          boost::format(
+              "Internal error: failed to find existing parent folder of %s") %
+          destination;
+      process::switchIdentity(orgIdentity);
+      SARUS_THROW_ERROR(message.str());
+    }
+    logMessage(boost::format("Deepest path for such path is %s") %
+                   *deepestExistingFolder,
+               LogLevel::DEBUG);
+
+    if (!isPathOnAllowedDevice(*deepestExistingFolder, rootfsDir)) {
+      auto message =
+          boost::format(
+              "Mount destination (%s) is not on a device allowed for mounts") %
+          (*deepestExistingFolder);
+      process::switchIdentity(orgIdentity);
+      SARUS_THROW_ERROR(message.str());
+>>>>>>> Stashed changes
     }
     auto destinationReal = rootfsDir / filesystem::realpathWithinRootfs(rootfsDir, destination);
 
@@ -90,6 +183,7 @@ boost::filesystem::path getValidatedMountDestination(const boost::filesystem::pa
             SARUS_THROW_ERROR(message.str());
         }
     }
+<<<<<<< Updated upstream
     /* If destination exists, check it is on an allowed device */
     else {
         bool allowed;
@@ -107,6 +201,24 @@ boost::filesystem::path getValidatedMountDestination(const boost::filesystem::pa
     logMessage(boost::format("Returning successfully validated mount destination: %s") % destinationReal,
                         LogLevel::DEBUG);
     return destinationReal;
+=======
+    if (!allowed) {
+      auto message =
+          boost::format(
+              "Mount destination (%s) is not on a device allowed for mounts") %
+          destination;
+      process::switchIdentity(orgIdentity);
+      SARUS_THROW_ERROR(message.str());
+    }
+  }
+  logMessage(
+      boost::format("Returning successfully validated mount destination: %s") %
+          destinationReal,
+      LogLevel::DEBUG);
+
+  process::switchIdentity(orgIdentity);
+  return destinationReal;
+>>>>>>> Stashed changes
 }
 
 
@@ -167,6 +279,7 @@ dev_t getDevice(const boost::filesystem::path& path) {
  *   does not need to be realpath'ed beforehand.
  * In both cases, this function takes care of resolving and constructing the full paths on its own.
  */
+<<<<<<< Updated upstream
 void validatedBindMount(const boost::filesystem::path& source,
                         const boost::filesystem::path& destination,
                         const UserIdentity& userIdentity,
@@ -243,6 +356,102 @@ void bindMount(const boost::filesystem::path& from, const boost::filesystem::pat
         auto message = boost::format("Failed to remount %s as non-shared (error: %s)") % to % strerror(errno);
         SARUS_THROW_ERROR(message.str());
     }
+=======
+void validatedBindMount(const boost::filesystem::path &source,
+                        const boost::filesystem::path &destination,
+                        const UserIdentity &userIdentity,
+                        const boost::filesystem::path &rootfsDir,
+                        const unsigned long flags,
+                        bool privileged) {
+  auto asIdentity = privileged ? userIdentity : UserIdentity{};
+
+  try {
+    // switch to user identity to make sure user has access to the mount source
+    auto sourceReal = getValidatedMountSource(source, asIdentity);
+    auto destinationReal = getValidatedMountDestination(destination, rootfsDir,
+        asIdentity);
+
+    // Save predicate result in a variable. This is done before switching back
+    // to root identity to leverage the unprivileged user identity on
+    // root_squashed filesystems. The creation of the mount point later on has
+    // to be done as root to enable mounts to the root-owned /dev directory in
+    // the container. Using the Boost filesystem predicate function as root will
+    // be denied if the mount source is in a root_squashed filesystem.
+    auto mountSourceIsDirectory = boost::filesystem::is_directory(sourceReal);
+
+    // Create file or folder if necessary, after validation.
+    // Always assign ownership of the newly-created mount point to the container
+    // user: while it has no effect on the ownership and permissions of the
+    // mounted resource in the container (they are the same as the mount
+    // source), a non-root-owned file reduces cleanup problems (in case there
+    // are any).
+    if (mountSourceIsDirectory) {
+      filesystem::createFoldersIfNecessary(destinationReal, userIdentity.uid,
+                                           userIdentity.gid);
+    } else {
+      filesystem::createFileIfNecessary(destinationReal, userIdentity.uid,
+                                        userIdentity.gid);
+    }
+
+    // switch to user filesystem identity to make sure we can access paths as
+    // root even on root_squashed filesystems
+    bindMount(sourceReal, destinationReal, flags, asIdentity);
+  } catch (Error &e) {
+    // Restore root identity in case the exception happened while having a
+    // non-privileged id. By setting the euid, the fsuid will also be set
+    // accordingly.
+    auto message =
+        boost::format("Failed to bind mount %s on container's %s: %s") %
+        source.string() % destination.string() % e.what();
+    SARUS_RETHROW_ERROR(e, message.str());
+  }
+}
+
+void bindMount(const boost::filesystem::path &from,
+               const boost::filesystem::path &to, unsigned long flags,
+               UserIdentity asIdentity) {
+  logMessage(boost::format{"Bind mounting %s -> %s"} % from % to,
+             LogLevel::DEBUG);
+
+  unsigned long flagsForBindMount = MS_BIND | MS_REC;
+  unsigned long flagsForRemount = MS_REMOUNT | MS_BIND | MS_NOSUID | MS_REC;
+  unsigned long flagsForPropagationRemount = MS_PRIVATE | MS_REC;
+
+  auto orgIdentity = UserIdentity{};
+  process::setFilesystemUid(asIdentity);
+
+  if (flags & MS_RDONLY) {
+    flagsForRemount |= MS_RDONLY;
+  }
+
+  // bind mount
+  if (::mount(from.c_str(), to.c_str(), "bind", flagsForBindMount, NULL) != 0) {
+    auto message = boost::format("Failed to bind mount %s -> %s (error: %s)") %
+                   from % to % strerror(errno);
+    process::setFilesystemUid(orgIdentity);
+    SARUS_THROW_ERROR(message.str());
+  }
+
+  // remount to apply flags
+  if (::mount(from.c_str(), to.c_str(), "bind", flagsForRemount, NULL) != 0) {
+    auto message =
+        boost::format("Failed to re-bind mount %s -> %s (error: %s)") % from %
+        to % strerror(errno);
+    process::setFilesystemUid(orgIdentity);
+    SARUS_THROW_ERROR(message.str());
+  }
+
+  // remount to apply propagation type
+  if (::mount(NULL, to.c_str(), NULL, flagsForPropagationRemount, NULL) != 0) {
+    auto message =
+        boost::format("Failed to remount %s as non-shared (error: %s)") % to %
+        strerror(errno);
+    process::setFilesystemUid(orgIdentity);
+    SARUS_THROW_ERROR(message.str());
+  }
+
+  process::setFilesystemUid(orgIdentity);
+>>>>>>> Stashed changes
 }
 
 
