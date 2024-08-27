@@ -14,13 +14,11 @@
 
 #include "Error.hpp"
 
+// clang-format off
 #define _DECLARE(tag) int __lineno_##tag = -1;
-#define _TAG(tag, expr)                                                        \
-  do {                                                                         \
-    __lineno_##tag = __LINE__;                                                 \
-    expr;                                                                      \
-  } while (0)
+#define _TAG(tag, expr) do { __lineno_##tag = __LINE__; expr; } while (0)
 #define _GET(tag) (__lineno_##tag)
+// clang-format on
 
 namespace libsarus {
 namespace test {
