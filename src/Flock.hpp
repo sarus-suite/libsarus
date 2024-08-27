@@ -14,8 +14,8 @@
 #include <chrono>
 #include <limits>
 
-#include <boost/optional.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/optional.hpp>
 
 namespace libsarus {
 
@@ -39,37 +39,38 @@ class Logger;
  */
 class Flock {
 public:
-    static const milliseconds noTimeout;
-    enum Type {readLock, writeLock};
+  static const milliseconds noTimeout;
+  enum Type { readLock, writeLock };
 
 public:
-    Flock();
-    Flock(const boost::filesystem::path& file, const Type type=readLock,
-          const milliseconds& timeoutTime=noTimeout, const milliseconds& warningTime=milliseconds{1000});
-    Flock(const Flock&) = delete;
-    Flock(Flock&&);
-    ~Flock();
+  Flock();
+  Flock(const boost::filesystem::path &file, const Type type = readLock,
+        const milliseconds &timeoutTime = noTimeout,
+        const milliseconds &warningTime = milliseconds{1000});
+  Flock(const Flock &) = delete;
+  Flock(Flock &&);
+  ~Flock();
 
-    void convertToType(const Type type);
+  void convertToType(const Type type);
 
-    Flock& operator=(const Flock&) = delete;
-    Flock& operator=(Flock&&);
-
-private:
-    void timedLockAcquisition();
-    bool acquireLockAtomically();
-    void release();
+  Flock &operator=(const Flock &) = delete;
+  Flock &operator=(Flock &&);
 
 private:
-    libsarus::Logger* logger;
-    std::string loggerSubsystemName = "Flock";
-    boost::optional<boost::filesystem::path> lockfile;
-    Type lockType;
-    int fileFd = -1;
-    milliseconds timeoutTime;
-    milliseconds warningTime;
+  void timedLockAcquisition();
+  bool acquireLockAtomically();
+  void release();
+
+private:
+  libsarus::Logger *logger;
+  std::string loggerSubsystemName = "Flock";
+  boost::optional<boost::filesystem::path> lockfile;
+  Type lockType;
+  int fileFd = -1;
+  milliseconds timeoutTime;
+  milliseconds warningTime;
 };
 
-}
+} // namespace libsarus
 
 #endif

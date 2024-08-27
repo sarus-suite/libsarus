@@ -11,8 +11,8 @@
 #ifndef libsarus_PathRAII_hpp
 #define libsarus_PathRAII_hpp
 
-#include <boost/optional.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/optional.hpp>
 
 namespace libsarus {
 
@@ -20,23 +20,23 @@ namespace libsarus {
 // which is automatically removed by the destructor of this class.
 class PathRAII {
 public:
-    PathRAII() = default;
-    PathRAII(const boost::filesystem::path& path);
-    PathRAII(const PathRAII&) = delete;
-    PathRAII(PathRAII&&);
-    PathRAII& operator=(const PathRAII&) = delete;
-    PathRAII& operator=(PathRAII&&);
-    ~PathRAII();
+  PathRAII() = default;
+  PathRAII(const boost::filesystem::path &path);
+  PathRAII(const PathRAII &) = delete;
+  PathRAII(PathRAII &&);
+  PathRAII &operator=(const PathRAII &) = delete;
+  PathRAII &operator=(PathRAII &&);
+  ~PathRAII();
 
-    const boost::filesystem::path& getPath() const;
-    void release();
+  const boost::filesystem::path &getPath() const;
+  void release();
 
 private:
-    void setFilesAsRemovableByOwner() const;
+  void setFilesAsRemovableByOwner() const;
 
-    boost::optional<boost::filesystem::path> path;
+  boost::optional<boost::filesystem::path> path;
 };
 
-}
+} // namespace libsarus
 
 #endif

@@ -17,118 +17,135 @@
 #include "Flock.hpp"
 #include "Utility.hpp"
 
-
 namespace libsarus {
 namespace test {
 
 constexpr std::chrono::milliseconds operator""_ms(unsigned long long ms) {
-    return std::chrono::milliseconds(ms);
+  return std::chrono::milliseconds(ms);
 }
 
-static bool lockAcquisitionDoesntThrow(const boost::filesystem::path &fileToLock, const libsarus::Flock::Type &lockType) {
-    try {
-        libsarus::Flock{fileToLock, lockType, 10_ms};
-    } catch (const libsarus::Error &) {
-        return false;
-    }
-    return true;
+static bool
+lockAcquisitionDoesntThrow(const boost::filesystem::path &fileToLock,
+                           const libsarus::Flock::Type &lockType) {
+  try {
+    libsarus::Flock{fileToLock, lockType, 10_ms};
+  } catch (const libsarus::Error &) {
+    return false;
+  }
+  return true;
 }
 
 class FlockTest : public testing::Test {
 protected:
-    boost::filesystem::path fileToLock = libsarus::filesystem::makeUniquePathWithRandomSuffix("/tmp/file-to-lock");
-    boost::filesystem::path lockfile = fileToLock.string() + ".lock";
+  boost::filesystem::path fileToLock =
+      libsarus::filesystem::makeUniquePathWithRandomSuffix("/tmp/file-to-lock");
+  boost::filesystem::path lockfile = fileToLock.string() + ".lock";
 
-    FlockTest() {
-        libsarus::filesystem::createFileIfNecessary(fileToLock);
-    }
+  FlockTest() { libsarus::filesystem::createFileIfNecessary(fileToLock); }
 
-    ~FlockTest() override {
-        boost::filesystem::remove(fileToLock);
-    }
+  ~FlockTest() override { boost::filesystem::remove(fileToLock); }
 };
 
 TEST_F(FlockTest, lock_is_released_when_the_object_is_destroyed) {
-    {
-        libsarus::Logger::getInstance().setLevel(libsarus::LogLevel::DEBUG);
-        libsarus::Flock lock{fileToLock, libsarus::Flock::Type::writeLock};
-    }
-    {
-        EXPECT_TRUE(lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::writeLock));
-    }
-    {
-        EXPECT_TRUE(lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::writeLock));
-    }
+  {
+    libsarus::Logger::getInstance().setLevel(libsarus::LogLevel::DEBUG);
+    libsarus::Flock lock{fileToLock, libsarus::Flock::Type::writeLock};
+  }
+  {
+    EXPECT_TRUE(lockAcquisitionDoesntThrow(fileToLock,
+                                           libsarus::Flock::Type::writeLock));
+  }
+  {
+    EXPECT_TRUE(lockAcquisitionDoesntThrow(fileToLock,
+                                           libsarus::Flock::Type::writeLock));
+  }
 }
 
 TEST_F(FlockTest, move_constructor_moves_resources) {
-    libsarus::Flock original{fileToLock, libsarus::Flock::Type::writeLock};
-    {
-        libsarus::Flock moveConstructed{std::move(original)};
-        EXPECT_THROW(libsarus::Flock(fileToLock, libsarus::Flock::Type::writeLock, 10_ms), libsarus::Error);
-    }
-    // check that lock can be acquired (move-constructed lock went out of scope)
-    EXPECT_TRUE(lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::writeLock));
+  libsarus::Flock original{fileToLock, libsarus::Flock::Type::writeLock};
+  {
+    libsarus::Flock moveConstructed{std::move(original)};
+    EXPECT_THROW(
+        libsarus::Flock(fileToLock, libsarus::Flock::Type::writeLock, 10_ms),
+        libsarus::Error);
+  }
+  // check that lock can be acquired (move-constructed lock went out of scope)
+  EXPECT_TRUE(
+      lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::writeLock));
 }
 
 TEST_F(FlockTest, move_assignment_moves_resources) {
-    libsarus::Flock original{fileToLock, libsarus::Flock::Type::writeLock};
-    {
-        libsarus::Flock moveAssigned;
-        moveAssigned = std::move(original);
-        EXPECT_THROW(libsarus::Flock(fileToLock, libsarus::Flock::Type::writeLock, 10_ms), libsarus::Error);
-    }
-    // check that lock can be acquired (move-assigned lock went out of scope)
-    EXPECT_TRUE(lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::writeLock));
+  libsarus::Flock original{fileToLock, libsarus::Flock::Type::writeLock};
+  {
+    libsarus::Flock moveAssigned;
+    moveAssigned = std::move(original);
+    EXPECT_THROW(
+        libsarus::Flock(fileToLock, libsarus::Flock::Type::writeLock, 10_ms),
+        libsarus::Error);
+  }
+  // check that lock can be acquired (move-assigned lock went out of scope)
+  EXPECT_TRUE(
+      lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::writeLock));
 }
 
 TEST_F(FlockTest, write_fails_if_resource_is_in_use) {
-    {
-        libsarus::Flock lock{fileToLock, libsarus::Flock::Type::writeLock};
-        EXPECT_THROW(libsarus::Flock(fileToLock, libsarus::Flock::Type::writeLock, 10_ms), libsarus::Error);
-    }
-    {
-        libsarus::Flock lock{fileToLock, libsarus::Flock::Type::readLock};
-        EXPECT_THROW(libsarus::Flock(fileToLock, libsarus::Flock::Type::writeLock, 10_ms), libsarus::Error);
-    }
+  {
+    libsarus::Flock lock{fileToLock, libsarus::Flock::Type::writeLock};
+    EXPECT_THROW(
+        libsarus::Flock(fileToLock, libsarus::Flock::Type::writeLock, 10_ms),
+        libsarus::Error);
+  }
+  {
+    libsarus::Flock lock{fileToLock, libsarus::Flock::Type::readLock};
+    EXPECT_THROW(
+        libsarus::Flock(fileToLock, libsarus::Flock::Type::writeLock, 10_ms),
+        libsarus::Error);
+  }
 }
 
 TEST_F(FlockTest, concurrent_read_are_allowed) {
-    libsarus::Flock lock{fileToLock, libsarus::Flock::Type::readLock};
-    EXPECT_TRUE(lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::readLock));
+  libsarus::Flock lock{fileToLock, libsarus::Flock::Type::readLock};
+  EXPECT_TRUE(
+      lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::readLock));
 }
 
 TEST_F(FlockTest, read_fails_if_resource_is_being_written) {
-    libsarus::Flock lock{fileToLock, libsarus::Flock::Type::writeLock};
-    EXPECT_THROW(libsarus::Flock(fileToLock, libsarus::Flock::Type::readLock, 10_ms), libsarus::Error);
+  libsarus::Flock lock{fileToLock, libsarus::Flock::Type::writeLock};
+  EXPECT_THROW(
+      libsarus::Flock(fileToLock, libsarus::Flock::Type::readLock, 10_ms),
+      libsarus::Error);
 }
 
 TEST_F(FlockTest, convert_read_to_write) {
-    libsarus::Flock lock{fileToLock, libsarus::Flock::Type::readLock};
-    lock.convertToType(libsarus::Flock::Type::writeLock);
-    EXPECT_THROW(libsarus::Flock(fileToLock, libsarus::Flock::Type::readLock, 10_ms), libsarus::Error);
+  libsarus::Flock lock{fileToLock, libsarus::Flock::Type::readLock};
+  lock.convertToType(libsarus::Flock::Type::writeLock);
+  EXPECT_THROW(
+      libsarus::Flock(fileToLock, libsarus::Flock::Type::readLock, 10_ms),
+      libsarus::Error);
 }
 
 TEST_F(FlockTest, convert_write_to_read) {
-    libsarus::Flock lock{fileToLock, libsarus::Flock::Type::writeLock};
-    lock.convertToType(libsarus::Flock::Type::readLock);
-    EXPECT_TRUE(lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::readLock));
+  libsarus::Flock lock{fileToLock, libsarus::Flock::Type::writeLock};
+  lock.convertToType(libsarus::Flock::Type::readLock);
+  EXPECT_TRUE(
+      lockAcquisitionDoesntThrow(fileToLock, libsarus::Flock::Type::readLock));
 }
 
 TEST_F(FlockTest, timeout_time_is_respected) {
-    libsarus::Flock lock{fileToLock, libsarus::Flock::Type::writeLock};
+  libsarus::Flock lock{fileToLock, libsarus::Flock::Type::writeLock};
 
-    for (auto &timeout : {100, 500, 1000, 2000}) {
-        auto start = std::chrono::system_clock::now();
-        try {
-            libsarus::Flock{fileToLock, libsarus::Flock::Type::writeLock, std::chrono::milliseconds{timeout}};
-        } catch (const libsarus::Error &) {
-        }
-        auto end = std::chrono::system_clock::now();
-        std::chrono::duration<double, std::milli> elapsed = end - start;
-        EXPECT_LE(timeout, elapsed.count());
-        EXPECT_LE(elapsed.count(), 2 * timeout);
+  for (auto &timeout : {100, 500, 1000, 2000}) {
+    auto start = std::chrono::system_clock::now();
+    try {
+      libsarus::Flock{fileToLock, libsarus::Flock::Type::writeLock,
+                      std::chrono::milliseconds{timeout}};
+    } catch (const libsarus::Error &) {
     }
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double, std::milli> elapsed = end - start;
+    EXPECT_LE(timeout, elapsed.count());
+    EXPECT_LE(elapsed.count(), 2 * timeout);
+  }
 }
 
 static_assert(!std::is_copy_constructible<libsarus::Flock>::value, "");
@@ -136,4 +153,5 @@ static_assert(!std::is_copy_assignable<libsarus::Flock>::value, "");
 static_assert(std::is_move_constructible<libsarus::Flock>::value, "");
 static_assert(std::is_move_assignable<libsarus::Flock>::value, "");
 
-}}
+} // namespace test
+} // namespace libsarus

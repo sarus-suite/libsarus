@@ -18,13 +18,15 @@
 
 namespace libsarus {
 
-void logMessage(const boost::format& message, LogLevel level, std::ostream& out, std::ostream& err) {
-    logMessage(message.str(), level, out, err);
+void logMessage(const boost::format &message, LogLevel level, std::ostream &out,
+                std::ostream &err) {
+  logMessage(message.str(), level, out, err);
 }
 
-void logMessage(const std::string& message, LogLevel level, std::ostream& out, std::ostream& err) {
-    auto subsystemName = "CommonUtility";
-    Logger::getInstance().log(message, subsystemName, level, out, err);
+void logMessage(const std::string &message, LogLevel level, std::ostream &out,
+                std::ostream &err) {
+  auto subsystemName = "CommonUtility";
+  Logger::getInstance().log(message, subsystemName, level, out, err);
 }
 
-}
+} // namespace libsarus

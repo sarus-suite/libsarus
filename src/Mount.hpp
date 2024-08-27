@@ -11,8 +11,8 @@
 #ifndef libsarus_Mount_hpp
 #define libsarus_Mount_hpp
 
-#include <memory>
 #include <boost/filesystem.hpp>
+#include <memory>
 #include <sys/mount.h>
 
 #include "UserIdentity.hpp"
@@ -21,26 +21,26 @@ namespace libsarus {
 
 class Mount {
 public:
-    Mount(const boost::filesystem::path& source,
-          const boost::filesystem::path& destination,
-          const unsigned long mountFlags,
-          const boost::filesystem::path& rootfsDir,
-          const libsarus::UserIdentity userIdentity);
+  Mount(const boost::filesystem::path &source,
+        const boost::filesystem::path &destination,
+        const unsigned long mountFlags,
+        const boost::filesystem::path &rootfsDir,
+        const libsarus::UserIdentity userIdentity);
 
-    void performMount() const;
+  void performMount() const;
 
-    boost::filesystem::path getSource() const { return source; };
-    boost::filesystem::path getDestination() const { return destination; };
-    unsigned long getFlags() const { return mountFlags; };
+  boost::filesystem::path getSource() const { return source; };
+  boost::filesystem::path getDestination() const { return destination; };
+  unsigned long getFlags() const { return mountFlags; };
 
 private:
-    boost::filesystem::path source;
-    boost::filesystem::path destination;
-    unsigned long mountFlags;
-    boost::filesystem::path rootfsDir;
-    libsarus::UserIdentity userIdentity;
+  boost::filesystem::path source;
+  boost::filesystem::path destination;
+  unsigned long mountFlags;
+  boost::filesystem::path rootfsDir;
+  libsarus::UserIdentity userIdentity;
 };
 
-}
+} // namespace libsarus
 
 #endif

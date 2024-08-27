@@ -13,8 +13,8 @@
 
 #include <memory>
 #include <string>
-#include <vector>
 #include <unordered_map>
+#include <vector>
 
 #include <boost/format.hpp>
 #include <rapidjson/document.h>
@@ -26,31 +26,39 @@ namespace libsarus {
 
 class MountParser {
 public:
-    MountParser(const boost::filesystem::path& rootfsDir, const libsarus::UserIdentity& userIdentity);
-    void setMountDestinationRestrictions(const rapidjson::Value& destinationRestrictions);
-    std::unique_ptr<libsarus::Mount> parseMountRequest(const std::unordered_map<std::string, std::string>& mountRequest);
+  MountParser(const boost::filesystem::path &rootfsDir,
+              const libsarus::UserIdentity &userIdentity);
+  void setMountDestinationRestrictions(
+      const rapidjson::Value &destinationRestrictions);
+  std::unique_ptr<libsarus::Mount> parseMountRequest(
+      const std::unordered_map<std::string, std::string> &mountRequest);
 
 private:
-    struct ValidationSettings {
-        std::vector<std::string> destinationDisallowedWithPrefix;
-        std::vector<std::string> destinationDisallowedExact;
-        std::vector<std::string> sourceDisallowedWithPrefix;
-        std::vector<std::string> sourceDisallowedExact;
-    };
+  struct ValidationSettings {
+    std::vector<std::string> destinationDisallowedWithPrefix;
+    std::vector<std::string> destinationDisallowedExact;
+    std::vector<std::string> sourceDisallowedWithPrefix;
+    std::vector<std::string> sourceDisallowedExact;
+  };
 
 private:
-    std::unique_ptr<libsarus::Mount> parseBindMountRequest(const std::unordered_map<std::string, std::string>& requestMap);
-    unsigned long convertBindMountFlags(const std::unordered_map<std::string, std::string>& requestMap);
-    boost::filesystem::path getValidatedMountSource(const std::unordered_map<std::string, std::string>& requestMap);
-    boost::filesystem::path getValidatedMountDestination(const std::unordered_map<std::string, std::string>& requestMap);
-    std::string convertRequestMapToString(const std::unordered_map<std::string, std::string>&) const;
+  std::unique_ptr<libsarus::Mount> parseBindMountRequest(
+      const std::unordered_map<std::string, std::string> &requestMap);
+  unsigned long convertBindMountFlags(
+      const std::unordered_map<std::string, std::string> &requestMap);
+  boost::filesystem::path getValidatedMountSource(
+      const std::unordered_map<std::string, std::string> &requestMap);
+  boost::filesystem::path getValidatedMountDestination(
+      const std::unordered_map<std::string, std::string> &requestMap);
+  std::string convertRequestMapToString(
+      const std::unordered_map<std::string, std::string> &) const;
 
 private:
-    ValidationSettings validationSettings = {};
-    boost::filesystem::path rootfsDir;
-    libsarus::UserIdentity userIdentity;
+  ValidationSettings validationSettings = {};
+  boost::filesystem::path rootfsDir;
+  libsarus::UserIdentity userIdentity;
 };
 
-}
+} // namespace libsarus
 
 #endif

@@ -19,7 +19,6 @@
 
 #include "Logger.hpp"
 
-
 namespace libsarus {
 namespace test {
 
@@ -29,108 +28,115 @@ protected:
 
 class LoggerChecker {
 public:
-    LoggerChecker& log(libsarus::LogLevel logLevel, const std::string& message) {
-        auto& logger = libsarus::Logger::getInstance();
-        logger.log(message, "subsystem", logLevel, stdoutStream, stderrStream);
-        return *this;
-    }
+  LoggerChecker &log(libsarus::LogLevel logLevel, const std::string &message) {
+    auto &logger = libsarus::Logger::getInstance();
+    logger.log(message, "subsystem", logLevel, stdoutStream, stderrStream);
+    return *this;
+  }
 
-    LoggerChecker& expectGeneralMessageInStdout(const std::string& message) {
-        auto pattern = ".*^" + message + "\n.*";
-        expectedPatternInStdout += pattern;
-        return *this;
-    }
+  LoggerChecker &expectGeneralMessageInStdout(const std::string &message) {
+    auto pattern = ".*^" + message + "\n.*";
+    expectedPatternInStdout += pattern;
+    return *this;
+  }
 
-    LoggerChecker& expectMessageInStdout(const std::string& logLevel, const std::string& message) {
-        return expectMessage(logLevel, message, expectedPatternInStdout);
-    }
+  LoggerChecker &expectMessageInStdout(const std::string &logLevel,
+                                       const std::string &message) {
+    return expectMessage(logLevel, message, expectedPatternInStdout);
+  }
 
-    LoggerChecker& expectMessageInStderr(const std::string& logLevel, const std::string& message) {
-        return expectMessage(logLevel, message, expectedPatternInStderr);
-    }
+  LoggerChecker &expectMessageInStderr(const std::string &logLevel,
+                                       const std::string &message) {
+    return expectMessage(logLevel, message, expectedPatternInStderr);
+  }
 
-    ~LoggerChecker() {
-        check(stdoutStream, expectedPatternInStdout);
-        check(stderrStream, expectedPatternInStderr);
-    }
-
-private:
-    LoggerChecker& expectMessage(const std::string& logLevel, const std::string& message, std::string& expectedPattern) {
-        auto messagePattern = "\\[.*\\..*\\] \\[.*\\] \\[subsystem\\] \\[" + logLevel + "\\] " + message + "\n";
-        expectedPattern += messagePattern;
-        return *this;
-    }
-
-    void check(const std::ostringstream& stream, const std::string& expectedPattern) const {
-        auto regex = boost::regex(expectedPattern);
-        boost::cmatch matches;
-        EXPECT_TRUE(boost::regex_match(stream.str().c_str(), matches, regex));
-    }
+  ~LoggerChecker() {
+    check(stdoutStream, expectedPatternInStdout);
+    check(stderrStream, expectedPatternInStderr);
+  }
 
 private:
-    std::ostringstream stdoutStream;
-    std::ostringstream stderrStream;
+  LoggerChecker &expectMessage(const std::string &logLevel,
+                               const std::string &message,
+                               std::string &expectedPattern) {
+    auto messagePattern = "\\[.*\\..*\\] \\[.*\\] \\[subsystem\\] \\[" +
+                          logLevel + "\\] " + message + "\n";
+    expectedPattern += messagePattern;
+    return *this;
+  }
 
-    std::string expectedPatternInStdout;
-    std::string expectedPatternInStderr;
+  void check(const std::ostringstream &stream,
+             const std::string &expectedPattern) const {
+    auto regex = boost::regex(expectedPattern);
+    boost::cmatch matches;
+    EXPECT_TRUE(boost::regex_match(stream.str().c_str(), matches, regex));
+  }
+
+private:
+  std::ostringstream stdoutStream;
+  std::ostringstream stderrStream;
+
+  std::string expectedPatternInStdout;
+  std::string expectedPatternInStderr;
 };
 
 TEST_F(LoggerTest, logger) {
-    const std::string generalMessage = "GENERAL message";
-    const std::string debugMessage = "DEBUG message";
-    const std::string infoMessage = "INFO message";
-    const std::string warnMessage = "WARN message";
-    const std::string errorMessage = "ERROR message";
+  const std::string generalMessage = "GENERAL message";
+  const std::string debugMessage = "DEBUG message";
+  const std::string infoMessage = "INFO message";
+  const std::string warnMessage = "WARN message";
+  const std::string errorMessage = "ERROR message";
 
-    // DEBUG level
-    libsarus::Logger::getInstance().setLevel(libsarus::LogLevel::DEBUG);
-    LoggerChecker{}
-        .log(libsarus::LogLevel::GENERAL, generalMessage)
-        .log(libsarus::LogLevel::DEBUG, debugMessage)
-        .log(libsarus::LogLevel::INFO, infoMessage)
-        .log(libsarus::LogLevel::WARN, warnMessage)
-        .log(libsarus::LogLevel::ERROR, errorMessage)
-        .expectGeneralMessageInStdout(generalMessage)
-        .expectMessageInStdout("DEBUG", debugMessage)
-        .expectMessageInStdout("INFO", infoMessage)
-        .expectMessageInStderr("WARN", warnMessage)
-        .expectMessageInStderr("ERROR", errorMessage);
+  // DEBUG level
+  libsarus::Logger::getInstance().setLevel(libsarus::LogLevel::DEBUG);
+  LoggerChecker{}
+      .log(libsarus::LogLevel::GENERAL, generalMessage)
+      .log(libsarus::LogLevel::DEBUG, debugMessage)
+      .log(libsarus::LogLevel::INFO, infoMessage)
+      .log(libsarus::LogLevel::WARN, warnMessage)
+      .log(libsarus::LogLevel::ERROR, errorMessage)
+      .expectGeneralMessageInStdout(generalMessage)
+      .expectMessageInStdout("DEBUG", debugMessage)
+      .expectMessageInStdout("INFO", infoMessage)
+      .expectMessageInStderr("WARN", warnMessage)
+      .expectMessageInStderr("ERROR", errorMessage);
 
-    // INFO level
-    libsarus::Logger::getInstance().setLevel(libsarus::LogLevel::INFO);
-    LoggerChecker{}
-        .log(libsarus::LogLevel::GENERAL, generalMessage)
-        .log(libsarus::LogLevel::DEBUG, debugMessage)
-        .log(libsarus::LogLevel::INFO, infoMessage)
-        .log(libsarus::LogLevel::WARN, warnMessage)
-        .log(libsarus::LogLevel::ERROR, errorMessage)
-        .expectGeneralMessageInStdout(generalMessage)
-        .expectMessageInStdout("INFO", infoMessage)
-        .expectMessageInStderr("WARN", warnMessage)
-        .expectMessageInStderr("ERROR", errorMessage);
+  // INFO level
+  libsarus::Logger::getInstance().setLevel(libsarus::LogLevel::INFO);
+  LoggerChecker{}
+      .log(libsarus::LogLevel::GENERAL, generalMessage)
+      .log(libsarus::LogLevel::DEBUG, debugMessage)
+      .log(libsarus::LogLevel::INFO, infoMessage)
+      .log(libsarus::LogLevel::WARN, warnMessage)
+      .log(libsarus::LogLevel::ERROR, errorMessage)
+      .expectGeneralMessageInStdout(generalMessage)
+      .expectMessageInStdout("INFO", infoMessage)
+      .expectMessageInStderr("WARN", warnMessage)
+      .expectMessageInStderr("ERROR", errorMessage);
 
-    // WARN level
-    libsarus::Logger::getInstance().setLevel(libsarus::LogLevel::WARN);
-    LoggerChecker{}
-        .log(libsarus::LogLevel::GENERAL, generalMessage)
-        .log(libsarus::LogLevel::DEBUG, debugMessage)
-        .log(libsarus::LogLevel::INFO, infoMessage)
-        .log(libsarus::LogLevel::WARN, warnMessage)
-        .log(libsarus::LogLevel::ERROR, errorMessage)
-        .expectGeneralMessageInStdout(generalMessage)
-        .expectMessageInStderr("WARN", warnMessage)
-        .expectMessageInStderr("ERROR", errorMessage);
+  // WARN level
+  libsarus::Logger::getInstance().setLevel(libsarus::LogLevel::WARN);
+  LoggerChecker{}
+      .log(libsarus::LogLevel::GENERAL, generalMessage)
+      .log(libsarus::LogLevel::DEBUG, debugMessage)
+      .log(libsarus::LogLevel::INFO, infoMessage)
+      .log(libsarus::LogLevel::WARN, warnMessage)
+      .log(libsarus::LogLevel::ERROR, errorMessage)
+      .expectGeneralMessageInStdout(generalMessage)
+      .expectMessageInStderr("WARN", warnMessage)
+      .expectMessageInStderr("ERROR", errorMessage);
 
-    // ERROR level
-    libsarus::Logger::getInstance().setLevel(libsarus::LogLevel::ERROR);
-    LoggerChecker{}
-        .log(libsarus::LogLevel::GENERAL, generalMessage)
-        .log(libsarus::LogLevel::DEBUG, debugMessage)
-        .log(libsarus::LogLevel::INFO, infoMessage)
-        .log(libsarus::LogLevel::WARN, warnMessage)
-        .log(libsarus::LogLevel::ERROR, errorMessage)
-        .expectGeneralMessageInStdout(generalMessage)
-        .expectMessageInStderr("ERROR", errorMessage);
+  // ERROR level
+  libsarus::Logger::getInstance().setLevel(libsarus::LogLevel::ERROR);
+  LoggerChecker{}
+      .log(libsarus::LogLevel::GENERAL, generalMessage)
+      .log(libsarus::LogLevel::DEBUG, debugMessage)
+      .log(libsarus::LogLevel::INFO, infoMessage)
+      .log(libsarus::LogLevel::WARN, warnMessage)
+      .log(libsarus::LogLevel::ERROR, errorMessage)
+      .expectGeneralMessageInStdout(generalMessage)
+      .expectMessageInStderr("ERROR", errorMessage);
 }
 
-}}
+} // namespace test
+} // namespace libsarus

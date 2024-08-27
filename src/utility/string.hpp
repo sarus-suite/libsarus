@@ -12,9 +12,9 @@
 #define libsarus_utility_string_hpp
 
 #include <string>
+#include <sys/types.h>
 #include <tuple>
 #include <unordered_map>
-#include <sys/types.h>
 
 /**
  * Utility functions for string manipulation
@@ -23,15 +23,18 @@
 namespace libsarus {
 namespace string {
 
-std::string removeWhitespaces(const std::string&);
-std::string replace(std::string &buf, const std::string& from, const std::string& to);
-std::string eraseFirstAndLastDoubleQuote(const std::string& buf);
-std::pair<std::string, std::string> parseKeyValuePair(const std::string& pairString, const char separator = '=');
+std::string removeWhitespaces(const std::string &);
+std::string replace(std::string &buf, const std::string &from,
+                    const std::string &to);
+std::string eraseFirstAndLastDoubleQuote(const std::string &buf);
+std::pair<std::string, std::string>
+parseKeyValuePair(const std::string &pairString, const char separator = '=');
 std::string generateRandom(size_t size);
-std::unordered_map<std::string, std::string> parseMap(const std::string& input,
-                                                      const char pairSeparators = ',',
-                                                      const char keyValueSeparators = '=');
+std::unordered_map<std::string, std::string>
+parseMap(const std::string &input, const char pairSeparators = ',',
+         const char keyValueSeparators = '=');
 
-}}
+} // namespace string
+} // namespace libsarus
 
 #endif

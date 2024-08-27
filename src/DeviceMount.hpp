@@ -13,8 +13,8 @@
 
 #include <sys/types.h>
 
-#include "Mount.hpp"
 #include "DeviceAccess.hpp"
+#include "Mount.hpp"
 
 namespace libsarus {
 
@@ -23,20 +23,20 @@ namespace libsarus {
  */
 class DeviceMount : public Mount {
 public:
-    DeviceMount(Mount&& baseMount, const DeviceAccess& access);
+  DeviceMount(Mount &&baseMount, const DeviceAccess &access);
 
 public:
-    char getType() const {return type;};
-    unsigned int getMajorID() const;
-    unsigned int getMinorID() const;
-    const DeviceAccess& getAccess() const {return access;};
+  char getType() const { return type; };
+  unsigned int getMajorID() const;
+  unsigned int getMinorID() const;
+  const DeviceAccess &getAccess() const { return access; };
 
 private:
-    DeviceAccess access;
-    dev_t id;
-    char type;
+  DeviceAccess access;
+  dev_t id;
+  char type;
 };
 
-}
+} // namespace libsarus
 
 #endif
