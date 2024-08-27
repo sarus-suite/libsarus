@@ -32,34 +32,42 @@ protected:
   _DECLARE(FTRWLLD)
 
   void functionThatThrows() {
+    // clang-format off
     _TAG(FTT, SARUS_THROW_ERROR("first error message"));
+    // clang-format on
   }
 
   void functionThatRethrows() {
     try {
       functionThatThrows();
     } catch (libsarus::Error &error) {
+      // clang-format off
       _TAG(FTR, SARUS_RETHROW_ERROR(error, "second error message"));
+      // clang-format on
     }
   }
 
   void functionThatThrowsFromStdException() {
     auto stdException = std::runtime_error("first error message");
     const auto &ref = stdException;
+    // clang-format off
     _TAG(FTTFSE, SARUS_RETHROW_ERROR(ref, "second error message"));
+    // clang-format on
   }
 
   void functionThatThrowsWithLogLevelDebug() {
-    _TAG(FTTWLLD,
-         SARUS_THROW_ERROR("first error message", libsarus::LogLevel::DEBUG));
+    // clang-format off
+    _TAG(FTTWLLD, SARUS_THROW_ERROR("first error message", libsarus::LogLevel::DEBUG));
+    // clang-format on
   }
 
   void functionThatRethrowsWithLogLevelDebug() {
     try {
       functionThatThrows();
     } catch (libsarus::Error &error) {
-      _TAG(FTRWLLD, SARUS_RETHROW_ERROR(error, "second error message",
-                                        libsarus::LogLevel::DEBUG));
+      // clang-format off
+      _TAG(FTRWLLD, SARUS_RETHROW_ERROR(error, "second error message", libsarus::LogLevel::DEBUG));
+      // clang-format on
     }
   }
 };
