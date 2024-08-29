@@ -40,7 +40,7 @@ std::vector<int> getCpuAffinity();
 void setCpuAffinity(const std::vector<int> &);
 void setStdinEcho(bool);
 
-} // namespace process
-} // namespace libsarus
+}  // namespace process
+}  // namespace libsarus
 
 #endif

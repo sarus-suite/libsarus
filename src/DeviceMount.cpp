@@ -19,24 +19,25 @@ namespace libsarus {
 
 DeviceMount::DeviceMount(Mount &&baseMount, const DeviceAccess &access)
     : Mount{std::move(baseMount)}, access{access} {
-  logMessage(boost::format("Constructing device mount object: source = %s; "
-                           "destination = %s; mount flags = %d; access = %s") %
-                 getSource().string() % getDestination().string() % getFlags() %
-                 access.string(),
-             LogLevel::DEBUG);
+    logMessage(
+        boost::format("Constructing device mount object: source = %s; "
+                      "destination = %s; mount flags = %d; access = %s") %
+            getSource().string() % getDestination().string() % getFlags() %
+            access.string(),
+        LogLevel::DEBUG);
 
-  if (!libsarus::filesystem::isDeviceFile(getSource())) {
-    auto message =
-        boost::format("Source path %s is not a device file") % getSource();
-    SARUS_THROW_ERROR(message.str());
-  }
+    if (!libsarus::filesystem::isDeviceFile(getSource())) {
+        auto message =
+            boost::format("Source path %s is not a device file") % getSource();
+        SARUS_THROW_ERROR(message.str());
+    }
 
-  id = libsarus::filesystem::getDeviceID(getSource());
-  type = libsarus::filesystem::getDeviceType(getSource());
+    id = libsarus::filesystem::getDeviceID(getSource());
+    type = libsarus::filesystem::getDeviceType(getSource());
 }
 
 unsigned int DeviceMount::getMajorID() const { return major(id); }
 
 unsigned int DeviceMount::getMinorID() const { return minor(id); }
 
-} // namespace libsarus
+}  // namespace libsarus

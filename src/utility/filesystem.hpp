@@ -12,9 +12,10 @@
 #define libsarus_utility_filesystem_hpp
 
 #include <string>
-#include <sys/types.h>
 #include <tuple>
 #include <vector>
+
+#include <sys/types.h>
 
 #include <boost/filesystem.hpp>
 
@@ -45,17 +46,16 @@ std::string readFile(const boost::filesystem::path &path);
 void writeTextFile(const std::string &text,
                    const boost::filesystem::path &filename,
                    const std::ios_base::openmode mode = std::ios_base::out);
-boost::filesystem::path
-makeUniquePathWithRandomSuffix(const boost::filesystem::path &);
+boost::filesystem::path makeUniquePathWithRandomSuffix(
+    const boost::filesystem::path &);
 std::string makeColonSeparatedListOfPaths(
     const std::vector<boost::filesystem::path> &paths);
 boost::filesystem::path appendPathsWithinRootfs(
     const boost::filesystem::path &rootfs, const boost::filesystem::path &path0,
     const boost::filesystem::path &path1,
     std::vector<boost::filesystem::path> *traversedSymlinks = nullptr);
-boost::filesystem::path
-realpathWithinRootfs(const boost::filesystem::path &rootfs,
-                     const boost::filesystem::path &path);
+boost::filesystem::path realpathWithinRootfs(
+    const boost::filesystem::path &rootfs, const boost::filesystem::path &path);
 dev_t getDeviceID(const boost::filesystem::path &path);
 char getDeviceType(const boost::filesystem::path &path);
 
@@ -66,7 +66,7 @@ bool isSymlink(const boost::filesystem::path &path);
 bool isLibc(const boost::filesystem::path &);
 bool isSharedLib(const boost::filesystem::path &file);
 
-} // namespace filesystem
-} // namespace libsarus
+}  // namespace filesystem
+}  // namespace libsarus
 
 #endif

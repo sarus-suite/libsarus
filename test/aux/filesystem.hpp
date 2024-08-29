@@ -15,8 +15,9 @@
 #ifndef libsarus_test_aux_filesystem_hpp
 #define libsarus_test_aux_filesystem_hpp
 
-#include <fcntl.h>
 #include <string>
+
+#include <fcntl.h>
 
 #include <boost/filesystem.hpp>
 
@@ -39,9 +40,9 @@ void createBlockDeviceFile(const boost::filesystem::path &path,
                                                S_IWGRP | S_IROTH | S_IWOTH);
 void createTestDirectoryTree(const std::string &dir);
 
-} // namespace filesystem
-} // namespace aux
-} // namespace test
-} // namespace libsarus
+}  // namespace filesystem
+}  // namespace aux
+}  // namespace test
+}  // namespace libsarus
 
 #endif

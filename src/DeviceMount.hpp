@@ -22,21 +22,21 @@ namespace libsarus {
  * This class represents a bind mount for a device file
  */
 class DeviceMount : public Mount {
-public:
-  DeviceMount(Mount &&baseMount, const DeviceAccess &access);
+  public:
+    DeviceMount(Mount &&baseMount, const DeviceAccess &access);
 
-public:
-  char getType() const { return type; };
-  unsigned int getMajorID() const;
-  unsigned int getMinorID() const;
-  const DeviceAccess &getAccess() const { return access; };
+  public:
+    char getType() const { return type; };
+    unsigned int getMajorID() const;
+    unsigned int getMinorID() const;
+    const DeviceAccess &getAccess() const { return access; };
 
-private:
-  DeviceAccess access;
-  dev_t id;
-  char type;
+  private:
+    DeviceAccess access;
+    dev_t id;
+    char type;
 };
 
-} // namespace libsarus
+}  // namespace libsarus
 
 #endif

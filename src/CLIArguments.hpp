@@ -25,40 +25,40 @@ namespace libsarus {
  * to be passed to program (the char* argv[] parameter)
  */
 class CLIArguments {
-public:
-  using const_iterator = typename std::vector<char *>::const_iterator;
+  public:
+    using const_iterator = typename std::vector<char *>::const_iterator;
 
-public:
-  CLIArguments();
-  CLIArguments(const CLIArguments &rhs);
-  CLIArguments(int argc, char *argv[]);
-  CLIArguments(std::initializer_list<std::string> args);
-  template <class InputIter>
-  CLIArguments(InputIter begin, InputIter end) : CLIArguments() {
-    for (InputIter arg = begin; arg != end; ++arg) {
-      push_back(*arg);
-    }
-  };
+  public:
+    CLIArguments();
+    CLIArguments(const CLIArguments &rhs);
+    CLIArguments(int argc, char *argv[]);
+    CLIArguments(std::initializer_list<std::string> args);
+    template <class InputIter>
+    CLIArguments(InputIter begin, InputIter end) : CLIArguments() {
+        for (InputIter arg = begin; arg != end; ++arg) {
+            push_back(*arg);
+        }
+    };
 
-  ~CLIArguments();
+    ~CLIArguments();
 
-  CLIArguments &operator=(const CLIArguments &rhs);
-  void push_back(const std::string &arg);
+    CLIArguments &operator=(const CLIArguments &rhs);
+    void push_back(const std::string &arg);
 
-  int argc() const;
-  char **argv() const;
+    int argc() const;
+    char **argv() const;
 
-  const_iterator begin() const;
-  const_iterator end() const;
+    const_iterator begin() const;
+    const_iterator end() const;
 
-  CLIArguments &operator+=(const CLIArguments &rhs);
+    CLIArguments &operator+=(const CLIArguments &rhs);
 
-  bool empty() const;
-  void clear();
-  std::string string() const;
+    bool empty() const;
+    void clear();
+    std::string string() const;
 
-private:
-  std::vector<char *> args;
+  private:
+    std::vector<char *> args;
 };
 
 bool operator==(const CLIArguments &, const CLIArguments &);
@@ -66,6 +66,6 @@ const CLIArguments operator+(const CLIArguments &, const CLIArguments &);
 std::ostream &operator<<(std::ostream &, const CLIArguments &);
 std::istream &operator>>(std::istream &, CLIArguments &);
 
-} // namespace libsarus
+}  // namespace libsarus
 
 #endif

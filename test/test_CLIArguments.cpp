@@ -22,37 +22,37 @@ namespace libsarus {
 namespace test {
 
 class CLIArgumentsTest : public testing::Test {
-protected:
+  protected:
 };
 
 TEST_F(CLIArgumentsTest, serialize) {
-  auto args = libsarus::CLIArguments{"command", "arg0", "arg1"};
+    auto args = libsarus::CLIArguments{"command", "arg0", "arg1"};
 
-  std::stringstream os;
-  os << args;
+    std::stringstream os;
+    os << args;
 
-  EXPECT_EQ(os.str(), std::string{"[\"command\", \"arg0\", \"arg1\"]"});
+    EXPECT_EQ(os.str(), std::string{"[\"command\", \"arg0\", \"arg1\"]"});
 };
 
 TEST_F(CLIArgumentsTest, deserialize) {
-  std::stringstream is("[\"command\", \"arg0\", \"arg1\"]");
+    std::stringstream is("[\"command\", \"arg0\", \"arg1\"]");
 
-  libsarus::CLIArguments args;
-  is >> args;
+    libsarus::CLIArguments args;
+    is >> args;
 
-  auto expected = libsarus::CLIArguments{"command", "arg0", "arg1"};
-  EXPECT_EQ(args, expected);
+    auto expected = libsarus::CLIArguments{"command", "arg0", "arg1"};
+    EXPECT_EQ(args, expected);
 };
 
 TEST_F(CLIArgumentsTest, string) {
-  std::stringstream is("[\"command\", \"arg0\", \"arg1\"]");
+    std::stringstream is("[\"command\", \"arg0\", \"arg1\"]");
 
-  libsarus::CLIArguments args;
-  is >> args;
+    libsarus::CLIArguments args;
+    is >> args;
 
-  auto expected = std::string{"command arg0 arg1"};
-  EXPECT_EQ(args.string(), expected);
+    auto expected = std::string{"command arg0 arg1"};
+    EXPECT_EQ(args.string(), expected);
 };
 
-} // namespace test
-} // namespace libsarus
+}  // namespace test
+}  // namespace libsarus

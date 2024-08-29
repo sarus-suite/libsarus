@@ -38,39 +38,39 @@ class Logger;
  * locks (see the man page for further details).
  */
 class Flock {
-public:
-  static const milliseconds noTimeout;
-  enum Type { readLock, writeLock };
+  public:
+    static const milliseconds noTimeout;
+    enum Type { readLock, writeLock };
 
-public:
-  Flock();
-  Flock(const boost::filesystem::path &file, const Type type = readLock,
-        const milliseconds &timeoutTime = noTimeout,
-        const milliseconds &warningTime = milliseconds{1000});
-  Flock(const Flock &) = delete;
-  Flock(Flock &&);
-  ~Flock();
+  public:
+    Flock();
+    Flock(const boost::filesystem::path &file, const Type type = readLock,
+          const milliseconds &timeoutTime = noTimeout,
+          const milliseconds &warningTime = milliseconds{1000});
+    Flock(const Flock &) = delete;
+    Flock(Flock &&);
+    ~Flock();
 
-  void convertToType(const Type type);
+    void convertToType(const Type type);
 
-  Flock &operator=(const Flock &) = delete;
-  Flock &operator=(Flock &&);
+    Flock &operator=(const Flock &) = delete;
+    Flock &operator=(Flock &&);
 
-private:
-  void timedLockAcquisition();
-  bool acquireLockAtomically();
-  void release();
+  private:
+    void timedLockAcquisition();
+    bool acquireLockAtomically();
+    void release();
 
-private:
-  libsarus::Logger *logger;
-  std::string loggerSubsystemName = "Flock";
-  boost::optional<boost::filesystem::path> lockfile;
-  Type lockType;
-  int fileFd = -1;
-  milliseconds timeoutTime;
-  milliseconds warningTime;
+  private:
+    libsarus::Logger *logger;
+    std::string loggerSubsystemName = "Flock";
+    boost::optional<boost::filesystem::path> lockfile;
+    Type lockType;
+    int fileFd = -1;
+    milliseconds timeoutTime;
+    milliseconds warningTime;
 };
 
-} // namespace libsarus
+}  // namespace libsarus
 
 #endif

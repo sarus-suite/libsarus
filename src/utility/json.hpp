@@ -34,7 +34,7 @@ void write(const rapidjson::Value &json,
            const boost::filesystem::path &filename);
 std::string serialize(const rapidjson::Value &json);
 
-} // namespace json
-} // namespace libsarus
+}  // namespace json
+}  // namespace libsarus
 
 #endif

@@ -28,6 +28,6 @@ void logMessage(const std::string &, LogLevel, std::ostream &out = std::cout,
 void logMessage(const boost::format &, LogLevel, std::ostream &out = std::cout,
                 std::ostream &err = std::cerr);
 
-} // namespace libsarus
+}  // namespace libsarus
 
 #endif

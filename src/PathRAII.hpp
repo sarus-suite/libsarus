@@ -19,24 +19,24 @@ namespace libsarus {
 // RAII wrapper for a path: manages the lifetime of a specified path,
 // which is automatically removed by the destructor of this class.
 class PathRAII {
-public:
-  PathRAII() = default;
-  PathRAII(const boost::filesystem::path &path);
-  PathRAII(const PathRAII &) = delete;
-  PathRAII(PathRAII &&);
-  PathRAII &operator=(const PathRAII &) = delete;
-  PathRAII &operator=(PathRAII &&);
-  ~PathRAII();
+  public:
+    PathRAII() = default;
+    PathRAII(const boost::filesystem::path &path);
+    PathRAII(const PathRAII &) = delete;
+    PathRAII(PathRAII &&);
+    PathRAII &operator=(const PathRAII &) = delete;
+    PathRAII &operator=(PathRAII &&);
+    ~PathRAII();
 
-  const boost::filesystem::path &getPath() const;
-  void release();
+    const boost::filesystem::path &getPath() const;
+    void release();
 
-private:
-  void setFilesAsRemovableByOwner() const;
+  private:
+    void setFilesAsRemovableByOwner() const;
 
-  boost::optional<boost::filesystem::path> path;
+    boost::optional<boost::filesystem::path> path;
 };
 
-} // namespace libsarus
+}  // namespace libsarus
 
 #endif

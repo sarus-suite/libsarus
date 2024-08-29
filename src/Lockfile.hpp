@@ -30,32 +30,32 @@ class Logger;
  * from the filesystem.
  */
 class Lockfile {
-public:
-  static constexpr unsigned int noTimeout =
-      std::numeric_limits<unsigned int>::max();
+  public:
+    static constexpr unsigned int noTimeout =
+        std::numeric_limits<unsigned int>::max();
 
-public:
-  Lockfile();
-  Lockfile(const boost::filesystem::path &file,
-           unsigned int timeoutMs = noTimeout, unsigned int warningMs = 1000);
-  Lockfile(const Lockfile &) = delete;
-  Lockfile(Lockfile &&);
-  ~Lockfile();
+  public:
+    Lockfile();
+    Lockfile(const boost::filesystem::path &file,
+             unsigned int timeoutMs = noTimeout, unsigned int warningMs = 1000);
+    Lockfile(const Lockfile &) = delete;
+    Lockfile(Lockfile &&);
+    ~Lockfile();
 
-  Lockfile &operator=(const Lockfile &) = delete;
-  Lockfile &operator=(Lockfile &&);
+    Lockfile &operator=(const Lockfile &) = delete;
+    Lockfile &operator=(Lockfile &&);
 
-private:
-  boost::filesystem::path
-  convertToLockfile(const boost::filesystem::path &file) const;
-  bool createLockfileAtomically() const;
+  private:
+    boost::filesystem::path convertToLockfile(
+        const boost::filesystem::path &file) const;
+    bool createLockfileAtomically() const;
 
-private:
-  libsarus::Logger *logger;
-  std::string loggerSubsystemName = "Lockfile";
-  boost::optional<boost::filesystem::path> lockfile;
+  private:
+    libsarus::Logger *logger;
+    std::string loggerSubsystemName = "Lockfile";
+    boost::optional<boost::filesystem::path> lockfile;
 };
 
-} // namespace libsarus
+}  // namespace libsarus
 
 #endif
