@@ -59,8 +59,10 @@ stages:
 check.format:
   extends: .check.format
   rules:
-    - if: ($CI_COMMIT_REF_PROTECTED == 'false' && $CI_PIPELINE_SOURCE != "merge_request_event")
+    - if: $CI_COMMIT_REF_PROTECTED == 'false'
       allow_failure: true
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      allow_failure: false
 
 check.runner:
   extends: .check.runner
