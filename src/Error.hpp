@@ -115,30 +115,30 @@ std::string getExceptionTypeString(const std::exception &e);
 // SARUS_RETHROW_ERROR macros
 #define SARUS_GET_OVERLOADED_RETHROW_ERROR(_1, _2, _3, NAME, ...) NAME
 
-#define SARUS_RETHROW_ERROR_3(exception, errorMessage, logLevel)             \
-    {                                                                        \
-        auto errorTraceEntry = libsarus::Error::ErrorTraceEntry{             \
-            errorMessage, __FILENAME__, __LINE__, __func__};                 \
-        const auto *cp = dynamic_cast<const libsarus::Error *>(&exception);  \
-        if (cp) { /* check if dynamic type is libsarus::Error */             \
-            assert(!std::is_const<                                           \
-                   decltype(exception)>{}); /* a libsarus::Error object must \
-                                               be caught as non-const                                                         \
-                                               reference because we need to                                                                  \
-                                               modify its internal error trace                                                                       \
-                                             */                              \
-            auto *p = const_cast<libsarus::Error *>(cp);                     \
-            p->setLogLevel(logLevel);                                        \
-            p->appendErrorTraceEntry(errorTraceEntry);                       \
-            throw;                                                           \
-        } else {                                                             \
-            auto previousErrorTraceEntry = libsarus::Error::ErrorTraceEntry{ \
-                exception.what(), "unspecified location", -1,                \
-                libsarus::getExceptionTypeString(exception)};                \
-            auto error = libsarus::Error{logLevel, previousErrorTraceEntry}; \
-            error.appendErrorTraceEntry(errorTraceEntry);                    \
-            throw error;                                                     \
-        }                                                                    \
+#define SARUS_RETHROW_ERROR_3(exception, errorMessage, logLevel)               \
+    {                                                                          \
+        auto errorTraceEntry = libsarus::Error::ErrorTraceEntry{               \
+            errorMessage, __FILENAME__, __LINE__, __func__};                   \
+        const auto *cp = dynamic_cast<const libsarus::Error *>(&exception);    \
+        if (cp) { /* check if dynamic type is libsarus::Error */               \
+            assert(!std::is_const<                                             \
+                   decltype(exception)>{}); /* a libsarus::Error object must   \
+                                               be caught as non-const          \
+                                               reference because we need to    \
+                                               modify its internal error trace \
+                                             */                                \
+            auto *p = const_cast<libsarus::Error *>(cp);                       \
+            p->setLogLevel(logLevel);                                          \
+            p->appendErrorTraceEntry(errorTraceEntry);                         \
+            throw;                                                             \
+        } else {                                                               \
+            auto previousErrorTraceEntry = libsarus::Error::ErrorTraceEntry{   \
+                exception.what(), "unspecified location", -1,                  \
+                libsarus::getExceptionTypeString(exception)};                  \
+            auto error = libsarus::Error{logLevel, previousErrorTraceEntry};   \
+            error.appendErrorTraceEntry(errorTraceEntry);                      \
+            throw error;                                                       \
+        }                                                                      \
     }
 
 #define SARUS_RETHROW_ERROR_2(exception, errorMessage)                        \
