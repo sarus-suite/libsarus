@@ -12,16 +12,16 @@
  *  @brief General utility functions for custom mounts
  */
 
-#include "mount.hpp"
+#include "libsarus/utility/mount.hpp"
 
 #include <errno.h>
 
 #include <boost/format.hpp>
 
-#include "CLIArguments.hpp"
-#include "Error.hpp"
-#include "Logger.hpp"
-#include "Utility.hpp"
+#include "libsarus/CLIArguments.hpp"
+#include "libsarus/Error.hpp"
+#include "libsarus/Logger.hpp"
+#include "libsarus/Utility.hpp"
 
 /**
  * Utility functions for mounting

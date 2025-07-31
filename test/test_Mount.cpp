@@ -15,10 +15,10 @@
 
 #include <gtest/gtest.h>
 
-#include "Mount.hpp"
-#include "PathRAII.hpp"
-#include "Utility.hpp"
-#include "aux/filesystem.hpp"
+#include "libsarus/Mount.hpp"
+#include "libsarus/PathRAII.hpp"
+#include "libsarus/Utility.hpp"
+#include "libsarus/test/aux/filesystem.hpp"
 
 namespace libsarus {
 namespace test {

@@ -8,7 +8,7 @@
  *
  */
 
-#include "UserIdentity.hpp"
+#include "libsarus/UserIdentity.hpp"
 
 #include <cstring>
 
@@ -16,7 +16,7 @@
 
 #include <boost/format.hpp>
 
-#include "Error.hpp"
+#include "libsarus/Error.hpp"
 
 namespace libsarus {
 

@@ -8,10 +8,10 @@
  *
  */
 
-#include "PathRAII.hpp"
+#include "libsarus/PathRAII.hpp"
 
-#include "Error.hpp"
-#include "Utility.hpp"
+#include "libsarus/Error.hpp"
+#include "libsarus/Utility.hpp"
 
 namespace libsarus {
 

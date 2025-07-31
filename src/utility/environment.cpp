@@ -8,11 +8,11 @@
  *
  */
 
-#include "environment.hpp"
+#include "libsarus/utility/environment.hpp"
 
-#include "Error.hpp"
-#include "utility/logging.hpp"
-#include "utility/string.hpp"
+#include "libsarus/Error.hpp"
+#include "libsarus/utility/logging.hpp"
+#include "libsarus/utility/string.hpp"
 
 /**
  * Utility functions for environment variables

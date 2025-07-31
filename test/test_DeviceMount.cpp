@@ -15,11 +15,11 @@
 
 #include <gtest/gtest.h>
 
-#include "DeviceAccess.hpp"
-#include "DeviceMount.hpp"
-#include "PathRAII.hpp"
-#include "Utility.hpp"
-#include "aux/filesystem.hpp"
+#include "libsarus/DeviceAccess.hpp"
+#include "libsarus/DeviceMount.hpp"
+#include "libsarus/PathRAII.hpp"
+#include "libsarus/Utility.hpp"
+#include "libsarus/test/aux/filesystem.hpp"
 
 namespace libsarus {
 namespace test {

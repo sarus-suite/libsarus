@@ -8,7 +8,7 @@
  *
  */
 
-#include "Error.hpp"
+#include "libsarus/Error.hpp"
 
 namespace libsarus {
 

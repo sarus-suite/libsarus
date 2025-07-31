@@ -8,7 +8,7 @@
  *
  */
 
-#include "Logger.hpp"
+#include "libsarus/Logger.hpp"
 
 #include <cerrno>
 #include <fstream>
@@ -22,8 +22,8 @@
 
 #include <boost/format.hpp>
 
-#include "Error.hpp"
-#include "Utility.hpp"
+#include "libsarus/Error.hpp"
+#include "libsarus/Utility.hpp"
 
 namespace libsarus {
 

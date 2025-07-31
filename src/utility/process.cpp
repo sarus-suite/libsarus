@@ -8,7 +8,7 @@
  *
  */
 
-#include "process.hpp"
+#include "libsarus/utility/process.hpp"
 
 #include <sstream>
 
@@ -20,10 +20,10 @@
 #include <sys/wait.h>
 #include <termios.h>
 
-#include "Error.hpp"
-#include "PasswdDB.hpp"
-#include "utility/filesystem.hpp"
-#include "utility/logging.hpp"
+#include "libsarus/Error.hpp"
+#include "libsarus/PasswdDB.hpp"
+#include "libsarus/utility/logging.hpp"
+#include "libsarus/utility/filesystem.hpp"
 
 /**
  * Utility functions for system operations

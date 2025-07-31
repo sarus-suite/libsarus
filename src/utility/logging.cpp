@@ -8,9 +8,9 @@
  *
  */
 
-#include "logging.hpp"
+#include "libsarus/utility/logging.hpp"
 
-#include "Logger.hpp"
+#include "libsarus/Logger.hpp"
 
 /**
  * Utility functions for output controls

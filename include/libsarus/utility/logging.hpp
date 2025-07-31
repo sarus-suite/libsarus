@@ -15,7 +15,7 @@
 
 #include <boost/format.hpp>
 
-#include "Logger.hpp"
+#include "libsarus/Logger.hpp"
 
 /**
  * Utility functions for output controls

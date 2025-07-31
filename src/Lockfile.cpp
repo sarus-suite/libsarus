@@ -8,7 +8,7 @@
  *
  */
 
-#include "Lockfile.hpp"
+#include "libsarus/Lockfile.hpp"
 
 #include <chrono>
 #include <thread>
@@ -19,8 +19,8 @@
 
 #include <boost/format.hpp>
 
-#include "Error.hpp"
-#include "Logger.hpp"
+#include "libsarus/Error.hpp"
+#include "libsarus/Logger.hpp"
 
 namespace libsarus {
 

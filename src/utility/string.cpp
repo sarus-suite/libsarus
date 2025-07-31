@@ -9,7 +9,7 @@
  *
  */
 
-#include "string.hpp"
+#include "libsarus/utility/string.hpp"
 
 #include <iostream>
 #include <random>
@@ -18,8 +18,8 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 
-#include "Error.hpp"
-#include "utility/logging.hpp"
+#include "libsarus/Error.hpp"
+#include "libsarus/utility/logging.hpp"
 
 /**
  * Utility functions for string manipulation

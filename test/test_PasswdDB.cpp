@@ -14,8 +14,8 @@
 #include <boost/filesystem.hpp>
 #include <gtest/gtest.h>
 
-#include "PasswdDB.hpp"
-#include "PathRAII.hpp"
+#include "libsarus/PasswdDB.hpp"
+#include "libsarus/PathRAII.hpp"
 
 namespace libsarus {
 namespace test {

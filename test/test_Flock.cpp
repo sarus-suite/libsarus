@@ -13,9 +13,9 @@
 #include <boost/filesystem.hpp>
 #include <gtest/gtest.h>
 
-#include "Error.hpp"
-#include "Flock.hpp"
-#include "Utility.hpp"
+#include "libsarus/Error.hpp"
+#include "libsarus/Flock.hpp"
+#include "libsarus/Utility.hpp"
 
 namespace libsarus {
 namespace test {

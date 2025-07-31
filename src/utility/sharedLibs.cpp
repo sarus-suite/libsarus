@@ -8,17 +8,17 @@
  *
  */
 
-#include "sharedLibs.hpp"
+#include "libsarus/utility/sharedLibs.hpp"
 
 #include <sstream>
 
 #include <boost/algorithm/string.hpp>
 #include <boost/regex.hpp>
 
-#include "Error.hpp"
-#include "utility/filesystem.hpp"
-#include "utility/logging.hpp"
-#include "utility/process.hpp"
+#include "libsarus/Error.hpp"
+#include "libsarus/utility/logging.hpp"
+#include "libsarus/utility/filesystem.hpp"
+#include "libsarus/utility/process.hpp"
 
 /**
  * Utility functions for shared libraries

@@ -17,8 +17,8 @@
 #include <boost/filesystem.hpp>
 #include <boost/optional.hpp>
 
-#include "CLIArguments.hpp"
-#include "UserIdentity.hpp"
+#include "libsarus/CLIArguments.hpp"
+#include "libsarus/UserIdentity.hpp"
 
 /**
  * Utility functions for system operations

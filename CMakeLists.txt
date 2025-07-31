@@ -36,7 +36,7 @@ find_program(GIT_PATH git)
 add_definitions(-DBOOST_NO_CXX11_SCOPED_ENUMS)
 
 # Include headers
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${CMAKE_SOURCE_DIR}/dep/rapidjson/include)
 
@@ -52,6 +52,7 @@ message(STATUS "libsarus version: " ${LATEST_GIT_TAG})
 
 # Continue in subdirectories
 add_subdirectory(src)
+add_subdirectory(include)
 if(${ENABLE_UNIT_TESTS})
   add_subdirectory(test)
 endif(${ENABLE_UNIT_TESTS})

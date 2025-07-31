@@ -8,14 +8,14 @@
  *
  */
 
-#include "PasswdDB.hpp"
+#include "libsarus/PasswdDB.hpp"
 
 #include <fstream>
 
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 
-#include "Error.hpp"
+#include "libsarus/Error.hpp"
 
 namespace libsarus {
 
