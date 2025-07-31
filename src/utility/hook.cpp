@@ -172,14 +172,16 @@ void enterPidNamespaceOfProcess(pid_t pid) {
  * such file, please refer to the proc(5) man page. For details about cgroup
  * subsystems belonging to different namespaces, please refer to the
  * cgroup_namespaces(7) man page.
+ * TODO: upgrade it to cgroup v2.
  */
 std::tuple<boost::filesystem::path, boost::filesystem::path>
 findSubsystemMountPaths(const std::string &subsystemName,
                         const boost::filesystem::path &procPrefixDir,
                         const pid_t pid) {
     // Print deprecation notice.
-    hook::logMessage("!!DEPRECATED!! The function 'findSubsystemMountPaths' "
-                     "is deprecated as it assumes cgroups v1.",
+    hook::logMessage(
+        "!!DEPRECATED!! The function 'findSubsystemMountPaths' "
+        "is deprecated as it assumes cgroups v1.",
         libsarus::LogLevel::WARN);
 
     auto mountinfoPath = boost::filesystem::path(
@@ -250,14 +252,16 @@ findSubsystemMountPaths(const std::string &subsystemName,
  * about cgroup hierarchies rooted in different namespaces, please refer to the
  * cgroup_namespaces(7) man page. The returned path is relative to the mount
  * point of the requested subsystem hierarchy.
+ * TODO: upgrade it to cgroup v2.
  */
 boost::filesystem::path findCgroupPathInHierarchy(
     const std::string &subsystemName,
     const boost::filesystem::path &procPrefixDir,
     const boost::filesystem::path &subsystemMountRoot, const pid_t pid) {
     // Print deprecation notice.
-    hook::logMessage("!!DEPRECATED!! The function 'findCgroupPathInHierarchy' "
-                     "is deprecated as it assumes cgroups v1.",
+    hook::logMessage(
+        "!!DEPRECATED!! The function 'findCgroupPathInHierarchy' "
+        "is deprecated as it assumes cgroups v1.",
         libsarus::LogLevel::WARN);
 
     auto procFilePath = boost::filesystem::path(procPrefixDir / "proc" /
@@ -317,12 +321,14 @@ boost::filesystem::path findCgroupPathInHierarchy(
 
 // Find the absolute path of a cgroup given a subsystem name, a prefix path for
 // the location of a /proc filesystem and a pid
+// TODO: upgrade it to cgroup v2.
 boost::filesystem::path findCgroupPath(
     const std::string &subsystemName,
     const boost::filesystem::path &procPrefixDir, const pid_t pid) {
     // Print deprecation notice.
-    hook::logMessage("!!DEPRECATED!! The function 'findCgroupPath' "
-                     "is deprecated as it assumes cgroups v1.",
+    hook::logMessage(
+        "!!DEPRECATED!! The function 'findCgroupPath' "
+        "is deprecated as it assumes cgroups v1.",
         libsarus::LogLevel::WARN);
 
     hook::logMessage(
@@ -360,12 +366,14 @@ boost::filesystem::path findCgroupPath(
  * For reference about the involved files and syntax, check the following
  * resource:
  * - https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v1/devices.html
+ * TODO: upgrade it to cgroup v2.
  */
 void whitelistDeviceInCgroup(const boost::filesystem::path &cgroupPath,
                              const boost::filesystem::path &deviceFile) {
     // Print deprecation notice.
-    hook::logMessage("!!DEPRECATED!! The function 'whitelistDeviceInCgroup' "
-                     "is deprecated as it assumes cgroups v1.",
+    hook::logMessage(
+        "!!DEPRECATED!! The function 'whitelistDeviceInCgroup' "
+        "is deprecated as it assumes cgroups v1.",
         libsarus::LogLevel::WARN);
 
     hook::logMessage(
