@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
 
 project("libsarus")
 
@@ -29,7 +29,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Check and set dependencies
-find_package(Boost REQUIRED COMPONENTS filesystem regex)
+find_package(Boost REQUIRED NO_MODULE COMPONENTS filesystem regex)
 find_package(GTest REQUIRED)
 find_program(GIT_PATH git)
 ### Workaround: issue in linking 'boost::filesystem::detail::copy_file'
