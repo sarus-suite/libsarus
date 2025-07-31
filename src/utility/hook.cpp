@@ -177,6 +177,11 @@ std::tuple<boost::filesystem::path, boost::filesystem::path>
 findSubsystemMountPaths(const std::string &subsystemName,
                         const boost::filesystem::path &procPrefixDir,
                         const pid_t pid) {
+    // Print deprecation notice.
+    hook::logMessage("!!DEPRECATED!! The function 'findSubsystemMountPaths' "
+                     "is deprecated as it assumes cgroups v1.",
+        libsarus::LogLevel::WARN);
+
     auto mountinfoPath = boost::filesystem::path(
         procPrefixDir / "proc" / std::to_string(pid) / "mountinfo");
     hook::logMessage(
@@ -250,6 +255,11 @@ boost::filesystem::path findCgroupPathInHierarchy(
     const std::string &subsystemName,
     const boost::filesystem::path &procPrefixDir,
     const boost::filesystem::path &subsystemMountRoot, const pid_t pid) {
+    // Print deprecation notice.
+    hook::logMessage("!!DEPRECATED!! The function 'findCgroupPathInHierarchy' "
+                     "is deprecated as it assumes cgroups v1.",
+        libsarus::LogLevel::WARN);
+
     auto procFilePath = boost::filesystem::path(procPrefixDir / "proc" /
                                                 std::to_string(pid) / "cgroup");
     hook::logMessage(boost::format("Parsing %s for \"%s\" cgroup path relative "
@@ -310,6 +320,11 @@ boost::filesystem::path findCgroupPathInHierarchy(
 boost::filesystem::path findCgroupPath(
     const std::string &subsystemName,
     const boost::filesystem::path &procPrefixDir, const pid_t pid) {
+    // Print deprecation notice.
+    hook::logMessage("!!DEPRECATED!! The function 'findCgroupPath' "
+                     "is deprecated as it assumes cgroups v1.",
+        libsarus::LogLevel::WARN);
+
     hook::logMessage(
         boost::format(
             "Searching for cgroup \"%s\" subsystem under %s for process %d") %
@@ -348,6 +363,11 @@ boost::filesystem::path findCgroupPath(
  */
 void whitelistDeviceInCgroup(const boost::filesystem::path &cgroupPath,
                              const boost::filesystem::path &deviceFile) {
+    // Print deprecation notice.
+    hook::logMessage("!!DEPRECATED!! The function 'whitelistDeviceInCgroup' "
+                     "is deprecated as it assumes cgroups v1.",
+        libsarus::LogLevel::WARN);
+
     hook::logMessage(
         boost::format("Whitelisting device %s for rw access in cgroup %s") %
             deviceFile % cgroupPath,
