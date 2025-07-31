@@ -28,7 +28,7 @@ newline() {
 }
 
 #-----------------------------------------------------------------------------#
-  
+
 # Parse options
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -42,7 +42,7 @@ while [[ $# -gt 0 ]]; do
       shift
       shift
       ;;
-    *)      
+    *)
       error "unrecognized option '$1'"
       newline
       usage

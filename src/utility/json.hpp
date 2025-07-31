@@ -24,15 +24,17 @@
 namespace libsarus {
 namespace json {
 
-rapidjson::SchemaDocument readSchema(const boost::filesystem::path& schemaFile);
-rapidjson::Document parseStream(std::istream& is);
-rapidjson::Document parse(const std::string& string);
-rapidjson::Document read(const boost::filesystem::path& filename);
-rapidjson::Document readAndValidate(const boost::filesystem::path& jsonFile,
-                                        const boost::filesystem::path& schemaFile);
-void write(const rapidjson::Value& json, const boost::filesystem::path& filename);
-std::string serialize(const rapidjson::Value& json);
+rapidjson::SchemaDocument readSchema(const boost::filesystem::path &schemaFile);
+rapidjson::Document parseStream(std::istream &is);
+rapidjson::Document parse(const std::string &string);
+rapidjson::Document read(const boost::filesystem::path &filename);
+rapidjson::Document readAndValidate(const boost::filesystem::path &jsonFile,
+                                    const boost::filesystem::path &schemaFile);
+void write(const rapidjson::Value &json,
+           const boost::filesystem::path &filename);
+std::string serialize(const rapidjson::Value &json);
 
-}}
+}  // namespace json
+}  // namespace libsarus
 
 #endif

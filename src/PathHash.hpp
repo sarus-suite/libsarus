@@ -17,12 +17,12 @@
 namespace libsarus {
 
 class PathHash {
-public:
-    size_t operator()(const boost::filesystem::path& path) const {
+  public:
+    size_t operator()(const boost::filesystem::path &path) const {
         return boost::filesystem::hash_value(path);
     }
 };
 
-}
+}  // namespace libsarus
 
 #endif

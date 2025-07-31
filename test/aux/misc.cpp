@@ -21,7 +21,6 @@
 #include "PasswdDB.hpp"
 #include "Utility.hpp"
 
-
 namespace libsarus {
 namespace test {
 namespace aux {
@@ -32,15 +31,18 @@ std::tuple<uid_t, gid_t> getNonRootUserIds() {
     std::stringstream ss{out};
     auto passwd = libsarus::PasswdDB{ss};
 
-    for(const auto& entry : passwd.getEntries()) {
-        if(entry.uid != 0) {
+    for (const auto &entry : passwd.getEntries()) {
+        if (entry.uid != 0) {
             return std::tuple<uid_t, gid_t>{entry.uid, entry.gid};
         }
     }
-    
+
     SARUS_THROW_ERROR("Failed to find non-root user ids");
 }
 
-}}}}
+}  // namespace misc
+}  // namespace aux
+}  // namespace test
+}  // namespace libsarus
 
 #endif

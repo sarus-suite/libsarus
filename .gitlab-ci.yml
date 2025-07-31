@@ -10,16 +10,28 @@ stages:
 # Generic jobs
 #-----------------------------------------------------------------------------#
 
-.check-general:
+.check.format:
+  image: jfrog.svc.cscs.ch/vcef/libsarus/formatting:latest
+  stage: check
+  script:
+    - pre-commit install
+    - pre-commit run --all-files
+  rules:
+    - when: on_success
+
+# NOTE: all images should pass the check if and only if any image passes it.
+.check.runner:
   stage: check
   script:
     - ci/check_host.sh --no-dep
+  rules:
+    - when: on_success
 
-.build-general:
-  image: jfrog.svc.cscs.ch/vcef/libsarus/${IMAGE_NAME} 
+.build:
+  image: jfrog.svc.cscs.ch/vcef/libsarus/${IMAGE_NAME}
   stage: build
   before_script:
-    - git config --global --add safe.directory $PWD 
+    - git config --global --add safe.directory $PWD
   script:
     - ./build.sh -DBUILD_DIR=$PWD/build-${IMAGE_NAME//:/_}
   artifacts:
@@ -27,49 +39,66 @@ stages:
     when: on_success
     paths:
       - "build-${IMAGE_NAME//:/_}"
+  rules:
+    - when: on_success
 
-.test-general:
-  image: jfrog.svc.cscs.ch/vcef/libsarus/${IMAGE_NAME} 
+.test:
+  image: jfrog.svc.cscs.ch/vcef/libsarus/${IMAGE_NAME}
   stage: test
   script:
-    - cd "build-${IMAGE_NAME//:/_}" 
-    - ASAN_OPTIONS=detect_leaks=1 ctest --exclude-regex AsRoot
-    - sudo env "PATH=$PATH" ASAN_OPTIONS=detect_leaks=1 ctest --tests-regex AsRoot
+    - cd "build-${IMAGE_NAME//:/_}"
+    - ASAN_OPTIONS=detect_leaks=1 ctest --output-on-failure --exclude-regex AsRoot
+    - sudo env "PATH=$PATH" ASAN_OPTIONS=detect_leaks=1 ctest --output-on-failure --tests-regex AsRoot
+  rules:
+    - when: on_success
 
 #-----------------------------------------------------------------------------#
-# Specialized jobs 
+# Specialized jobs
 #-----------------------------------------------------------------------------#
 
-# NOTE: all images should pass the check if and only if any image passes it.
-check-unified:
-  extends: .check-general
+check.format:
+  extends: .check.format
+  rules:
+    - if: $CI_COMMIT_REF_PROTECTED == 'false'
+      allow_failure: true
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      allow_failure: false
 
-build-ubuntu_22.04:
-  extends: .build-general
+check.runner:
+  extends: .check.runner
+
+build.ubuntu_22.04:
+  extends: .build
   variables:
     IMAGE_NAME: ubuntu:22.04
 
-build-rockylinux_9:
-  extends: .build-general
+build.rockylinux_9:
+  extends: .build
   variables:
-    IMAGE_NAME: rockylinux:9 
+    IMAGE_NAME: rockylinux:9
 
-build-opensuseleap_15:
-  extends: .build-general
+build.opensuseleap_15:
+  extends: .build
   variables:
     IMAGE_NAME: opensuseleap:15
 
-test-ubuntu_22.04:
-  extends: .test-general
+test.ubuntu_22.04:
+  extends: .test
   variables:
     IMAGE_NAME: ubuntu:22.04
+  dependencies:
+    - build.ubuntu_22.04
 
-test-rockylinux_9:
-  extends: .test-general
+test.rockylinux_9:
+  extends: .test
   variables:
-    IMAGE_NAME: rockylinux:9 
+    IMAGE_NAME: rockylinux:9
+  dependencies:
+    - build.rockylinux_9
 
-test-opensuseleap_15:
-  extends: .test-general
+test.opensuseleap_15:
+  extends: .test
   variables:
     IMAGE_NAME: opensuseleap:15
+  dependencies:
+    - build.opensuseleap_15

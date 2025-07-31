@@ -14,31 +14,33 @@
 #include <string>
 #include <vector>
 
-#include <boost/optional.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/optional.hpp>
 
 #include "CLIArguments.hpp"
 #include "UserIdentity.hpp"
 
 /**
- * Utility functions for system operations 
+ * Utility functions for system operations
  */
 
 namespace libsarus {
 namespace process {
 
-void switchIdentity(const libsarus::UserIdentity&);
-void setFilesystemUid(const libsarus::UserIdentity&);
-std::string executeCommand(const std::string& command);
-int forkExecWait(const libsarus::CLIArguments& args,
-                 const boost::optional<std::function<void()>>& preExecChildActions = {},
-                 const boost::optional<std::function<void(int)>>& postForkParentActions = {},
-                 std::iostream* const childStdoutStream= nullptr);
+void switchIdentity(const libsarus::UserIdentity &);
+void setFilesystemUid(const libsarus::UserIdentity &);
+std::string executeCommand(const std::string &command);
+int forkExecWait(
+    const libsarus::CLIArguments &args,
+    const boost::optional<std::function<void()>> &preExecChildActions = {},
+    const boost::optional<std::function<void(int)>> &postForkParentActions = {},
+    std::iostream *const childStdoutStream = nullptr);
 std::string getHostname();
 std::vector<int> getCpuAffinity();
-void setCpuAffinity(const std::vector<int>&);
+void setCpuAffinity(const std::vector<int> &);
 void setStdinEcho(bool);
 
-}}
+}  // namespace process
+}  // namespace libsarus
 
 #endif

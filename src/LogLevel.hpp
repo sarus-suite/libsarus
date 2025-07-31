@@ -13,7 +13,7 @@
 
 namespace libsarus {
 
-enum class LogLevel {DEBUG, INFO, WARN, ERROR, GENERAL};
+enum class LogLevel { DEBUG, INFO, WARN, ERROR, GENERAL };
 
 }
 

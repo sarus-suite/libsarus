@@ -14,16 +14,17 @@
 
 #include "Error.hpp"
 
-#define _DECLARE(tag)   int __lineno_##tag = -1;
-#define _TAG(tag)       __lineno_##tag = __LINE__;
-#define _GET(tag)       (__lineno_##tag)
-
+// clang-format off
+#define _DECLARE(tag) int __lineno_##tag = -1;
+#define _TAG(tag, expr) do { __lineno_##tag = __LINE__; expr; } while (0)
+#define _GET(tag) (__lineno_##tag)
+// clang-format on
 
 namespace libsarus {
 namespace test {
 
 class ErrorTest : public testing::Test {
-protected:
+  protected:
     _DECLARE(FTT)
     _DECLARE(FTR)
     _DECLARE(FTTFSE)
@@ -31,34 +32,42 @@ protected:
     _DECLARE(FTRWLLD)
 
     void functionThatThrows() {
-        _TAG(FTT) SARUS_THROW_ERROR("first error message");
+        // clang-format off
+        _TAG(FTT, SARUS_THROW_ERROR("first error message"));
+        // clang-format on
     }
 
     void functionThatRethrows() {
         try {
             functionThatThrows();
-        }
-        catch(libsarus::Error& error) {
-            _TAG(FTR) SARUS_RETHROW_ERROR(error, "second error message");
+        } catch (libsarus::Error &error) {
+            // clang-format off
+            _TAG(FTR, SARUS_RETHROW_ERROR(error, "second error message"));
+            // clang-format on
         }
     }
 
     void functionThatThrowsFromStdException() {
         auto stdException = std::runtime_error("first error message");
-        const auto& ref = stdException;
-        _TAG(FTTFSE) SARUS_RETHROW_ERROR(ref, "second error message");
+        const auto &ref = stdException;
+        // clang-format off
+        _TAG(FTTFSE, SARUS_RETHROW_ERROR(ref, "second error message"));
+        // clang-format on
     }
 
     void functionThatThrowsWithLogLevelDebug() {
-        _TAG(FTTWLLD) SARUS_THROW_ERROR("first error message", libsarus::LogLevel::DEBUG);
+        // clang-format off
+        _TAG(FTTWLLD, SARUS_THROW_ERROR("first error message", libsarus::LogLevel::DEBUG));
+        // clang-format on
     }
 
     void functionThatRethrowsWithLogLevelDebug() {
         try {
             functionThatThrows();
-        }
-        catch(libsarus::Error& error) {
-            _TAG(FTRWLLD) SARUS_RETHROW_ERROR(error, "second error message", libsarus::LogLevel::DEBUG);
+        } catch (libsarus::Error &error) {
+            // clang-format off
+            _TAG(FTRWLLD, SARUS_RETHROW_ERROR(error, "second error message", libsarus::LogLevel::DEBUG));
+            // clang-format on
         }
     }
 };
@@ -66,9 +75,10 @@ protected:
 TEST_F(ErrorTest, oneStackTraceEntry) {
     try {
         functionThatThrows();
-    }
-    catch(const libsarus::Error& error) {
-        auto expectedFirstEntry = libsarus::Error::ErrorTraceEntry{"first error message", "test_Error.cpp", _GET(FTT), "functionThatThrows"};
+    } catch (const libsarus::Error &error) {
+        auto expectedFirstEntry = libsarus::Error::ErrorTraceEntry{
+            "first error message", "test_Error.cpp", _GET(FTT),
+            "functionThatThrows"};
 
         EXPECT_EQ(error.getErrorTrace().size(), 1);
         EXPECT_EQ(error.getErrorTrace()[0], expectedFirstEntry);
@@ -79,10 +89,13 @@ TEST_F(ErrorTest, oneStackTraceEntry) {
 TEST_F(ErrorTest, twoStackTraceEntries) {
     try {
         functionThatRethrows();
-    }
-    catch (const libsarus::Error& error) {
-        auto expectedFirstEntry = libsarus::Error::ErrorTraceEntry{"first error message", "test_Error.cpp", _GET(FTT), "functionThatThrows"};
-        auto expectedSecondEntry = libsarus::Error::ErrorTraceEntry{"second error message", "test_Error.cpp", _GET(FTR), "functionThatRethrows"};
+    } catch (const libsarus::Error &error) {
+        auto expectedFirstEntry = libsarus::Error::ErrorTraceEntry{
+            "first error message", "test_Error.cpp", _GET(FTT),
+            "functionThatThrows"};
+        auto expectedSecondEntry = libsarus::Error::ErrorTraceEntry{
+            "second error message", "test_Error.cpp", _GET(FTR),
+            "functionThatRethrows"};
 
         EXPECT_EQ(error.getErrorTrace().size(), 2);
         EXPECT_EQ(error.getErrorTrace()[0], expectedFirstEntry);
@@ -94,10 +107,12 @@ TEST_F(ErrorTest, twoStackTraceEntries) {
 TEST_F(ErrorTest, fromStdException) {
     try {
         functionThatThrowsFromStdException();
-    }
-    catch(const libsarus::Error& error) {
-        auto expectedFirstEntry = libsarus::Error::ErrorTraceEntry{"first error message", "unspecified location", -1, "runtime error"};
-        auto expectedSecondEntry = libsarus::Error::ErrorTraceEntry{"second error message", "test_Error.cpp", _GET(FTTFSE), "functionThatThrowsFromStdException"};
+    } catch (const libsarus::Error &error) {
+        auto expectedFirstEntry = libsarus::Error::ErrorTraceEntry{
+            "first error message", "unspecified location", -1, "runtime error"};
+        auto expectedSecondEntry = libsarus::Error::ErrorTraceEntry{
+            "second error message", "test_Error.cpp", _GET(FTTFSE),
+            "functionThatThrowsFromStdException"};
 
         EXPECT_EQ(error.getErrorTrace().size(), 2);
         EXPECT_EQ(error.getErrorTrace()[0], expectedFirstEntry);
@@ -109,9 +124,10 @@ TEST_F(ErrorTest, fromStdException) {
 TEST_F(ErrorTest, oneStackTraceEntry_throwWithLogLevelDebug) {
     try {
         functionThatThrowsWithLogLevelDebug();
-    }
-    catch(const libsarus::Error& error) {
-        auto expectedFirstEntry = libsarus::Error::ErrorTraceEntry{"first error message", "test_Error.cpp", _GET(FTTWLLD), "functionThatThrowsWithLogLevelDebug"};
+    } catch (const libsarus::Error &error) {
+        auto expectedFirstEntry = libsarus::Error::ErrorTraceEntry{
+            "first error message", "test_Error.cpp", _GET(FTTWLLD),
+            "functionThatThrowsWithLogLevelDebug"};
 
         EXPECT_EQ(error.getErrorTrace().size(), 1);
         EXPECT_EQ(error.getErrorTrace()[0], expectedFirstEntry);
@@ -122,10 +138,13 @@ TEST_F(ErrorTest, oneStackTraceEntry_throwWithLogLevelDebug) {
 TEST_F(ErrorTest, twoStackTraceEntries_rethrowWithLogLevelDebug) {
     try {
         functionThatRethrowsWithLogLevelDebug();
-    }
-    catch (const libsarus::Error& error) {
-        auto expectedFirstEntry = libsarus::Error::ErrorTraceEntry{"first error message", "test_Error.cpp", _GET(FTT), "functionThatThrows"};
-        auto expectedSecondEntry = libsarus::Error::ErrorTraceEntry{"second error message", "test_Error.cpp", _GET(FTRWLLD), "functionThatRethrowsWithLogLevelDebug"};
+    } catch (const libsarus::Error &error) {
+        auto expectedFirstEntry = libsarus::Error::ErrorTraceEntry{
+            "first error message", "test_Error.cpp", _GET(FTT),
+            "functionThatThrows"};
+        auto expectedSecondEntry = libsarus::Error::ErrorTraceEntry{
+            "second error message", "test_Error.cpp", _GET(FTRWLLD),
+            "functionThatRethrowsWithLogLevelDebug"};
 
         EXPECT_EQ(error.getErrorTrace().size(), 2);
         EXPECT_EQ(error.getErrorTrace()[0], expectedFirstEntry);
@@ -134,5 +153,5 @@ TEST_F(ErrorTest, twoStackTraceEntries_rethrowWithLogLevelDebug) {
     }
 }
 
-}}
-
+}  // namespace test
+}  // namespace libsarus

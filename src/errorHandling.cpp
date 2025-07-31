@@ -12,21 +12,18 @@
 
 namespace libsarus {
 
-std::string getExceptionTypeString(const std::exception& e) {
+std::string getExceptionTypeString(const std::exception &e) {
     auto ret = std::string("generic exception");
-    if (dynamic_cast<const std::logic_error*>(&e)) {
+    if (dynamic_cast<const std::logic_error *>(&e)) {
         ret = std::string("logic error");
-    }
-    else if (dynamic_cast<const std::runtime_error*>(&e)) {
+    } else if (dynamic_cast<const std::runtime_error *>(&e)) {
         ret = std::string("runtime error");
-    }
-    else if (dynamic_cast<const std::system_error*>(&e)) {
+    } else if (dynamic_cast<const std::system_error *>(&e)) {
         ret = std::string("system error");
-    }
-    else if (dynamic_cast<const std::ios_base::failure*>(&e)) {
+    } else if (dynamic_cast<const std::ios_base::failure *>(&e)) {
         ret = std::string("ios_base failure");
     }
     return ret;
 }
 
-}
+}  // namespace libsarus
