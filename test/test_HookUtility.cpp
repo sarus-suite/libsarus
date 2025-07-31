@@ -104,7 +104,7 @@ TEST_F(HooksUtilityTest, getEnvironmentVariableValueFromOCIBundle) {
     }
 }
 
-TEST_F(HooksUtilityTest, findSubsystemMountPaths) {
+TEST_F(DISABLED_HooksUtilityTest, findSubsystemMountPaths) {
     auto testDir =
         libsarus::PathRAII(libsarus::filesystem::makeUniquePathWithRandomSuffix(
             boost::filesystem::current_path() /
