@@ -104,6 +104,8 @@ TEST_F(HooksUtilityTest, getEnvironmentVariableValueFromOCIBundle) {
     }
 }
 
+// Disabled: This test assumes cgroups v1, but LibSarus hook utilities will
+// soon be upgraded to cgroups v2.
 TEST_F(HooksUtilityTest, DISABLED_findSubsystemMountPaths) {
     auto testDir =
         libsarus::PathRAII(libsarus::filesystem::makeUniquePathWithRandomSuffix(
