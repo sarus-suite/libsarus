@@ -5,7 +5,7 @@ Essential code collection for custom container runtime development.
 
 ## Runtime Requirements
 
-- Linux kernel 3.0+ (with `cgroups-v1`)
+- Linux kernel 3.0+
 - Kernel modules (`loop`, `squashfs`, `overlay`)
 - libboost 1.85.0+
 
@@ -20,7 +20,7 @@ You can develop, build, and test `libsarus` directly on your host machine.
 
 #### Requirements
 
-- Linux kernel 3.0+ (with `cgroups-v1`)
+- Linux kernel 3.0+
 - Kernel modules (`loop`, `squashfs`, `overlay`)
 - Spack dependencies (See [this link](https://spack.readthedocs.io/en/latest/getting_started.html))
 
@@ -80,7 +80,7 @@ Alternatively, you can build and test `libsarus` in a container image while doin
 
 #### Requirements
 
-- Linux kernel 3.0+ (with `cgroups-v1`)
+- Linux kernel 3.0+
 - Kernel modules (`loop`, `squashfs`, `overlay`)
 - Docker
 
