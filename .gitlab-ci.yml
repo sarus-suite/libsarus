@@ -47,8 +47,8 @@ stages:
   stage: test
   script:
     - cd "build-${IMAGE_NAME//:/_}"
-    - ASAN_OPTIONS=detect_leaks=1 ctest --exclude-regex AsRoot
-    - sudo env "PATH=$PATH" ASAN_OPTIONS=detect_leaks=1 ctest --tests-regex AsRoot
+    - ASAN_OPTIONS=detect_leaks=1 ctest --output-on-failure --exclude-regex AsRoot
+    - sudo env "PATH=$PATH" ASAN_OPTIONS=detect_leaks=1 ctest --output-on-failure --tests-regex AsRoot
   rules:
     - when: on_success
 
