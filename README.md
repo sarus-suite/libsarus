@@ -141,3 +141,11 @@ $ sudo env "PATH=$PATH" ctest -R AsRoot   # Do privileged tests
 ```
 
 </details>
+
+## Contribution
+
+All contributions should pass all pipeline stages. If you don't have write permission to this repository, please submit your contribution via PR.
+
+### Formatting
+
+Code formatting will be automatically checked in the pipeline upon PR; if some code doesn't match the standard, the pipeline stage `check.format` will generate a warning. To avoid such a formatting warning, consider running `ci/format_code.sh` to automatically format all code.
