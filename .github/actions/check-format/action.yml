@@ -4,7 +4,9 @@ runs:
     - name: Initialize git repository
       shell: bash
       run: |
-        rm -rf .git && git init && git add .
+        rm -rf .git
+        git config --global --add safe.directory '*'
+        git init && git add .
 
     - name: Install Pre-commit
       shell: bash
