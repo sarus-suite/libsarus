@@ -6,6 +6,7 @@
 LIBSARUS_ROOT_PATH=$(dirname $(realpath "${BASH_SOURCE[0]}"))
 LOCAL_SPACK_PATH=$LIBSARUS_ROOT_PATH/ci/spack/bin
 
+CMAKE="/usr/bin/cmake"
 BUILD_DIR=$PWD/build
 INSTALL_DIR=$PWD/build/install
 TOOLCHAIN_FILE=gcc.cmake
@@ -35,7 +36,7 @@ if [[ $($LOCAL_SPACK_PATH/spack env status) == *"No active env"* ]]; then
   spack env activate ci
 fi
 
-cmake -DCMAKE_TOOLCHAIN_FILE=$BUILD_DIR/../cmake/toolchain_files/$TOOLCHAIN_FILE \
+$CMAKE -DCMAKE_TOOLCHAIN_FILE=$BUILD_DIR/../cmake/toolchain_files/$TOOLCHAIN_FILE \
       -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
       -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
       -B $BUILD_DIR -S .
