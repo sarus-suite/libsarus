@@ -17,7 +17,7 @@ runs:
 
     - name: Change file permission
       shell: bash
-      run: chown docker:docker $PWD/*
+      run: chown docker:docker $PWD/* -R
 
     - name: Run build script
       shell: bash
