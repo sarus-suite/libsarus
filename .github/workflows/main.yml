@@ -36,7 +36,7 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: WORKAROUND for EACCES from node_fs_2368
-        run: rm -rf ${GITHUB_WORKSPACE}/*
+        run: sudo chmod +x -R ${GITHUB_WORKSPACE}; rm -rf ${GITHUB_WORKSPACE}/*
 
       - name: Checkout code
         uses: actions/checkout@v4
