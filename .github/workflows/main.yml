@@ -5,7 +5,7 @@ permissions:
   contents: write
   actions: write
   attestations: write
-  packages: read
+  packages: write
 
 jobs:
   check-format:
