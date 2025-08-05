@@ -1,4 +1,5 @@
 runs:
+  using: "composite"
   container:
     image: jfrog.svc.cscs.ch/vcef/libsarus/formatting:latest
   steps:
