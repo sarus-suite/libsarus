@@ -9,6 +9,9 @@ runs:
       shell: bash
       run: git config --global --add safe.directory '*'
 
+    - shell: bash
+      run: echo $PATH
+
     - name: Change file permission
       shell: bash
       run: chown docker:docker $PWD/*
