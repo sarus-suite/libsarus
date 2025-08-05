@@ -9,13 +9,15 @@ runs:
       shell: bash
       run: git config --global --add safe.directory '*'
 
-    - name: Change file permission
+    - name: Activate preloaded Spack environment
       shell: bash
-      run: chown docker:docker $PWD/* -R
+      run: |
+        cd /home/docker
+        spack/bin/spack env activate spack-environment
 
     - name: Run build script
       shell: bash
-      run: sudo -u docker ./build.sh -DBUILD_DIR=$PWD/build
+      run: ./build.sh -DBUILD_DIR=$PWD/build
 
     - name: Upload build
       uses: actions/upload-artifact@v4
