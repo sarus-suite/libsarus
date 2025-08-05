@@ -11,8 +11,12 @@ runs:
 
     - shell: bash
       run: |
-        ls /__w/libsarus/libsarus/ci/spack/bin
+        echo $PWD
+        ls $PWD
+        ls $PWD/ci
+        ls $PWD/ci/spack
         ls $PWD/ci/spack/bin
+        ls /__w/libsarus/libsarus/ci/spack/bin
 
     - name: Run build script
       shell: bash
