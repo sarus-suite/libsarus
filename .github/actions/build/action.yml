@@ -23,6 +23,7 @@ runs:
         export PATH=$PWD/spack/bin:$PATH
         . spack/share/spack/setup-env.sh
         spack env activate spack-environment
+        cd ${GITHUB_WORKSPACE}
         ./build.sh -DBUILD_DIR=$PWD/build
 
     - name: Upload build
