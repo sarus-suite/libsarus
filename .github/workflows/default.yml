@@ -1,0 +1,13 @@
+name: Default libsarus workflow
+
+on:
+  push: {}
+
+jobs:
+  check-format:
+    steps:
+      - uses: base/check-format@v1
+
+  check-runner:
+    steps:
+      - uses: base/check-format@v2

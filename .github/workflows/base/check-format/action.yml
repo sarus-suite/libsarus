@@ -1,0 +1,9 @@
+runs:
+  container:
+    image: jfrog.svc.cscs.ch/vcef/libsarus/formatting:latest
+  steps:
+    - name: Install Pre-commit
+      run: pre-commit install
+
+    - name: Run Pre-commit (w/ clang-tidy)
+      run: pre-commit run --all-files
