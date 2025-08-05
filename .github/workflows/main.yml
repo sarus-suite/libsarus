@@ -1,15 +1,11 @@
 name: Default libsarus workflow
 on: [push]
 
-permissions:
-  contents: write
-  actions: write
-  attestations: write
-  packages: write
-
 jobs:
   check-format:
     runs-on: ubuntu-latest
+    permissions:
+      packages: read
     container:
       image: ghcr.io/sarus-suite/libsarus/formatting:latest
       credentials:
