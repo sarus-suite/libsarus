@@ -4,6 +4,7 @@ on:
   push: {}
 
 jobs:
+  runs-on: ubuntu-latest
   check-format:
     steps:
       - uses: base/check-format@v1
