@@ -5,7 +5,7 @@ jobs:
   check-format:
     runs-on: ubuntu-latest
     container:
-      image: jfrog.svc.cscs.ch/vcef/libsarus/formatting:latest
+      image: ghcr.io/sarus-suite/libsarus/formatting:latest
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/check-format
