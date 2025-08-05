@@ -31,6 +31,7 @@ jobs:
     needs: [ check-format, check-runner ]
     container:
       image: ghcr.io/sarus-suite/libsarus/opensuseleap:15
+      options: --user root
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
@@ -47,6 +48,7 @@ jobs:
     needs: [ check-format, check-runner ]
     container:
       image: ghcr.io/sarus-suite/libsarus/rockylinux:9
+      options: --user root
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
@@ -63,6 +65,7 @@ jobs:
     needs: [ check-format, check-runner ]
     container:
       image: ghcr.io/sarus-suite/libsarus/rockylinux:9
+      options: --user root
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
