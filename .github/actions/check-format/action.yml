@@ -3,7 +3,8 @@ runs:
   steps:
     - name: Initialize git repository
       shell: bash
-      run: pwd 
+      run: |
+        rm -rf .git && git init && git add .
 
     - name: Install Pre-commit
       shell: bash
