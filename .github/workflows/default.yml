@@ -4,11 +4,12 @@ on:
   push: {}
 
 jobs:
-  runs-on: ubuntu-latest
   check-format:
+    runs-on: ubuntu-latest
     steps:
       - uses: base/check-format@v1
 
   check-runner:
+    runs-on: ubuntu-latest
     steps:
       - uses: base/check-format@v2
