@@ -16,8 +16,8 @@
 #include <boost/regex.hpp>
 
 #include "libsarus/Error.hpp"
-#include "libsarus/utility/logging.hpp"
 #include "libsarus/utility/filesystem.hpp"
+#include "libsarus/utility/logging.hpp"
 #include "libsarus/utility/process.hpp"
 
 /**

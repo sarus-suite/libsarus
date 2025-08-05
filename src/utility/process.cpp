@@ -22,8 +22,8 @@
 
 #include "libsarus/Error.hpp"
 #include "libsarus/PasswdDB.hpp"
-#include "libsarus/utility/logging.hpp"
 #include "libsarus/utility/filesystem.hpp"
+#include "libsarus/utility/logging.hpp"
 
 /**
  * Utility functions for system operations
