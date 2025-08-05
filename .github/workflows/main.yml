@@ -31,13 +31,11 @@ jobs:
     needs: [ check-format, check-runner ]
     container:
       image: ghcr.io/sarus-suite/libsarus/opensuseleap:15
+      options: --user root
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - name: WORKAROUND for EACCES from node_fs_2368
-        run: sudo chmod 1777 /__w -R
-
       - name: Checkout code
         uses: actions/checkout@v4
         with:
@@ -52,6 +50,7 @@ jobs:
     needs: [ check-format, check-runner ]
     container:
       image: ghcr.io/sarus-suite/libsarus/rockylinux:9
+      options: --user root
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
@@ -70,6 +69,7 @@ jobs:
     needs: [ check-format, check-runner ]
     container:
       image: ghcr.io/sarus-suite/libsarus/rockylinux:9
+      options: --user root
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
