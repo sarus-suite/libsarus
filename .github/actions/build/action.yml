@@ -17,7 +17,9 @@ runs:
     - name: Activate preloaded Spack environment
       shell: bash
       run: |
-        cd /home/docker
+        rm -r /root
+        ln -s /home/docker /root
+        cd /root
         export PATH=$PWD/spack/bin:$PATH
         . spack/share/spack/setup-env.sh
         spack env activate spack-environment
