@@ -6,6 +6,14 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/sarus-suite/libsarus/formatting:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_REPOSITORY: ${{ github.repository }}
+        GITHUB_REF: ${{ github.ref }}
+        GITHUB_EVENT_PATH: ${{ github.event_path }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/check-format
