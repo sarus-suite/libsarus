@@ -9,6 +9,10 @@ runs:
       shell: bash
       run: git config --global --add safe.directory '*'
 
+    - name: Change file permission
+      shell: bash
+      run: chown docker:docker $PWD/*
+
     - name: Run build script
       shell: bash
       run: sudo -u docker ./build.sh -DBUILD_DIR=$PWD/build
