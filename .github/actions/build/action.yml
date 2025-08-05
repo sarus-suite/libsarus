@@ -9,10 +9,16 @@ runs:
       shell: bash
       run: git config --global --add safe.directory '*'
 
+    # GitHub enragingly still recommends to use a container as 'root' 
+    # because if not, actions/checkout sometimes doesn't work (EACCES error). 
+    # The side effect of using a container as 'root' is that it doesn't
+    # automatically enter the Spack environment. So we need to activate it
+    # manually once again here.
     - name: Activate preloaded Spack environment
       shell: bash
       run: |
         cd /home/docker
+        . spack/share/spack/setup-env.sh
         spack/bin/spack env activate spack-environment
 
     - name: Run build script
