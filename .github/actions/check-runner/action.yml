@@ -1,6 +1,6 @@
 runs:
   using: "composite"
   steps:
-    - name: Check the runner compatibility
+    - name: Check runner compatibility
       shell: bash
       run: ci/check_host.sh --no-dep
