@@ -4,6 +4,12 @@ inputs:
 
 runs:
   using: "composite"
+  container:
+    image: ghcr.io/sarus-suite/libsarus/opensuseleap:15
+    options: --user root
+    credentials:
+      username: ${{ github.actor }}
+      password: ${{ secrets.GITHUB_TOKEN }}
   steps:
     - name: Initialize git repository
       shell: bash
