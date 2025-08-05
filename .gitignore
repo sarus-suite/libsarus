@@ -20,7 +20,7 @@ cache/
 .vagrant
 garage/
 Dockerfile.gen.*
-!.github
+!.github/
 
 # Auto-generated files
 RELEASE_NOTES.md
