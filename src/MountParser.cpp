@@ -8,16 +8,16 @@
  *
  */
 
-#include "MountParser.hpp"
+#include "libsarus/MountParser.hpp"
 
 #include <limits>
 #include <sstream>
 
 #include <boost/filesystem.hpp>
 
-#include "Error.hpp"
-#include "Mount.hpp"
-#include "Utility.hpp"
+#include "libsarus/Error.hpp"
+#include "libsarus/Mount.hpp"
+#include "libsarus/Utility.hpp"
 
 namespace libsarus {
 

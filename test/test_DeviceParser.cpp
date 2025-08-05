@@ -10,11 +10,11 @@
 
 #include <gtest/gtest.h>
 
-#include "DeviceParser.hpp"
-#include "Logger.hpp"
-#include "PathRAII.hpp"
-#include "Utility.hpp"
-#include "aux/filesystem.hpp"
+#include "libsarus/DeviceParser.hpp"
+#include "libsarus/Logger.hpp"
+#include "libsarus/PathRAII.hpp"
+#include "libsarus/Utility.hpp"
+#include "libsarus/test/aux/filesystem.hpp"
 
 namespace libsarus {
 namespace test {

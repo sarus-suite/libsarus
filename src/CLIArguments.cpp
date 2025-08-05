@@ -8,7 +8,7 @@
  *
  */
 
-#include "CLIArguments.hpp"
+#include "libsarus/CLIArguments.hpp"
 
 #include <iterator>
 #include <sstream>
@@ -18,7 +18,7 @@
 #include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
 
-#include "Error.hpp"
+#include "libsarus/Error.hpp"
 
 namespace libsarus {
 

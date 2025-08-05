@@ -8,7 +8,7 @@
  *
  */
 
-#include "json.hpp"
+#include "libsarus/utility/json.hpp"
 
 #include <fstream>
 #include <sstream>
@@ -20,9 +20,9 @@
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/writer.h>
 
-#include "Error.hpp"
-#include "utility/filesystem.hpp"
-#include "utility/logging.hpp"
+#include "libsarus/Error.hpp"
+#include "libsarus/utility/filesystem.hpp"
+#include "libsarus/utility/logging.hpp"
 
 #include <rapidjson/error/en.h>
 

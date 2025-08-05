@@ -10,7 +10,7 @@
 
 #include <gtest/gtest.h>
 
-#include "DeviceAccess.hpp"
+#include "libsarus/DeviceAccess.hpp"
 
 namespace libsarus {
 namespace test {

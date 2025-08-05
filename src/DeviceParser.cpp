@@ -8,13 +8,13 @@
  *
  */
 
-#include "DeviceParser.hpp"
+#include "libsarus/DeviceParser.hpp"
 
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
 
-#include "Error.hpp"
-#include "Utility.hpp"
+#include "libsarus/Error.hpp"
+#include "libsarus/Utility.hpp"
 
 namespace libsarus {
 

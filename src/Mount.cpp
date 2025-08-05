@@ -12,13 +12,13 @@
  * @brief Source file for user-requested mounts.
  */
 
-#include "Mount.hpp"
+#include "libsarus/Mount.hpp"
 
 #include <sys/fsuid.h>
 #include <sys/mount.h>
 #include <sys/stat.h>
 
-#include "Utility.hpp"
+#include "libsarus/Utility.hpp"
 
 namespace libsarus {
 

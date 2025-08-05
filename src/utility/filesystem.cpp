@@ -8,7 +8,7 @@
  *
  */
 
-#include "filesystem.hpp"
+#include "libsarus/utility/filesystem.hpp"
 
 #include <fstream>
 
@@ -18,9 +18,9 @@
 #include <boost/format.hpp>
 #include <boost/regex.hpp>
 
-#include "Error.hpp"
-#include "utility/logging.hpp"
-#include "utility/string.hpp"
+#include "libsarus/Error.hpp"
+#include "libsarus/utility/logging.hpp"
+#include "libsarus/utility/string.hpp"
 
 /**
  * Utility functions for filesystem manipulation

@@ -12,7 +12,7 @@
  * @brief Filesystem utility functions to be used in the tests.
  **/
 
-#include "filesystem.hpp"
+#include "libsarus/utility/filesystem.hpp"
 
 #include <cstdlib>
 #include <string>
@@ -25,7 +25,7 @@
 #include <sys/sysmacros.h>
 #include <unistd.h>
 
-#include "Utility.hpp"
+#include "libsarus/Utility.hpp"
 
 namespace libsarus {
 namespace test {

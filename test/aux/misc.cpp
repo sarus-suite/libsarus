@@ -11,15 +11,15 @@
 #ifndef libsarus_test_aux_misc_hpp
 #define libsarus_test_aux_misc_hpp
 
-#include "misc.hpp"
+#include "libsarus/test/aux/misc.hpp"
 
 #include <sstream>
 
 #include <rapidjson/prettywriter.h>
 
-#include "Error.hpp"
-#include "PasswdDB.hpp"
-#include "Utility.hpp"
+#include "libsarus/Error.hpp"
+#include "libsarus/PasswdDB.hpp"
+#include "libsarus/Utility.hpp"
 
 namespace libsarus {
 namespace test {

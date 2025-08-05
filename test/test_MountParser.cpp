@@ -12,10 +12,10 @@
 #include <rapidjson/allocators.h>
 #include <rapidjson/document.h>
 
-#include "Logger.hpp"
-#include "MountParser.hpp"
-#include "PathRAII.hpp"
-#include "Utility.hpp"
+#include "libsarus/Logger.hpp"
+#include "libsarus/MountParser.hpp"
+#include "libsarus/PathRAII.hpp"
+#include "libsarus/Utility.hpp"
 
 namespace libsarus {
 namespace test {

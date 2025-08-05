@@ -12,7 +12,7 @@
 
 #include <gtest/gtest.h>
 
-#include "Error.hpp"
+#include "libsarus/Error.hpp"
 
 // clang-format off
 #define _DECLARE(tag) int __lineno_##tag = -1;

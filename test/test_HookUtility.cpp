@@ -20,10 +20,10 @@
 #include <gtest/gtest.h>
 #include <rapidjson/document.h>
 
-#include "PathRAII.hpp"
-#include "Utility.hpp"
-#include "aux/hook.hpp"
-#include "aux/misc.hpp"
+#include "libsarus/PathRAII.hpp"
+#include "libsarus/Utility.hpp"
+#include "libsarus/test/aux/hook.hpp"
+#include "libsarus/test/aux/misc.hpp"
 
 namespace libsarus {
 namespace test {

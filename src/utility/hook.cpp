@@ -8,7 +8,7 @@
  *
  */
 
-#include "hook.hpp"
+#include "libsarus/utility/hook.hpp"
 
 #include <cstring>
 #include <iostream>
@@ -25,10 +25,10 @@
 #include <boost/regex.hpp>
 #include <rapidjson/istreamwrapper.h>
 
-#include "Error.hpp"
-#include "utility/environment.hpp"
-#include "utility/filesystem.hpp"
-#include "utility/json.hpp"
+#include "libsarus/Error.hpp"
+#include "libsarus/utility/environment.hpp"
+#include "libsarus/utility/filesystem.hpp"
+#include "libsarus/utility/json.hpp"
 
 /**
  * Utility functions for hooks

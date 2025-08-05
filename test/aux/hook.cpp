@@ -8,7 +8,7 @@
  *
  */
 
-#include "hook.hpp"
+#include "libsarus/utility/hook.hpp"
 
 #include <cstdio>
 #include <fstream>
@@ -16,7 +16,7 @@
 
 #include <boost/format.hpp>
 
-#include "Error.hpp"
+#include "libsarus/Error.hpp"
 
 namespace libsarus {
 namespace test {

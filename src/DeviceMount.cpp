@@ -8,12 +8,12 @@
  *
  */
 
-#include "DeviceMount.hpp"
+#include "libsarus/DeviceMount.hpp"
 
 #include <sys/sysmacros.h>
 
-#include "Error.hpp"
-#include "Utility.hpp"
+#include "libsarus/Error.hpp"
+#include "libsarus/Utility.hpp"
 
 namespace libsarus {
 
