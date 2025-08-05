@@ -1,0 +1,20 @@
+inputs:
+  image-name:
+    description: "Container image name"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Initialize git repository
+      shell: bash
+      run: git config --global --add safe.directory '*'
+
+    - name: Run build script
+      shell: bash
+      run: ./build.sh -DBUILD_DIR=$PWD/build
+
+    - name: Upload build
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-${{ inputs.image-name }}
+        path: ./build
