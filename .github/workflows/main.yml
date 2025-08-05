@@ -38,9 +38,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - run: pwd
-
       - name: Build OpenSUSE Leap 15
         uses: ./.github/actions/build
         with:

@@ -9,6 +9,9 @@ runs:
       shell: bash
       run: git config --global --add safe.directory '*'
 
+    - run: ls /__w/libsarus/libsarus/ci/spack/bin
+    - run: ls $PWD/ci/spack/bin
+
     - name: Run build script
       shell: bash
       run: ./build.sh -DBUILD_DIR=$PWD/build
