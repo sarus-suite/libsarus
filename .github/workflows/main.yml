@@ -35,7 +35,7 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - name: WORKAROUND: EACCES from node:fs:2368
+      - name: WORKAROUND for EACCES from node_fs_2368
         run: rm -rf ${GITHUB_WORKSPACE}/*; chmod +x ${GITHUB_WORKSPACE}
 
       - name: Checkout code
