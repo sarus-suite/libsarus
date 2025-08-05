@@ -1,3 +1,4 @@
+!.github/
 *.pyc
 *.swp
 *.swo
@@ -20,7 +21,6 @@ cache/
 .vagrant
 garage/
 Dockerfile.gen.*
-!.github/
 
 # Auto-generated files
 RELEASE_NOTES.md
