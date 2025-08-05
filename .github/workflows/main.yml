@@ -1,8 +1,5 @@
 name: Default libsarus workflow
-on: [push]
-
-permissions:
-  packages: read
+on: [ push ]
 
 jobs:
   check-format:
@@ -11,13 +8,16 @@ jobs:
       image: ghcr.io/sarus-suite/libsarus/formatting:latest
       credentials:
         username: ${{ github.actor }}
-        password: ${{ secrets.github_token }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+      permissions:
+        packages: read
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - uses: ./.github/actions/check-format
 
   check-runner:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
       - uses: ./.github/actions/check-runner

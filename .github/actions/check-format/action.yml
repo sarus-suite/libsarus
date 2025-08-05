@@ -1,6 +1,10 @@
 runs:
   using: "composite"
   steps:
+    - name: Initialize git repository
+      shell: bash
+      run: git init && git add .
+
     - name: Install Pre-commit
       shell: bash
       run: pre-commit install
