@@ -35,8 +35,11 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
     steps:
+      - name: WORKAROUND for EACCES from node_fs_2368
+        run: sudo chown ${USER}:${USER} __w -R
+
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           submodules: 'true'
       - name: Build OpenSUSE Leap 15
