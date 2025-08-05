@@ -1,6 +1,9 @@
 name: Default libsarus workflow
 on: [push]
 
+permissions:
+  packages: read
+
 jobs:
   check-format:
     runs-on: ubuntu-latest
