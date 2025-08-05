@@ -38,6 +38,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          submodules: 'true'
       - name: Build OpenSUSE Leap 15
         uses: ./.github/actions/build
         with:
@@ -55,6 +57,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          submodules: 'true'
       - name: Build Rockylinux 9
         uses: ./.github/actions/build
         with:
@@ -72,6 +76,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          submodules: 'true'
       - name: Build Ubuntu 22.04
         uses: ./.github/actions/build
         with:
