@@ -3,7 +3,9 @@ runs:
   steps:
     - name: Initialize git repository
       shell: bash
-      run: git init && git add .
+      run: |
+        git config --global --add safe.directory /__w/*
+        git init && git add .
 
     - name: Install Pre-commit
       shell: bash
