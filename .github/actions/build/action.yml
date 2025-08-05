@@ -14,7 +14,7 @@ runs:
     # The side effect of using a container as 'root' is that it doesn't
     # automatically enter the Spack environment. So we need to activate it
     # manually once again here.
-    - name: Activate preloaded Spack environment
+    - name: Run build script
       shell: bash
       run: |
         rm -r /root
@@ -23,10 +23,7 @@ runs:
         export PATH=$PWD/spack/bin:$PATH
         . spack/share/spack/setup-env.sh
         spack env activate spack-environment
-
-    - name: Run build script
-      shell: bash
-      run: ./build.sh -DBUILD_DIR=$PWD/build
+        ./build.sh -DBUILD_DIR=$PWD/build
 
     - name: Upload build
       uses: actions/upload-artifact@v4
