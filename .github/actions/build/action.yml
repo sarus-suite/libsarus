@@ -12,6 +12,9 @@ runs:
     - shell: bash
       run: echo $PATH
 
+    - shell: bash
+      run: which cmake
+
     - name: Change file permission
       shell: bash
       run: chown docker:docker $PWD/*
