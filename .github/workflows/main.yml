@@ -1,17 +1,15 @@
 name: Default libsarus workflow
-
-on:
-  push: {}
+on: [push]
 
 jobs:
   check-format:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: base/check-format@v1
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/check-format
 
   check-runner:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: base/check-format@v2
+      - uses: ./.github/actions/check-format

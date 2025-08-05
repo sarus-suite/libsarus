@@ -1,4 +1,5 @@
 runs:
+  using: "composite"
   steps:
     - name: Check the runner compatibility 
       run: ci/check_host.sh --no-dep
