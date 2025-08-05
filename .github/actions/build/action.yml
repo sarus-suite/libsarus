@@ -1,15 +1,9 @@
 inputs:
-  image-name:
-    description: "Container image name"
+  tag:
+    description: "Artifact tag"
 
 runs:
   using: "composite"
-  container:
-    image: ghcr.io/sarus-suite/libsarus/opensuseleap:15
-    options: --user root
-    credentials:
-      username: ${{ github.actor }}
-      password: ${{ secrets.GITHUB_TOKEN }}
   steps:
     - name: Initialize git repository
       shell: bash
@@ -29,12 +23,10 @@ runs:
         sed 's|~/|/home/docker/|g' -i spack-environment/spack.yaml
         spack env activate spack-environment
         cd ${GITHUB_WORKSPACE}
-        echo $PATH
-        which cmake
         ./build.sh -DBUILD_DIR=$PWD/build
 
     - name: Upload build
       uses: actions/upload-artifact@v4
       with:
-        name: build-${{ inputs.image-name }}
+        name: build-${{ inputs.tag }}
         path: ./build

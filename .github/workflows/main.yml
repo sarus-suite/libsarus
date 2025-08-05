@@ -29,6 +29,12 @@ jobs:
   build-opensuseleap_15:
     runs-on: ubuntu-latest
     needs: [ check-format, check-runner ]
+    container:
+      image: ghcr.io/sarus-suite/libsarus/opensuseleap:15
+      options: --user root
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -37,7 +43,7 @@ jobs:
       - name: Build OpenSUSE Leap 15
         uses: ./.github/actions/build
         with:
-          image-name: opensuseleap:15
+          tag: opensuseleap_15
 
   build-rockylinux_9:
     runs-on: ubuntu-latest
@@ -56,7 +62,7 @@ jobs:
       - name: Build Rockylinux 9
         uses: ./.github/actions/build
         with:
-          image-name: rockylinux:9
+          tag: rockylinux_9
 
   build-ubuntu_22_04:
     runs-on: ubuntu-latest
@@ -75,4 +81,4 @@ jobs:
       - name: Build Ubuntu 22.04
         uses: ./.github/actions/build
         with:
-          image-name: ubuntu:22.04
+          tag: ubuntu_22_04
