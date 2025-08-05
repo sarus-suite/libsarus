@@ -2,7 +2,9 @@ runs:
   using: "composite"
   steps:
     - name: Install Pre-commit
+      shell: bash
       run: pre-commit install
 
     - name: Run Pre-commit (w/ clang-tidy)
+      shell: bash
       run: pre-commit run --all-files
