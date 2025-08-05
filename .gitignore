@@ -1,5 +1,4 @@
-!.github/
-!.github/actions/build/
+!.github/*
 *.pyc
 *.swp
 *.swo
