@@ -18,7 +18,9 @@ runs:
       shell: bash
       run: |
         cd /home/docker
-        eval `spack/bin/spack env activate --sh spack-environment`
+        export PATH=$PWD/spack/bin:$PATH
+        . spack/share/spack/setup-env.sh
+        spack env activate spack-environment
 
     - name: Run build script
       shell: bash
