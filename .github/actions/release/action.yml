@@ -1,6 +1,8 @@
 inputs:
   tag:
     description: "Artifact tag"
+  github_token:
+    description: "GitHub token"
 
 runs:
   using: "composite"
@@ -17,7 +19,7 @@ runs:
     - name: Create or update GitHub release
       uses: ncipollo/release-action@v1
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ input.github_token }}
         tag: ${{ github.ref_name }}
         name: Release ${{ github.ref_name }}
         artifacts: build/src
