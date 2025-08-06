@@ -154,7 +154,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: 'true'
-      - name: Test on OpenSUSE Leap 15
-        uses: ./.github/actions/test
+      - name: Release build on OpenSUSE Leap 15
+        uses: ./.github/actions/release
         with:
           tag: opensuseleap_15
