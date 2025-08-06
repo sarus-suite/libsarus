@@ -43,6 +43,8 @@ jobs:
           submodules: 'true'
       - name: Build
         uses: ./.github/actions/build
+        with:
+          artifact-tag: rockylinux_9
       - name: Test
         uses: ./.github/actions/test
 
@@ -62,6 +64,8 @@ jobs:
           submodules: 'true'
       - name: Build
         uses: ./.github/actions/build
+        with:
+          artifact-tag: rockylinux_9
       - name: Test
         uses: ./.github/actions/test
 
@@ -81,6 +85,8 @@ jobs:
           submodules: 'true'
       - name: Build
         uses: ./.github/actions/build
+        with:
+          artifact-tag: rockylinux_9
       - name: Test
         uses: ./.github/actions/test
 
