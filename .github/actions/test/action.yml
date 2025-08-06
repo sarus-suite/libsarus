@@ -1,25 +1,12 @@
-inputs:
-  tag:
-    description: "Artifact tag"
-
 runs:
   using: "composite"
   steps:
-    - name: Initialize git repository
-      shell: bash
-      run: git config --global --add safe.directory '*'
-
-    - name: Download build
-      uses: actions/download-artifact@v4
-      with:
-        name: build-${{ inputs.tag }}
-        path: build
-
     # GitHub enragingly still recommends to use a container as 'root'
     # because if not, actions/checkout sometimes doesn't work (EACCES error).
     # The side effect of using a container as 'root' is that it doesn't
     # automatically enter the Spack environment. So we need to activate it
     # manually once again here.
+    # Assume 'build' is already there.
     - name: Run test script
       shell: bash
       run: |

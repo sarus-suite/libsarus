@@ -1,14 +1,6 @@
-inputs:
-  tag:
-    description: "Artifact tag"
-
 runs:
   using: "composite"
   steps:
-    - name: Initialize git repository
-      shell: bash
-      run: git config --global --add safe.directory '*'
-
     # GitHub enragingly still recommends to use a container as 'root'
     # because if not, actions/checkout sometimes doesn't work (EACCES error).
     # The side effect of using a container as 'root' is that it doesn't
