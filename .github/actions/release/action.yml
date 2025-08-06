@@ -1,0 +1,27 @@
+inputs:
+  tag:
+    description: "Artifact tag"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Initialize git repository
+      shell: bash
+      run: git config --global --add safe.directory '*'
+
+    - name: Download build
+      uses: actions/download-artifact@v4
+      with:
+        name: build-${{ inputs.tag }}
+
+    - name: Create or update GitHub release
+      uses: ncipollo/release-action@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ github.ref_name }}
+        name: Release ${{ github.ref_name }}
+        artifacts: build/src
+        allowUpdates: true
+        replacesArtifacts: false
+        draft: false
+        prerelease: false
