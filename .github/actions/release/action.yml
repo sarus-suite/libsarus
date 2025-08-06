@@ -15,6 +15,7 @@ runs:
       uses: actions/download-artifact@v4
       with:
         name: build-${{ inputs.tag }}
+        path: build
 
     - name: Create or update GitHub release
       uses: ncipollo/release-action@v1
