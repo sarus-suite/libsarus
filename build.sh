@@ -24,7 +24,7 @@ done
 # WARNING: the local testing environment and GitLab CI/CD use Spack differently;
 # for local testing, dependencies are installed in
 # $LIBSARUS_ROOT_PATH/ci/spack but for GitLab CI/CD, dependencies are
-# installed in /opt/spack-environment. This subtle difference can make a
+# installed in /home/docker/spack-environment. This subtle difference can make a
 # discrepancy that something works locally but not in CI/CD.
 if [[ $($LOCAL_SPACK_PATH/spack env status) == *"No active env"* ]]; then
   export PATH=$LOCAL_SPACK_PATH:$PATH
