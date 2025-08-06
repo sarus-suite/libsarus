@@ -89,7 +89,7 @@ jobs:
     needs: [ build-opensuseleap_15 ]
     container:
       image: ghcr.io/sarus-suite/libsarus/opensuseleap:15
-      options: --user root
+      options: --user root --privileged
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
@@ -108,7 +108,7 @@ jobs:
     needs: [ build-rockylinux_9 ]
     container:
       image: ghcr.io/sarus-suite/libsarus/opensuseleap:15
-      options: --user root
+      options: --user root --privileged
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
@@ -127,7 +127,7 @@ jobs:
     needs: [ build-ubuntu_22_04 ]
     container:
       image: ghcr.io/sarus-suite/libsarus/opensuseleap:15
-      options: --user root
+      options: --user root --privileged
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
