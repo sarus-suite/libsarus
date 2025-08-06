@@ -107,13 +107,7 @@ $ ci/enter_buildenv.sh
 
 #### Build
 
-1. **Install third-party dependencies.** `install_dep.sh` will install all necessary dependencies in the local directory using Spack.
-
-```
-$ ./install_dep.sh
-```
-
-2. **Build `libsarus`**. `build.sh` will build `libsarus` using the dependencies installed by Spack.
+1. **Build `libsarus`**. `build.sh` will build `libsarus` using the dependencies installed by Spack.
 
 ```
 $ ./build.sh
