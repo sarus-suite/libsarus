@@ -30,5 +30,7 @@ runs:
         spack env activate spack-environment
         cd ${GITHUB_WORKSPACE}
         cd build
+        pwd
+        ls
         sudo --user docker env "PATH=$PATH" ASAN_OPTIONS=detect_leaks=1 ctest --output-on-failure --exclude-regex AsRoot
         ASAN_OPTIONS=detect_leaks=1 ctest --output-on-failure --tests-regex AsRoot
