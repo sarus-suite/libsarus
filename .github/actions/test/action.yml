@@ -13,6 +13,7 @@ runs:
       uses: actions/download-artifact@v4
       with:
         name: build-${{ inputs.tag }}
+        path: build
 
     # GitHub enragingly still recommends to use a container as 'root'
     # because if not, actions/checkout sometimes doesn't work (EACCES error).
