@@ -23,10 +23,7 @@ runs:
         token: ${{ inputs.github_token }}
         tag: ${{ github.ref_name }}
         name: Release ${{ github.ref_name }}
-        artifacts: |
-          build/src/libsarus.a
-          build/src/libsarus.so
-          include/libsarus
+        artifacts: "build/src/libsarus.a,build/src/libsarus.so,include/libsarus"
         allowUpdates: true
         replacesArtifacts: false
         draft: false

@@ -2,6 +2,7 @@ name: Default libsarus workflow
 on: [ push ]
 
 permissions:
+  contents: write
   packages: read
 
 jobs:
