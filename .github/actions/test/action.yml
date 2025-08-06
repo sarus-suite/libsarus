@@ -6,7 +6,8 @@ runs:
     # The side effect of using a container as 'root' is that it doesn't
     # automatically enter the Spack environment. So we need to activate it
     # manually once again here.
-    # Assume 'build' is already there.
+    # Assume 'build' is already there. (It was initially on a different job,
+    # but it took unnecessarily long to re-pull container images.)
     - name: Run test script
       shell: bash
       run: |
