@@ -44,7 +44,7 @@ jobs:
       - name: Build
         uses: ./.github/actions/build
         with:
-          artifact-tag: rockylinux_9
+          artifact-tag: opensuseleap_15
       - name: Test
         uses: ./.github/actions/test
 
@@ -86,7 +86,7 @@ jobs:
       - name: Build
         uses: ./.github/actions/build
         with:
-          artifact-tag: rockylinux_9
+          artifact-tag: ubuntu_22_04
       - name: Test
         uses: ./.github/actions/test
 
@@ -101,7 +101,7 @@ jobs:
       - name: Release build on OpenSUSE Leap 15
         uses: ./.github/actions/release
         with:
-          tag: opensuseleap_15
+          artifact-tag: opensuseleap_15
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
   release-rockylinux_9:
@@ -115,7 +115,7 @@ jobs:
       - name: Release build on OpenSUSE Leap 15
         uses: ./.github/actions/release
         with:
-          tag: rockylinux_9
+          artifact-tag: rockylinux_9
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
   release-ubuntu_22_04:
@@ -129,5 +129,5 @@ jobs:
       - name: Release build on OpenSUSE Leap 15
         uses: ./.github/actions/release
         with:
-          tag: ubuntu_22_04
+          artifact-tag: ubuntu_22_04
           github_token: ${{ secrets.GITHUB_TOKEN }}

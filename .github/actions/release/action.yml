@@ -1,5 +1,5 @@
 inputs:
-  tag:
+  artifact-tag:
     description: "Artifact tag"
   github_token:
     description: "GitHub token"
