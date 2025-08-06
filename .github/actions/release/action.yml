@@ -18,6 +18,7 @@ runs:
         path: build
 
     - name: Rename artifact
+      shell: bash
       run: |
         mv build/src/libsarus.a build/src/libsarus-${ARCH}-${TAG}.a
         mv build/src/libsarus.so build/src/libsarus-${ARCH}-${TAG}.so
