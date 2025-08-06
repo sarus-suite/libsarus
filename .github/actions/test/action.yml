@@ -29,8 +29,8 @@ runs:
         sed 's|~/|/home/docker/|g' -i spack-environment/spack.yaml
         spack env activate spack-environment
         cd ${GITHUB_WORKSPACE}
+        chmod +x build/test/test*
+        chown docker:docker build -R
         cd build
-        chmod +x test/test*
-        chown docker:docker * -R
-        #sudo --user docker env "PATH=$PATH" ASAN_OPTIONS=detect_leaks=1 ctest --output-on-failure --exclude-regex AsRoot
+        sudo --user docker env "PATH=$PATH" ASAN_OPTIONS=detect_leaks=1 ctest --output-on-failure --exclude-regex AsRoot
         ASAN_OPTIONS=detect_leaks=1 ctest --output-on-failure --tests-regex AsRoot

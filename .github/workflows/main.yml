@@ -143,7 +143,7 @@ jobs:
 
   release-opensuseleap_15:
     runs-on: ubuntu-latest
-    needs: [ build-opensuseleap_15 ]  # FIXME: should be 'test-*'
+    needs: [ test-opensuseleap_15 ]
     container:
       image: ghcr.io/sarus-suite/libsarus/opensuseleap:15
       options: --user root
@@ -163,9 +163,9 @@ jobs:
 
   release-rockylinux_9:
     runs-on: ubuntu-latest
-    needs: [ build-rockylinux_9 ]  # FIXME: should be 'test-*'
+    needs: [ test-rockylinux_9 ]
     container:
-      image: ghcr.io/sarus-suite/libsarus/opensuseleap:15
+      image: ghcr.io/sarus-suite/libsarus/rockylinux:9
       options: --user root
       credentials:
         username: ${{ github.actor }}
@@ -183,9 +183,9 @@ jobs:
 
   release-ubuntu_22_04:
     runs-on: ubuntu-latest
-    needs: [ build-ubuntu_22_04 ]  # FIXME: should be 'test-*'
+    needs: [ test-ubuntu_22_04 ]
     container:
-      image: ghcr.io/sarus-suite/libsarus/opensuseleap:15
+      image: ghcr.io/sarus-suite/libsarus/ubuntu:22.04
       options: --user root
       credentials:
         username: ${{ github.actor }}
