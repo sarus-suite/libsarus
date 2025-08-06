@@ -24,7 +24,7 @@ runs:
         mv build/src/libsarus.so build/src/libsarus-${ARCH}-${TAG}.so
       env:
         ARCH: "x86_64"
-        TAG: ${{ inputs.tag }}
+        TAG: ${{ inputs.artifact-tag }}
 
     - name: Create or update GitHub release
       uses: ncipollo/release-action@v1
