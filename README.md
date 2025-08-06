@@ -107,7 +107,7 @@ $ ci/enter_buildenv.sh
 
 #### Build
 
-1. **Build `libsarus`**. `build.sh` will build `libsarus` using the dependencies installed by Spack.
+**Build `libsarus`**. `build.sh` will build `libsarus` using the dependencies installed by Spack.
 
 ```
 $ ./build.sh
