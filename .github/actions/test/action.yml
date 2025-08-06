@@ -22,8 +22,6 @@ runs:
     - name: Run test script
       shell: bash
       run: |
-        ls
-        ls build
         cd /home/docker
         export PATH=$PWD/spack/bin:$PATH
         . spack/share/spack/setup-env.sh

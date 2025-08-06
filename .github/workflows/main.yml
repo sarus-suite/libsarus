@@ -101,3 +101,41 @@ jobs:
         uses: ./.github/actions/test
         with:
           tag: opensuseleap_15
+
+  test-rockylinux_9:
+    runs-on: ubuntu-latest
+    needs: [ build-rockylinux_9 ]
+    container:
+      image: ghcr.io/sarus-suite/libsarus/opensuseleap:15
+      options: --user root
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+      - name: Test on Rockylinux 9
+        uses: ./.github/actions/test
+        with:
+          tag: rockylinux_9
+
+  test-ubuntu_22_04:
+    runs-on: ubuntu-latest
+    needs: [ build-ubuntu_22_04 ]
+    container:
+      image: ghcr.io/sarus-suite/libsarus/opensuseleap:15
+      options: --user root
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+      - name: Test on Ubuntu 22.04
+        uses: ./.github/actions/test
+        with:
+          tag: ubuntu_22_04

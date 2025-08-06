@@ -29,4 +29,5 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: build-${{ inputs.tag }}
-        path: ./build
+        path: build/
+        if-no-files-found: error
