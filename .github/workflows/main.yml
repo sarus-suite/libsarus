@@ -144,12 +144,6 @@ jobs:
   release-opensuseleap_15:
     runs-on: ubuntu-latest
     needs: [ test-opensuseleap_15 ]
-    container:
-      image: ghcr.io/sarus-suite/libsarus/opensuseleap:15
-      options: --user root
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -164,12 +158,6 @@ jobs:
   release-rockylinux_9:
     runs-on: ubuntu-latest
     needs: [ test-rockylinux_9 ]
-    container:
-      image: ghcr.io/sarus-suite/libsarus/rockylinux:9
-      options: --user root
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -184,12 +172,6 @@ jobs:
   release-ubuntu_22_04:
     runs-on: ubuntu-latest
     needs: [ test-ubuntu_22_04 ]
-    container:
-      image: ghcr.io/sarus-suite/libsarus/ubuntu:22.04
-      options: --user root
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
