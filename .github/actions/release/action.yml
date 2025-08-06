@@ -17,13 +17,21 @@ runs:
         name: build-${{ inputs.tag }}
         path: build
 
+    - name: Rename artifact
+      run: |
+        mv build/src/libsarus.a build/src/libsarus-${ARCH}-${TAG}.a
+        mv build/src/libsarus.so build/src/libsarus-${ARCH}-${TAG}.so
+      env:
+        ARCH: "x86_64"
+        TAG: ${{ inputs.tag }}
+
     - name: Create or update GitHub release
       uses: ncipollo/release-action@v1
       with:
         token: ${{ inputs.github_token }}
         tag: ${{ github.ref_name }}
         name: Release ${{ github.ref_name }}
-        artifacts: "build/src/libsarus.a,build/src/libsarus.so,include/libsarus"
+        artifacts: "build/src/*.a,build/src/*.so"
         allowUpdates: true
         replacesArtifacts: false
         draft: false
