@@ -13,13 +13,12 @@ set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE 1)
 message(STATUS "Installation directory: " ${CMAKE_INSTALL_PREFIX})
 
 # Build statically-linked executables
-if(${BUILD_STATIC})
+if(NOT ${BUILD_SHARED_LIBS})
   set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
   set(CMAKE_EXE_LINKER_FLAGS "-static")
   set(CMAKE_LINK_SEARCH_START_STATIC TRUE)
   set(CMAKE_LINK_SEARCH_END_STATIC TRUE)
-  set(Boost_USE_STATIC_LIBS ON)
-endif(${BUILD_STATIC})
+endif(NOT ${BUILD_SHARED_LIBS})
 
 # Define CMake variables
 set(ENABLE_UNIT_TESTS TRUE CACHE BOOL "Build unit tests. [TRUE]")
@@ -29,15 +28,16 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Check and set dependencies
-find_package(Boost REQUIRED NO_MODULE COMPONENTS filesystem regex)
-find_package(GTest REQUIRED)
 find_program(GIT_PATH git)
 ### Workaround: issue in linking 'boost::filesystem::detail::copy_file'
 add_definitions(-DBOOST_NO_CXX11_SCOPED_ENUMS)
 
+# Prepare dependencies
+add_subdirectory(dep)
+
 # Include headers
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-include_directories(${Boost_INCLUDE_DIRS})
+include_directories(${LIBBOOST_INCLUDE_DIR})
 include_directories(${CMAKE_SOURCE_DIR}/dep/rapidjson/include)
 
 # Print version

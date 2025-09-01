@@ -1,5 +1,12 @@
 add_subdirectory(aux)
 
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/releases/download/v1.17.0/googletest-1.17.0.tar.gz
+)
+FetchContent_MakeAvailable(googletest)
+
 include(add_unit_test)
 set(ADDITIONAL_LINK_LIBS "libsarus_testaux")
 
