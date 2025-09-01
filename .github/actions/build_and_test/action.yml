@@ -1,10 +1,14 @@
+inputs:
+  artifact-tag:
+    description: "Cache tag"
+
 runs:
   using: "composite"
   steps:
     - name: Cache dependencies
       uses: actions/cache@v4
       with:
-        key: ${{ runner.os }}-build-dep
+        key: ${{ runner.os }}-${{ inputs.artifact-tag }}-build-dep
         path: ./build/dep
 
     - name: Run build script
