@@ -9,6 +9,7 @@ runs:
     - name: Run test script
       shell: bash
       run: |
+        chown nobody:nobody build -R
         cd build
         sudo --user nobody env "PATH=$PATH" ASAN_OPTIONS=detect_leaks=1 ctest --output-on-failure --exclude-regex AsRoot
         ASAN_OPTIONS=detect_leaks=1 ctest --output-on-failure --tests-regex AsRoot
