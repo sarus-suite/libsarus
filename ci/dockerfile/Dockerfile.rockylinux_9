@@ -1,0 +1,9 @@
+FROM rockylinux:9
+
+# Install dependencies
+RUN dnf update -y
+RUN dnf install -y \
+        git \
+        cmake \
+        squashfs-tools \
+        sudo
