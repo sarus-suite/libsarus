@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
-
 project("libsarus")
+
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
 # Set CMake variables
 enable_testing()
@@ -11,8 +12,6 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE 1)
 
 message(STATUS "Installation directory: " ${CMAKE_INSTALL_PREFIX})
-
-option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
 # Build statically-linked executables
 if(NOT ${BUILD_SHARED_LIBS})
