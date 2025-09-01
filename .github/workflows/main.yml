@@ -86,4 +86,4 @@ jobs:
       - name: Build and test
         uses: ./.github/actions/build_and_test
         with:
-          cache-tag: ubuntu_22_04 
+          cache-tag: ubuntu_22_04
