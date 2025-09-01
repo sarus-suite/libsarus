@@ -1,5 +1,5 @@
 inputs:
-  artifact-tag:
+  cache-tag:
     description: "Cache tag"
 
 runs:
@@ -8,7 +8,7 @@ runs:
     - name: Cache dependencies
       uses: actions/cache@v4
       with:
-        key: ${{ runner.os }}-${{ inputs.artifact-tag }}-build-dep
+        key: ${{ runner.os }}-${{ inputs.cache-tag }}-build-dep
         path: |
           - './build/dep'
           - '!./build/dep/bin'
