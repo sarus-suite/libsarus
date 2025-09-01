@@ -12,6 +12,8 @@ set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE 1)
 
 message(STATUS "Installation directory: " ${CMAKE_INSTALL_PREFIX})
 
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+
 # Build statically-linked executables
 if(NOT ${BUILD_SHARED_LIBS})
   set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")

@@ -11,6 +11,12 @@ runs:
         key: ${{ runner.os }}-${{ inputs.artifact-tag }}-build-dep
         path: ./build/dep
 
+    - name: Clean cached libsarus build
+      shell: bash
+      run: |
+        cd build
+        rm -rf bin lib src test include
+
     - name: Run build script
       shell: bash
       run: |

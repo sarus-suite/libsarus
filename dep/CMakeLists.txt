@@ -9,6 +9,7 @@ include(ExternalProject)
 if(NOT ${BUILD_SHARED_LIBS})
   ExternalProject_Add(libboost
     URL https://archives.boost.io/release/${BOOST_VERSION}/source/boost_${BOOST_VERSION_INFILE}.tar.bz2
+    URL_HASH SHA256=7009fe1faa1697476bdc7027703a2badb84e849b7b0baad5086b087b971f8617
     BUILD_IN_SOURCE 1
     CONFIGURE_COMMAND ./bootstrap.sh --prefix=${BOOST_PREFIX}
     BUILD_COMMAND ./b2 install --with-regex --with-filesystem link=static
@@ -20,6 +21,7 @@ else()
   if(${ENABLE_UNIT_TESTS})
     ExternalProject_Add(libboost
       URL https://archives.boost.io/release/${BOOST_VERSION}/source/boost_${BOOST_VERSION_INFILE}.tar.bz2
+      URL_HASH SHA256=7009fe1faa1697476bdc7027703a2badb84e849b7b0baad5086b087b971f8617
       BUILD_IN_SOURCE 1
       CONFIGURE_COMMAND ./bootstrap.sh --prefix=${BOOST_PREFIX}
       BUILD_COMMAND ./b2 install --with-regex --with-filesystem link=shared
@@ -30,6 +32,7 @@ else()
   else()
     ExternalProject_Add(libboost
       URL https://archives.boost.io/release/${BOOST_VERSION}/source/boost_${BOOST_VERSION_INFILE}.tar.bz2
+      URL_HASH SHA256=7009fe1faa1697476bdc7027703a2badb84e849b7b0baad5086b087b971f8617
       BUILD_IN_SOURCE 1
       CONFIGURE_COMMAND true
       BUILD_COMMAND cp -r boost ${BOOST_PREFIX}/include
