@@ -14,20 +14,17 @@ runs:
     - name: Clean cached libsarus build
       shell: bash
       run: |
-        if [[ -d "./build" ]]; then
-          cd ./build
-          rm -rf bin lib src test include
-        fi
+        rm -rf ./build/{bin,lib,src,test,include} || true
 
     - name: Run build script
       shell: bash
       run: |
         ./build.sh -DBUILD_DIR=$PWD/build
+        chown nobody:nogroup ./build -R
 
     - name: Run test script
       shell: bash
       run: |
-        chown nobody:nogroup ./build/test -R
         cd build
         sudo --user nobody env "PATH=$PATH" ASAN_OPTIONS=detect_leaks=1 ctest --output-on-failure --exclude-regex AsRoot
         ASAN_OPTIONS=detect_leaks=1 ctest --output-on-failure --tests-regex AsRoot
