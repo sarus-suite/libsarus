@@ -4,6 +4,7 @@ runs:
     - name: Cache dependencies
       uses: actions/cache@v4
       with:
+        key: ${{ runner.os }}-build-dep
         path: ./build/dep
 
     - name: Run build script
