@@ -63,7 +63,7 @@ jobs:
       - name: Build and test
         uses: ./.github/actions/build_and_test
         with:
-          artifact-tag: rockylinux_9
+          cache-tag: rockylinux_9
 
   build_and_test-ubuntu_22_04:
     runs-on: ubuntu-latest
