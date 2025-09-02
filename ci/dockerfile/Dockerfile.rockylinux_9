@@ -1,0 +1,23 @@
+FROM rockylinux:9
+
+# NOTE: Using GCC/G++ 11.5 (Rocky Linux 9 package manager default) instead of
+# GCC/G++ 12.2 (used in other build containers) as building them from scratch
+# takes an unreasonable amount of time.
+
+# Install dependencies
+RUN dnf update -y && \
+    dnf install -y \
+        git \
+        cmake \
+        squashfs-tools \
+        gcc \
+        g++ \
+        sudo
+
+# Change dummy group's name
+RUN groupmod -n nogroup nobody
+
+# Rocky Linux quirk? /etc/shadow has permission 0000 so even root (the owner)
+# can't access it when it's read by 'sudo'. Change the permission to 0400.
+# Reference: https://github.com/geerlingguy/docker-rockylinux9-ansible/issues/6
+RUN chmod 0400 /etc/shadow

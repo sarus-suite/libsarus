@@ -1,0 +1,29 @@
+inputs:
+  cache-tag:
+    description: "Cache tag"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        key: ${{ runner.os }}-${{ inputs.cache-tag }}-build-dep
+        path: ./build/dep
+
+    - name: Clean cached libsarus build
+      shell: bash
+      run: rm -rf ./build/{bin,lib,src,include,test} || true
+
+    - name: Run build script
+      shell: bash
+      run: |
+        ./build.sh -DBUILD_DIR=$PWD/build
+        chown nobody:nogroup ./build -R
+
+    - name: Run test script
+      shell: bash
+      run: |
+        cd build
+        sudo --user nobody env "PATH=$PATH" ASAN_OPTIONS=detect_leaks=1 ctest --output-on-failure --exclude-regex AsRoot
+        ASAN_OPTIONS=detect_leaks=1 ctest --output-on-failure --tests-regex AsRoot
