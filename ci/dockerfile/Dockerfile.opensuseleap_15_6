@@ -8,9 +8,12 @@ RUN zypper update -y && \
         squashfs \
         gcc12 \
         gcc12-c++ \
-        glibc-devel-static \
         sudo
 
 # Set up default compilers
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 10 && \
     update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 10
+
+# Add dummy user
+RUN useradd nobody && \
+    groupadd nogroup
