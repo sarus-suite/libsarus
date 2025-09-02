@@ -13,8 +13,7 @@ runs:
 
     - name: Clean cached libsarus build
       shell: bash
-      run: |
-        rm -rf ./build/{bin,lib,src,test,include} || true
+      run: rm -rf ./build/{bin,lib,src,test,include} || true
 
     - name: Run build script
       shell: bash
