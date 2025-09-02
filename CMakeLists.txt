@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
 project("libsarus")
 
-option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
-
 # Set CMake variables
 enable_testing()
 set(CMAKE_VERBOSE_MAKEFILE OFF)
@@ -14,12 +12,11 @@ set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE 1)
 message(STATUS "Installation directory: " ${CMAKE_INSTALL_PREFIX})
 
 # Build statically-linked executables
-if(NOT ${BUILD_SHARED_LIBS})
+if(NOT BUILD_SHARED_LIBS)
   set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
-  set(CMAKE_EXE_LINKER_FLAGS "-static")
   set(CMAKE_LINK_SEARCH_START_STATIC TRUE)
   set(CMAKE_LINK_SEARCH_END_STATIC TRUE)
-endif(NOT ${BUILD_SHARED_LIBS})
+endif(NOT BUILD_SHARED_LIBS)
 
 # Define CMake variables
 set(ENABLE_UNIT_TESTS TRUE CACHE BOOL "Build unit tests. [TRUE]")
