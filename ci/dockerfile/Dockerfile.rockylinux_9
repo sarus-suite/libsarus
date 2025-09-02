@@ -16,3 +16,8 @@ RUN dnf update -y && \
 
 # Change dummy group's name
 RUN groupmod -n nogroup nobody
+
+# Rocky Linux quirk? /etc/shadow has permission 0000 so even root (the owner)
+# can't access it when it's read by 'sudo'. Change the permission to 0400.
+# Reference: https://github.com/geerlingguy/docker-rockylinux9-ansible/issues/6
+RUN chmod 0400 /etc/shadow

@@ -3,15 +3,16 @@
 set -e
 
 CI_ROOT_PATH=$(dirname $(realpath ${BASH_SOURCE[0]}))
+ROOT_PATH=$CI_ROOT_PATH/..
 
-CONTAINER_RT=docker
-OS_IMAGE="ubuntu:22.04"
+CONTAINER_RT=podman
+OS_IMAGE="ubuntu_22_04"
 
 usage() {
   cat <<EOF
 usage: $0 [OPTIONS...]
-  -c|--container-rt CONTAINER_RT  Container runtime to use (default:docker)
-  -i|--os-image OS_IMAGE          OS image name to use (default: ubuntu:22.04)
+  -c|--container-rt CONTAINER_RT  Container runtime to use (default: docker)
+  -i|--os-image OS_IMAGE          OS image name to use (default: ubuntu_22_04)
 EOF
 }
 
@@ -57,22 +58,20 @@ if ! which $CONTAINER_RT >/dev/null 2>/dev/null; then
   exit 1
 fi
 
-if [[ -z $($CI_ROOT_PATH/dockerfile/containerize.sh -p | grep $OS_IMAGE) ]]; then
+if [[ ! -f $CI_ROOT_PATH/dockerfile/Dockerfile.$OS_IMAGE ]]; then
   error "os image '$OS_IMAGE' unsupported"
   exit 1
 fi
 
-OS_IMAGE_NAME=libsarus/build/$OS_IMAGE
+OS_IMAGE_NAME=libsarus-build:$OS_IMAGE
 
 # Create image if needed.
-# TODO: support other CONTAINER_RTs
-if [ -z "$(docker images -q $OS_IMAGE_NAME 2>/dev/null)" ]; then
+if [ -z "$($CONTAINER_RT images -q $OS_IMAGE_NAME 2>/dev/null)" ]; then
   pushd $CI_ROOT_PATH/dockerfile
-  ./containerize.sh $OS_IMAGE
-  $CONTAINER_RT build -f Dockerfile.gen.$OS_IMAGE -t $OS_IMAGE_NAME .
+  $CONTAINER_RT build -f Dockerfile.$OS_IMAGE -t $OS_IMAGE_NAME 
   popd
 fi
 
 $CONTAINER_RT run --rm -it --privileged \
-  --mount type=bind,source=$CI_ROOT_PATH/..,target=/home/docker/libsarus \
-  --workdir /home/docker/libsarus $OS_IMAGE_NAME
+  --mount type=bind,source=$ROOT_PATH,target=/libsarus \
+  --workdir /libsarus $OS_IMAGE_NAME
