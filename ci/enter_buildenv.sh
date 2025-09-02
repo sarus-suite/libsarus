@@ -5,7 +5,7 @@ set -e
 CI_ROOT_PATH=$(dirname $(realpath ${BASH_SOURCE[0]}))
 ROOT_PATH=$CI_ROOT_PATH/..
 
-CONTAINER_RT=podman
+CONTAINER_RT="podman"
 OS_IMAGE="ubuntu_22_04"
 
 usage() {
@@ -73,5 +73,5 @@ if [ -z "$($CONTAINER_RT images -q $OS_IMAGE_NAME 2>/dev/null)" ]; then
 fi
 
 $CONTAINER_RT run --rm -it --privileged \
-  --mount type=bind,source=$ROOT_PATH,target=/libsarus \
+  --mount type=bind,src=$ROOT_PATH,dst=/libsarus,relabel=private \
   --workdir /libsarus $OS_IMAGE_NAME
