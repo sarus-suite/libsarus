@@ -68,7 +68,7 @@ OS_IMAGE_NAME=libsarus-build:$OS_IMAGE
 # Create image if needed.
 if [ -z "$($CONTAINER_RT images -q $OS_IMAGE_NAME 2>/dev/null)" ]; then
   pushd $CI_ROOT_PATH/dockerfile
-  $CONTAINER_RT build -f Dockerfile.$OS_IMAGE -t $OS_IMAGE_NAME 
+  $CONTAINER_RT build -f Dockerfile.$OS_IMAGE -t $OS_IMAGE_NAME
   popd
 fi
 
