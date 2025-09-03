@@ -1,0 +1,17 @@
+FROM alpine:3.22
+
+# NOTE: Using GCC/G++ 14.2 (Alpine Linux 3.22 package manager default) instead of
+# GCC/G++ 12.2 (used in other build containers) as building them from scratch
+# takes an unreasonable amount of time.
+
+# Install dependencies
+RUN apk update && \
+    apk add \
+        git \
+        cmake \
+        linux-headers \
+        bash \
+        make \
+        gcc \
+        g++ \
+        sudo

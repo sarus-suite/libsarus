@@ -2,30 +2,17 @@
 
 set -e
 
-CI_ROOT_PATH=$(dirname $(realpath ${BASH_SOURCE[0]}))
-ROOT_PATH=$CI_ROOT_PATH/..
+ROOT_PATH=$(dirname $(realpath ${BASH_SOURCE[0]}))/..
 
-CONTAINER_RT=podman
+CONTAINER_RT="podman"
 OS_IMAGE="ubuntu_22_04"
 
 usage() {
   cat <<EOF
 usage: $0 [OPTIONS...]
-  -c|--container-rt CONTAINER_RT  Container runtime to use (default: docker)
+  -c|--container-rt CONTAINER_RT  Container runtime to use (default: podman)
   -i|--os-image OS_IMAGE          OS image name to use (default: ubuntu_22_04)
 EOF
-}
-
-error() {
-  echo "error: $@"
-}
-
-info() {
-  echo "info: $@"
-}
-
-newline() {
-  echo
 }
 
 #-----------------------------------------------------------------------------#
@@ -44,8 +31,8 @@ while [[ $# -gt 0 ]]; do
       shift
       ;;
     *)
-      error "unrecognized option '$1'"
-      newline
+      echo "error: unrecognized option '$1'"
+      echo
       usage
       exit 1
       ;;
@@ -54,24 +41,28 @@ done
 
 # Sanity check
 if ! which $CONTAINER_RT >/dev/null 2>/dev/null; then
-  error "container runtine '$CONTAINER_RT' uninstalled"
+  echo "error: container runtine '$CONTAINER_RT' uninstalled"
   exit 1
 fi
 
-if [[ ! -f $CI_ROOT_PATH/dockerfile/Dockerfile.$OS_IMAGE ]]; then
-  error "os image '$OS_IMAGE' unsupported"
+if [[ ! -d $ROOT_PATH/.devcontainer/$OS_IMAGE ]]; then
+  echo "error: os image '$OS_IMAGE' unsupported"
   exit 1
+fi
+
+if [ "$EUID" -ne 0 ]; then
+  echo "warning: entering as a non-root. some unit tests may fail."
 fi
 
 OS_IMAGE_NAME=libsarus-build:$OS_IMAGE
 
 # Create image if needed.
 if [ -z "$($CONTAINER_RT images -q $OS_IMAGE_NAME 2>/dev/null)" ]; then
-  pushd $CI_ROOT_PATH/dockerfile
-  $CONTAINER_RT build -f Dockerfile.$OS_IMAGE -t $OS_IMAGE_NAME
+  pushd $ROOT_PATH/.devcontainer/$OS_IMAGE
+  $CONTAINER_RT build -f Containerfile -t $OS_IMAGE_NAME
   popd
 fi
 
 $CONTAINER_RT run --rm -it --privileged \
-  --mount type=bind,source=$ROOT_PATH,target=/libsarus \
+  --mount type=bind,src=$ROOT_PATH,dst=/libsarus,relabel=private \
   --workdir /libsarus $OS_IMAGE_NAME
