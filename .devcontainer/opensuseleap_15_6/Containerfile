@@ -5,7 +5,6 @@ RUN zypper update -y && \
     zypper install -y \
         git \
         cmake \
-        squashfs \
         gcc12 \
         gcc12-c++ \
         sudo
