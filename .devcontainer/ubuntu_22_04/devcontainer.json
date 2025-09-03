@@ -2,7 +2,6 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
 {
 	"name": "Ubuntu 22.04",
-	"build": { "dockerfile": "Containerfile",
-               "options": [ "--format=docker" ] },
+	"build": { "dockerfile": "Containerfile" },
 	"remoteUser": "root"
 }
