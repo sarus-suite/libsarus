@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ check-format, check-runner ]
     container:
-      image: ghcr.io/sarus-suite/libsarus/opensuseleap_15_6:no-spack
+      image: ghcr.io/sarus-suite/libsarus/opensuseleap_15_6:v0.2
       options: --user root --privileged
       credentials:
         username: ${{ github.actor }}
@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ check-format, check-runner ]
     container:
-      image: ghcr.io/sarus-suite/libsarus/rockylinux_9:no-spack
+      image: ghcr.io/sarus-suite/libsarus/rockylinux_9:v0.2
       options: --user root --privileged
       credentials:
         username: ${{ github.actor }}
@@ -69,7 +69,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ check-format, check-runner ]
     container:
-      image: ghcr.io/sarus-suite/libsarus/ubuntu_22_04:no-spack
+      image: ghcr.io/sarus-suite/libsarus/ubuntu_22_04:v0.2
       options: --user root --privileged
       credentials:
         username: ${{ github.actor }}
