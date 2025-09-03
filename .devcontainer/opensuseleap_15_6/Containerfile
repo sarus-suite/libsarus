@@ -3,6 +3,7 @@ FROM opensuse/leap:15.6
 # Install dependencies
 RUN zypper update -y && \
     zypper install -y \
+        tar \
         git \
         cmake \
         gcc12 \

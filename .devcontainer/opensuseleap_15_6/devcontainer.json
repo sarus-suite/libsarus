@@ -3,5 +3,6 @@
 {
 	"name": "OpenSUSE Leap 15.6",
 	"build": { "dockerfile": "Containerfile" },
-	"remoteUser": "root"
+	"remoteUser": "root",
+    "privileged": true
 }

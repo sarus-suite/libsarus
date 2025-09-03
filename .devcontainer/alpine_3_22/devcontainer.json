@@ -3,5 +3,6 @@
 {
 	"name": "Alpine 3.22",
 	"build": { "dockerfile": "Containerfile" },
-	"remoteUser": "root"
+	"remoteUser": "root",
+    "privileged": true
 }
