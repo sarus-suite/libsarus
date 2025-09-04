@@ -98,6 +98,13 @@ else
   pass "mount-utils"
 fi
 
+# Check: rootful Docker
+if docker info -f "{{println .SecurityOptions}}" | grep rootless >/dev/null 2>&1; then
+  fail "Docker is rootless. Rootful Docker is required."
+else
+  pass "rootful Docker"
+fi
+
 # Finalize
 if [ -n "$HAS_ERROR" ]; then
   info "Check $(reddify failed)"
