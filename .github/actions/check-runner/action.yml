@@ -3,4 +3,4 @@ runs:
   steps:
     - name: Check runner compatibility
       shell: bash
-      run: ci/check_host.sh --no-dep
+      run: ci/check_devhost.sh --ci

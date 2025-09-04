@@ -53,6 +53,10 @@ info() {
 
 #-----------------------------------------------------------------------------#
 
+if [[ "$1" == "--ci" ]]; then
+  export INSIDE_CI_PIPELINE=1
+fi
+
 # Check: Linux kernel version
 MINIMUM_KERNEL_VER="3.0"
 OBTAINED_KERNEL_VER=$(cat /proc/version | grep -Eo '[0-9]\.[0-9]+\.[0-9]+' | head -n1)
@@ -99,10 +103,12 @@ else
 fi
 
 # Check: rootful Docker
-if docker info -f "{{println .SecurityOptions}}" | grep rootless >/dev/null 2>&1; then
-  fail "Docker is rootless. Rootful Docker is required."
-else
-  pass "rootful Docker"
+if [[ ! -v INSIDE_CI_PIPELINE ]]; then
+  if docker info -f "{{println .SecurityOptions}}" | grep rootless >/dev/null 2>&1; then
+    fail "Docker is rootless. Rootful Docker is required."
+  else
+    pass "rootful Docker"
+  fi
 fi
 
 # Finalize
