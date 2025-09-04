@@ -2,9 +2,7 @@
 
 Essential code collection for custom container runtime development.
 
-
-## Runtime Requirements
-
+**Runtime Requirements**
 - Linux kernel 3.0+
 - Kernel modules (`loop`, `squashfs`, `overlay`)
 
@@ -15,8 +13,7 @@ Use devcontainers for development.
 
 ### Requirements
 
- - Linux kernel 3.0+
- - Kernel modules (`loop`, `squashfs`, `overlay`)
+ - Runtime requirements
  - Docker (rootful)
 
 Run `ci/check_devhost.sh` to check build requirements.
