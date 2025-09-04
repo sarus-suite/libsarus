@@ -24,11 +24,11 @@ Run `ci/check_devhost.sh` to check build requirements.
  2. Enter the devcontainer via VSCode. Alternatively, you can enter a devcontainer on CLI using `ci/enter_buildenv.sh`.
  3. Build `libsarus` using `./build.sh`. You can find `libsarus.a` under `./build/src`.
 
-### Caveats
+### Notes
 
  - To build `libsarus` with a release mode setting, modify `BUILD_TYPE` in `./build.sh` to `Release`. (default: `Debug`)
  - To disable unit tests, add `-DENABLE_UNIT_TESTS=FALSE` to CMake options in `./build.sh`. (default: `TRUE`)
- - To build `libsarus` as a shared library, add `-DBUILD_SHARED_LIBS=TRUE` to CMake options in `./build.sh`. (default: `FALSE`) **This will make `libsarus` require Boost 1.85 (`filesystem` and `regex`) at runtime.**
+ - To build `libsarus` as a shared library, add `-DBUILD_SHARED_LIBS=TRUE` to CMake options in `./build.sh`. (default: `FALSE`) **Caveat: this will make `libsarus` require Boost 1.85 (`filesystem` and `regex`) at runtime.**
 
 ## Test
 
