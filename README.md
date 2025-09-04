@@ -41,6 +41,8 @@ $ ctest -E AsRoot                         # Do unprivileged tests
 $ sudo env "PATH=$PATH" ctest -R AsRoot   # Do privileged tests
 ```
 
+The CI pipeline runs the same unit tests upon each push.
+
 ## Contribution
 
 All contributions should pass all CI pipeline stages. If you don't have write permission to this repository, please submit your contribution via PR.
