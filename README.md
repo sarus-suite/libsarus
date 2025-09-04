@@ -34,7 +34,7 @@ Run `ci/check_devhost.sh` to check build requirements.
 `libsarus` has some basic unit tests to verify the functionality. To run unit tests,
 
  1. Build `libsarus` first (with unit tests enabled).
- 2. In the same devcontainer, run `ctest` in the `./build` directory. Alternatively, you can selectively run unit tests by permission as follows.
+ 2. In the same devcontainer, run `ctest` in the `./build` directory. Alternatively, selectively run unit tests by permission as follows.
 
 ```
 $ ctest -E AsRoot                         # Do unprivileged tests
