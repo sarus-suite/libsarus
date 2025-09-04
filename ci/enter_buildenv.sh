@@ -4,7 +4,7 @@ set -e
 
 ROOT_PATH=$(dirname $(realpath ${BASH_SOURCE[0]}))/..
 
-CONTAINER_RT="podman"
+CONTAINER_RT="docker"
 OS_IMAGE="ubuntu_22_04"
 
 usage() {
@@ -50,19 +50,15 @@ if [[ ! -d $ROOT_PATH/.devcontainer/$OS_IMAGE ]]; then
   exit 1
 fi
 
-if [ "$EUID" -ne 0 ]; then
-  echo "warning: entering as a non-root. some unit tests may fail."
-fi
-
 OS_IMAGE_NAME=libsarus-build:$OS_IMAGE
 
 # Create image if needed.
 if [ -z "$($CONTAINER_RT images -q $OS_IMAGE_NAME 2>/dev/null)" ]; then
   pushd $ROOT_PATH/.devcontainer/$OS_IMAGE
-  $CONTAINER_RT build -f Containerfile -t $OS_IMAGE_NAME
+  $CONTAINER_RT build -f Containerfile -t $OS_IMAGE_NAME .
   popd
 fi
 
 $CONTAINER_RT run --rm -it --privileged \
-  --mount type=bind,src=$ROOT_PATH,dst=/libsarus,relabel=private \
+  --mount type=bind,src=$ROOT_PATH,dst=/libsarus \
   --workdir /libsarus $OS_IMAGE_NAME
