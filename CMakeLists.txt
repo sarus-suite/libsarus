@@ -19,7 +19,7 @@ if(NOT BUILD_SHARED_LIBS)
 endif(NOT BUILD_SHARED_LIBS)
 
 # Define CMake variables
-option(ENABLE_UNIT_TESTS TRUE CACHE BOOL "Build unit tests. [TRUE]")
+option(ENABLE_UNIT_TESTS "Build unit tests." TRUE)
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 20)
