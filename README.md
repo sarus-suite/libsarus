@@ -27,7 +27,7 @@ Run `ci/check_devhost.sh` to check build requirements.
 ### Caveats
 
  - To build `libsarus` with a release mode setting, modify `BUILD_TYPE` in `./build.sh` to `Release`. (default: `Debug`)
- - To disable unit tests, add `-DENABLE_UNIT_TESTS=FALSE` to CMake options. (default: `TRUE`)
+ - To disable unit tests, add `-DENABLE_UNIT_TESTS=FALSE` to CMake options in `./build.sh`. (default: `TRUE`)
 
 ## Test
 
