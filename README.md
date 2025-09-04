@@ -49,4 +49,4 @@ All contributions should pass all CI pipeline stages. If you don't have write pe
 
 ### Formatting
 
-Failing to satisfy the code formatting standard causes the pipeline stage `check.format` to fail. To avoid this, run `./ci/format_code.sh` before pushing commits to fix the formatting issues automatically.
+Failing to satisfy the code formatting standard causes the pipeline stage `check.format` to fail. To avoid this, run `./ci/format_code.sh` to fix the formatting issues automatically before pushing commits.
