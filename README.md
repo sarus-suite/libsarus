@@ -13,7 +13,7 @@ Use devcontainers for development.
 
 ### Requirements
 
- - Runtime requirements
+ - All runtime requirements
  - Docker (rootful)
 
 Run `ci/check_devhost.sh` to check build requirements.
