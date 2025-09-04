@@ -38,8 +38,8 @@ Run `ci/check_devhost.sh` to check build requirements.
  2. In the same devcontainer, run `ctest` in the `./build` directory. Alternatively, selectively run unit tests by permission as follows.
 
 ```
-$ ctest -E AsRoot                         # Do unprivileged tests
-$ sudo env "PATH=$PATH" ctest -R AsRoot   # Do privileged tests
+# sudo -u nobody env "PATH=$PATH" ctest -E AsRoot    # Do unprivileged tests
+# ctest -R AsRoot                                    # Do privileged tests
 ```
 
 The CI pipeline runs the same unit tests upon each push.
