@@ -28,7 +28,7 @@ Run `ci/check_devhost.sh` to check build requirements.
 
  - To build `libsarus` with a release mode setting, modify `BUILD_TYPE` in `./build.sh` to `Release`. (default: `Debug`)
  - To disable unit tests, add `-DENABLE_UNIT_TESTS=FALSE` to CMake options in `./build.sh`. (default: `TRUE`)
- - To build `libsarus` as a shared library, add `-DBUILD_SHARED_LIBS=TRUE` to CMake options in `./build.sh`. (default: `FALSE`) **Caveat: this will make `libsarus` require Boost 1.85 (`filesystem` and `regex`) at runtime.**
+ - To build `libsarus` as a shared library, add `-DBUILD_SHARED_LIBS=TRUE` to CMake options in `./build.sh`. (default: `FALSE`) **Caveat: this will make `libsarus` depend on Boost 1.85 (`filesystem` and `regex`) at runtime.**
 
 ## Test
 
