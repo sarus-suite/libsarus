@@ -4,7 +4,6 @@
 # Check whether the runtime host environment is compatible with libsarus.
 # Written to be usable both on a bare-metal and inside a container.
 # CAVEAT: not to be confused with the *build* environment.
-# CAVEAT: set '--no-dep' if no library dependency check is needed.
 
 exec 3>&1
 exec 2>/dev/null
@@ -54,11 +53,6 @@ info() {
 
 #-----------------------------------------------------------------------------#
 
-DEP_CHECK=1
-if [[ -n $1 ]] && [[ "$1" == "--no-dep" ]]; then
-  DEP_CHECK=0
-fi
-
 # Check: Linux kernel version
 MINIMUM_KERNEL_VER="3.0"
 OBTAINED_KERNEL_VER=$(cat /proc/version | grep -Eo '[0-9]\.[0-9]+\.[0-9]+' | head -n1)
@@ -103,28 +97,6 @@ if [ $(ver_to_num $OBTAINED_MOUNT_VER) -lt $(ver_to_num $MINIMUM_MOUNT_VER) ]; t
 else
   pass "mount-utils"
 fi
-
-# Check: libboost
-REQUIRED_COMPONENTS="filesystem regex"
-MINIMUM_BOOST_VER="1.85.0"
-for _REQ_BOOST in $REQUIRED_COMPONENTS; do
-  if [[ $DEP_CHECK == 1 ]]; then
-    OBTAINED_BOOST_VER=$(ldconfig -v | grep libboost_$_REQ_BOOST | awk -F"[. ]" '{ printf "%s.%s.%s", $3, $4, $5 }')
-    if [ $(ver_to_num $OBTAINED_BOOST_VER) -lt $(ver_to_num $MINIMUM_BOOST_VER) ]; then
-      if [ -z $OBTAINED_BOOST_VER ]; then
-        _DIAG="Library '$_REQ_BOOST' not installed"
-      else
-        _DIAG="System version ($OBTAINED_BOOST_VER) smaller than minimum ($MINIMUM_BOOST_VER)"
-      fi
-      fail "libboost ($_REQ_BOOST)" "$_DIAG"
-    else
-      pass "libboost ($_REQ_BOOST)"
-    fi
-  else
-    skip "libboost ($_REQ_BOOST)" \
-      "Make sure to install this on the runtime environment"
-  fi
-done
 
 # Finalize
 if [ -n "$HAS_ERROR" ]; then
