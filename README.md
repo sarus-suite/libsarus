@@ -21,7 +21,7 @@ Run `ci/check_devhost.sh` to check build requirements.
 ### Procedure
 
  1. Clone the repository. Make sure to clone every submodule (`clone --recursive`).
- 2. Enter the devcontainer via VSCode. Alternatively, you can enter a devcontainer using `ci/enter_buildenv.sh`.
+ 2. Enter the devcontainer via VSCode. Alternatively, you can enter a devcontainer on CLI using `ci/enter_buildenv.sh`.
  3. Build `libsarus` using `./build.sh`. You can find `libsarus.a` under `./build/src`.
 
 ### Caveats
